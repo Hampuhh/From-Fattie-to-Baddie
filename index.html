@@ -60,13 +60,14 @@
             letter-spacing: 1px; line-height: 1.1;
         }
 
-        .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        /* ACTUALIZADO A 5 COLUMNAS PARA SEPARAR PERFIL Y METAS */
+        .tabs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
         .tab-btn { 
-            background: #ffffff; border: none; padding: 12px 5px; border-radius: 16px; 
-            font-family: 'Nunito'; font-size: 10px; font-weight: 800; color: var(--text-light); 
+            background: #ffffff; border: none; padding: 12px 2px; border-radius: 16px; 
+            font-family: 'Nunito'; font-size: 9px; font-weight: 800; color: var(--text-light); 
             display: flex; flex-direction: column; align-items: center; gap: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); cursor: pointer;
         }
-        .tab-btn i { font-size: 24px; color: var(--text-light); }
+        .tab-btn i { font-size: 22px; color: var(--text-light); }
         .tab-btn.active { background: var(--primary); color: white; }
         .tab-btn.active i { color: white; }
 
@@ -88,7 +89,8 @@
         label { display: block; font-size: 10px; font-weight: 800; margin-bottom: 4px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px;}
         input, select { width: 100%; padding: 12px; border: 2px solid #f0edea; border-radius: 14px; font-family: 'Nunito'; font-size: 15px; background: white; }
         
-        .btn-main { width: 100%; background: var(--primary); color: white; padding: 14px; border: none; border-radius: 14px; font-weight: 800; font-size: 14px; margin-top: 5px; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; }
+        .btn-main { width: 100%; background: var(--primary); color: white; padding: 14px; border: none; border-radius: 14px; font-weight: 800; font-size: 14px; margin-top: 5px; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; transition: 0.2s; }
+        .btn-main:active { transform: scale(0.98); }
         .btn-secondary { background: white; color: var(--primary); border: 2px solid var(--primary); }
 
         .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
@@ -117,18 +119,27 @@
         .badge-good { background: #e8f5e9; color: #2e7d32; }
         .badge-warn { background: #fff8e1; color: #f57f17; }
 
-        #baddie-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(90, 80, 75, 0.7); backdrop-filter: blur(8px); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(90, 80, 75, 0.7); backdrop-filter: blur(8px); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
         .modal-content { background: white; border-radius: 30px; padding: 35px 25px; text-align: center; max-width: 350px; border: 4px solid var(--accent); }
     </style>
 </head>
 <body>
 
-    <div id="baddie-modal">
+    <div id="baddie-modal" class="modal-overlay">
         <div class="modal-content">
             <i class="ph-fill ph-shooting-star" style="color: var(--gold); font-size: 50px;"></i>
             <h2 style="font-family: 'Fredoka'; color: var(--accent); font-size: 26px; margin: 10px 0;">¡Meta Lograda!</h2>
             <p id="recompensa-texto" style="font-family:'Fredoka'; font-weight: 700; color: var(--primary-dark); font-size: 18px; background: #f2fbf6; padding: 15px; border-radius: 16px; border: 2px dashed var(--success); margin-bottom: 20px;"></p>
             <button class="btn-main" onclick="document.getElementById('baddie-modal').style.display='none'"><i class="ph-bold ph-heart"></i> ¡Lo merezco! ✨</button>
+        </div>
+    </div>
+
+    <div id="end-day-modal" class="modal-overlay">
+        <div class="modal-content" style="border-color: var(--primary-dark);">
+            <i id="end-day-icon" class="ph-fill ph-confetti" style="font-size: 60px;"></i>
+            <h2 id="end-day-title" style="font-family: 'Fredoka'; font-size: 26px; margin: 10px 0;"></h2>
+            <p id="end-day-msg" style="font-family:'Nunito'; font-weight: 700; color: var(--text-main); font-size: 15px; line-height: 1.4; margin-bottom: 20px;"></p>
+            <button class="btn-main" onclick="cerrarYavanzarDia()" style="background: var(--primary-dark);">Continuar al día siguiente <i class="ph-bold ph-arrow-right"></i></button>
         </div>
     </div>
 
@@ -151,7 +162,8 @@
             <button class="tab-btn active" onclick="switchTab('dashboard', this)"><i class="ph-fill ph-chart-pie-slice"></i>Resumen</button>
             <button class="tab-btn" onclick="switchTab('medidas', this)"><i class="ph-fill ph-ruler"></i>Cuerpo</button>
             <button class="tab-btn" onclick="switchTab('nutricion', this)"><i class="ph-fill ph-magic-wand"></i>Diario</button>
-            <button class="tab-btn" onclick="switchTab('config', this)"><i class="ph-fill ph-target"></i>Metas</button>
+            <button class="tab-btn" onclick="switchTab('metas', this)"><i class="ph-fill ph-shooting-star"></i>Metas</button>
+            <button class="tab-btn" onclick="switchTab('perfil', this)"><i class="ph-fill ph-user-circle"></i>Perfil</button>
         </div>
 
         <div class="glass-panel">
@@ -179,10 +191,12 @@
                 <div class="chart-wrapper">
                     <canvas id="graficoPeso"></canvas>
                 </div>
+                
+                <button class="btn-main" onclick="terminarDia()" style="margin-top: 20px; background: var(--primary-dark); padding: 16px;"><i class="ph-fill ph-moon-stars" style="font-size: 20px;"></i> Terminar y Cerrar el Día</button>
             </div>
 
             <div id="medidas" class="tab-content">
-                <div class="section-title">Medidas del Día</div>
+                <div class="section-title">Registro Corporal</div>
                 <div class="row">
                     <div class="form-group"><label>Peso (kg)</label><input type="number" id="peso" step="0.1"></div>
                     <div class="form-group"><label>Busto (cm)</label><input type="number" id="busto" step="0.1"></div>
@@ -191,7 +205,7 @@
                     <div class="form-group"><label>Cintura (cm)</label><input type="number" id="cintura" step="0.1"></div>
                     <div class="form-group"><label>Cadera (cm)</label><input type="number" id="cadera" step="0.1"></div>
                 </div>
-                <button class="btn-main" onclick="guardarMedidas()"><i class="ph-bold ph-floppy-disk"></i> Guardar del Día</button>
+                <button class="btn-main" onclick="guardarMedidas()"><i class="ph-bold ph-floppy-disk"></i> Actualizar Medidas</button>
             </div>
 
             <div id="nutricion" class="tab-content">
@@ -228,8 +242,18 @@
                 <div id="lista-ejercicios" style="margin-top:15px;"></div>
             </div>
 
-            <div id="config" class="tab-content">
-                <div class="section-title">Perfil Base</div>
+            <div id="metas" class="tab-content">
+                <div class="section-title" style="color: var(--accent);">Metas y Proyecciones</div>
+                <div class="row">
+                    <input type="number" id="m-peso" placeholder="Meta kg" style="flex:1;">
+                    <input type="text" id="m-premio" placeholder="Premio" style="flex:2;">
+                </div>
+                <button class="btn-main btn-secondary" onclick="agregarMeta()">Crear Meta</button>
+                <div id="lista-metas" style="margin-top: 15px;"></div>
+            </div>
+
+            <div id="perfil" class="tab-content">
+                <div class="section-title">Perfil Base (No tocar sin querer 😉)</div>
                 <div class="row">
                     <div class="form-group"><label>Altura (cm)</label><input type="number" id="c-alt"></div>
                     <div class="form-group"><label>Edad</label><input type="number" id="c-edad"></div>
@@ -258,16 +282,8 @@
                     <input type="password" id="c-apikey" placeholder="Pega tu llave aquí...">
                 </div>
                 
-                <button class="btn-main" onclick="guardarConfig()">Actualizar Perfil</button>
-                <button class="btn-main" style="background-color: #e2e8e5; color: var(--primary-dark); margin-top: 10px;" onclick="descargarRespaldo()"><i class="ph-bold ph-download-simple"></i> Respaldar Datos</button>
-
-                <div class="section-title" style="margin-top: 30px; color: var(--accent);">Metas y Proyecciones</div>
-                <div class="row">
-                    <input type="number" id="m-peso" placeholder="Meta kg" style="flex:1;">
-                    <input type="text" id="m-premio" placeholder="Premio" style="flex:2;">
-                </div>
-                <button class="btn-main btn-secondary" onclick="agregarMeta()">Crear Meta</button>
-                <div id="lista-metas" style="margin-top: 15px;"></div>
+                <button class="btn-main" onclick="guardarConfig()">Guardar Ajustes</button>
+                <button class="btn-main" style="background-color: #e2e8e5; color: var(--primary-dark); margin-top: 10px;" onclick="descargarRespaldo()"><i class="ph-bold ph-download-simple"></i> Respaldar Todos mis Datos</button>
             </div>
         </div>
     </div>
@@ -308,7 +324,7 @@
             renderDiario(); renderMetas(); actualizarDashboard(); checkFattieZone();
         }
 
-// --- MOTOR GEMINI ACTUALIZADO (SERIE 2.5) ---
+        // MOTOR GEMINI ACTUALIZADO (SERIE 2.5)
         async function fetchGemini(prompt, key, modelo) {
             const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${key}`;
             const res = await fetch(url, {
@@ -325,20 +341,18 @@
             const q = document.getElementById('busqueda-ai').value;
             const key = db.config.apiKey;
             
-            if (!key) return alert("❌ Primero pega tu API Key en la pestaña de Metas (Ajustes)");
+            if (!key) return alert("❌ Primero pega tu API Key en la pestaña de Perfil");
             if (!q) return;
             
             document.getElementById('ai-loading').style.display = 'block';
             document.getElementById('ai-response').style.display = 'none';
             
-            // Mantenemos tu prompt original
             const prompt = `Actúa como nutricionista chilena. El usuario comió esto: "${q}". 
 Calcula las calorías y macronutrientes aproximados de manera realista. 
 IMPORTANTE: Tu respuesta debe ser ÚNICAMENTE un objeto JSON, sin formato markdown ni texto extra, con esta estructura exacta:
 {"nombre": "Nombre de la comida (porción)", "calorias": 100, "proteinas": 10}`;
 
             try {
-                // ¡AQUÍ ESTÁ LA MAGIA! Usamos el modelo que sí tienes habilitado
                 const data = await fetchGemini(prompt, key, 'gemini-2.5-flash');
 
                 if (!data.candidates || !data.candidates[0].content) {
@@ -346,15 +360,12 @@ IMPORTANTE: Tu respuesta debe ser ÚNICAMENTE un objeto JSON, sin formato markdo
                 }
 
                 let textResponse = data.candidates[0].content.parts[0].text;
-                
-                // Limpieza de formato por si la IA añade comillas de código
                 textResponse = textResponse.replace(/```json/gi, '').replace(/```/g, '').trim();
                 currentAIResult = JSON.parse(textResponse);
                 
                 currentAIResult.calorias = parseInt(currentAIResult.calorias) || 0;
                 currentAIResult.proteinas = parseInt(currentAIResult.proteinas) || 0;
                 
-                // Mostramos el resultado en la interfaz
                 document.getElementById('ai-texto').innerHTML = `<b>${currentAIResult.nombre}</b><br><i class="ph-fill ph-fire" style="color:var(--accent);"></i> ${currentAIResult.calorias} kcal | <i class="ph-fill ph-barbell" style="color:var(--primary-dark);"></i> ${currentAIResult.proteinas}g prot`;
                 document.getElementById('ai-response').style.display = 'block';
                 document.getElementById('btn-add-ai').onclick = addComidaAI;
@@ -383,12 +394,8 @@ IMPORTANTE: Tu respuesta debe ser ÚNICAMENTE un objeto JSON, sin formato markdo
             if (!n || isNaN(k)) return alert("¡Ups! Recuerda ingresar el nombre y las calorías.");
             
             db.registros[f].comidas.push({ id: Date.now(), n: n, k: k, p: p });
-            save(); 
-            cambioFechaGlobal();
-            
-            document.getElementById('man-nombre').value = ''; 
-            document.getElementById('man-kcal').value = ''; 
-            document.getElementById('man-prot').value = '';
+            save(); cambioFechaGlobal();
+            document.getElementById('man-nombre').value = ''; document.getElementById('man-kcal').value = ''; document.getElementById('man-prot').value = '';
         }
 
         function agregarEjercicio() {
@@ -415,7 +422,7 @@ IMPORTANTE: Tu respuesta debe ser ÚNICAMENTE un objeto JSON, sin formato markdo
                     document.getElementById('baddie-modal').style.display = 'flex';
                 }
             });
-            save(); cambioFechaGlobal(); alert("Guardado con éxito");
+            save(); cambioFechaGlobal(); alert("¡Medidas actualizadas con éxito!");
         }
 
         function renderDiario() {
@@ -426,8 +433,70 @@ IMPORTANTE: Tu respuesta debe ser ÚNICAMENTE un objeto JSON, sin formato markdo
             });
             const le = document.getElementById('lista-ejercicios'); le.innerHTML = '';
             db.registros[f].ejercicios.forEach(e => {
-                le.innerHTML += `<div class="list-item"><div class="info"><b>${e.n}</b><small>${e.t} min</small></div><div class="stats"><span style="color:var(--success);"><i class="ph-bold ph-trend-down"></i> ${e.k}</span><button class="delete-btn" onclick="borrarItem('e',${e.id})"><i class="ph-bold ph-trash"></i></button></div></div>`;
+                le.innerHTML += `<div class="list-item"><div class="info"><b>${e.n}</b><small>${e.t} min</small></div><div class="stats"><span style="color:var(--success);"><i class="ph-bold ph-trend-down"></i> ${e.k}</span><button class="delete-btn" onclick="borrarItem('e',${e.id})"><i class="ph-bold ph-trash"></i></button></div></div></div>`;
             });
+        }
+
+        // LÓGICA NUEVA: TERMINAR EL DÍA
+        function terminarDia() {
+            const f = document.getElementById('global-fecha').value;
+            const hoy = db.registros[f];
+            const conf = db.config;
+
+            let tIn = 0, tOut = 0;
+            hoy.comidas.forEach(c => { tIn += c.k; });
+            hoy.ejercicios.forEach(e => { tOut += e.k; });
+            const pesos = Object.keys(db.registros).sort().map(k=>db.registros[k].peso).filter(p=>p>0);
+            const uPeso = hoy.peso || pesos[pesos.length-1] || conf.pesoI || 0;
+
+            let rest = 0;
+            if(uPeso > 0 && conf.altura && conf.edad) {
+                const bmr = (10 * uPeso) + (6.25 * conf.altura) - (5 * conf.edad) - 161;
+                const neat = Math.round(bmr * conf.actividad); 
+                const metaDef = parseFloat(conf.deficit || 500);
+                const meta = neat - metaDef; 
+                rest = meta - tIn + tOut;
+            }
+
+            const modal = document.getElementById('end-day-modal');
+            const icon = document.getElementById('end-day-icon');
+            const title = document.getElementById('end-day-title');
+            const msg = document.getElementById('end-day-msg');
+
+            if (rest >= 0) {
+                icon.className = "ph-fill ph-confetti";
+                icon.style.color = "var(--success)";
+                title.style.color = "var(--success)";
+                title.innerText = "¡Misión Cumplida!";
+                msg.innerText = "¡Felicidades! Lograste mantenerte en tu zona Baddie y cumpliste tu déficit. ¡A descansar que mañana seguimos con todo! ✨";
+            } else {
+                icon.className = "ph-fill ph-battery-warning";
+                icon.style.color = "var(--danger)";
+                title.style.color = "var(--danger)";
+                title.innerText = "Día Terminado";
+                msg.innerText = "Hoy te pasaste un poquito de las calorías permitidas, ¡pero no pasa nada! Mañana es una nueva oportunidad para retomar tu rutina. 💪";
+            }
+
+            modal.style.display = 'flex';
+        }
+
+        function cerrarYavanzarDia() {
+            document.getElementById('end-day-modal').style.display = 'none';
+            
+            // Avanzar fecha de forma segura
+            const inputFecha = document.getElementById('global-fecha');
+            const actual = new Date(inputFecha.value + 'T00:00:00'); 
+            actual.setDate(actual.getDate() + 1);
+            
+            const año = actual.getFullYear();
+            const mes = String(actual.getMonth() + 1).padStart(2, '0');
+            const dia = String(actual.getDate()).padStart(2, '0');
+            
+            inputFecha.value = `${año}-${mes}-${dia}`;
+            cambioFechaGlobal();
+            
+            // Llevar al usuario arriba al dashboard
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function actualizarDashboard() {
@@ -515,7 +584,7 @@ IMPORTANTE: Tu respuesta debe ser ÚNICAMENTE un objeto JSON, sin formato markdo
             save(); cambioFechaGlobal();
             document.getElementById('m-peso').value = ''; document.getElementById('m-premio').value = '';
         }
-        function delMeta(id) { if(confirm("¿Borrar?")) { db.metas = db.metas.filter(m=>m.id!==id); save(); cambioFechaGlobal(); } }
+        function delMeta(id) { if(confirm("¿Borrar meta?")) { db.metas = db.metas.filter(m=>m.id!==id); save(); cambioFechaGlobal(); } }
         function borrarItem(tipo, id) {
             const f = document.getElementById('global-fecha').value;
             if(tipo==='c') db.registros[f].comidas = db.registros[f].comidas.filter(i=>i.id!==id);
@@ -539,7 +608,7 @@ IMPORTANTE: Tu respuesta debe ser ÚNICAMENTE un objeto JSON, sin formato markdo
             db.config.actividad = document.getElementById('c-act').value;
             db.config.deficit = document.getElementById('c-deficit').value;
             db.config.apiKey = document.getElementById('c-apikey').value.trim();
-            save(); alert("Perfil actualizado"); cambioFechaGlobal();
+            save(); alert("¡Ajustes del perfil guardados!"); cambioFechaGlobal();
         }
         
         function descargarRespaldo() {
