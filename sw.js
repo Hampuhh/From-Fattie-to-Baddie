@@ -1,4 +1,4 @@
-const CACHE_NAME = 'baddie-tracker-v4'; // <-- Caché v4 para aplicar todo lo kawaii
+const CACHE_NAME = 'baddie-tracker-v5'; // <-- Caché v5 para aplicar todo lo kawaii
 const urlsToCache = [
   './',
   './index.html',
