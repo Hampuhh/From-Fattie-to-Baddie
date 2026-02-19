@@ -35,12 +35,26 @@ self.addEventListener('activate', event => {
   );
 });
 
-// 3. FETCH: Muestra la app sin internet
+// 3. FETCH: Estrategia "Network First" (Red Primero)
 self.addEventListener('fetch', event => {
+  // Ignorar las peticiones a la API de Gemini o extensiones de Chrome
+  if (!event.request.url.startsWith(http) || event.request.url.includes('googleapis')) {
+    return;
+  }
+
   event.respondWith(
-    caches.match(event.request)
+    fetch(event.request)
       .then(response => {
-        return response || fetch(event.request);
+        // Si hay internet, guardamos la versión fresca en caché para el futuro y la mostramos
+        const responseClone = response.clone();
+        caches.open(CACHE_NAME).then(cache => {
+          cache.put(event.request, responseClone);
+        });
+        return response;
+      })
+      .catch(() => {
+        // Si FALLA el internet (estás offline), sacamos la versión guardada de la caché
+        return caches.match(event.request);
       })
   );
 });
