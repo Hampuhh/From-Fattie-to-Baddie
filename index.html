@@ -313,7 +313,7 @@
             return data;
         }
 
-        async function consultarAI() {
+      async function consultarAI() {
             const q = document.getElementById('busqueda-ai').value;
             const key = db.config.apiKey;
             
@@ -335,8 +335,13 @@ IMPORTANTE: Tu respuesta debe ser ÚNICAMENTE un objeto JSON, sin formato markdo
                     data = await fetchGemini(prompt, key, 'gemini-1.5-flash');
                 } catch (err1) {
                     console.warn("Fallo modelo Flash, intentando modelo Pro...", err1);
-                    // Intento 2: Modelo clásico ultra compatible
-                    data = await fetchGemini(prompt, key, 'gemini-pro');
+                    // Intento 2: ACTUALIZADO a la versión 1.5 correcta
+                    data = await fetchGemini(prompt, key, 'gemini-1.5-pro'); 
+                }
+
+                // NUEVO: Validación por si la API bloquea la respuesta o viene vacía
+                if (!data.candidates || !data.candidates[0].content) {
+                    throw new Error("El modelo no devolvió texto o bloqueó la consulta.");
                 }
 
                 let textResponse = data.candidates[0].content.parts[0].text;
