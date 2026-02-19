@@ -155,7 +155,6 @@
         </div>
 
         <div class="glass-panel">
-            
             <div id="dashboard" class="tab-content active">
                 <div class="kpi-card" style="background: var(--primary); color: white; margin-bottom: 12px; width: 100%;">
                     <h3 style="color: rgba(255,255,255,0.8);">Calorías Restantes</h3>
@@ -207,14 +206,14 @@
                 </div>
                 <div id="ai-loading" class="ai-loading" style="display:none;"><i class="ph-bold ph-spinner ph-spin"></i> Gemini está calculando...</div>
                 
-                <div class="section-title">Comidas</div>
+                <div class="section-title">Comidas de Hoy</div>
                 <div id="lista-comidas"></div>
                 
-                <div class="section-title" style="margin-top: 25px;">Ejercicio</div>
-                <div class="form-group"><label>Actividad</label><input type="text" id="ej-nombre" placeholder="Ej: Pilates"></div>
+                <div class="section-title" style="margin-top: 25px;">Ejercicio Físico</div>
+                <div class="form-group"><label>Actividad</label><input type="text" id="ej-nombre" placeholder="Ej: Pilates, Cardio..."></div>
                 <div class="row">
-                    <div class="form-group"><label>Mins</label><input type="number" id="ej-tiempo"></div>
-                    <div class="form-group"><label>Kcal</label><input type="number" id="ej-kcal"></div>
+                    <div class="form-group"><label>Minutos</label><input type="number" id="ej-tiempo"></div>
+                    <div class="form-group"><label>Kcal Quemadas</label><input type="number" id="ej-kcal"></div>
                 </div>
                 <button class="btn-main btn-secondary" onclick="agregarEjercicio()">+ Añadir Ejercicio</button>
                 <div id="lista-ejercicios" style="margin-top:15px;"></div>
@@ -223,7 +222,7 @@
             <div id="config" class="tab-content">
                 <div class="section-title">Perfil Base</div>
                 <div class="row">
-                    <div class="form-group"><label>Altura</label><input type="number" id="c-alt"></div>
+                    <div class="form-group"><label>Altura (cm)</label><input type="number" id="c-alt"></div>
                     <div class="form-group"><label>Edad</label><input type="number" id="c-edad"></div>
                 </div>
                 <div class="form-group"><label>Peso Inicio Oficial</label><input type="number" id="c-peso-i"></div>
@@ -273,7 +272,7 @@
 
         function init() {
             try {
-                const saved = localStorage.getItem('baddieData_V22');
+                const saved = localStorage.getItem('baddieData_V23');
                 if (saved) db = JSON.parse(saved);
                 document.getElementById('global-fecha').valueAsDate = new Date();
                 cargarConfigUI(); 
@@ -300,48 +299,54 @@
             renderDiario(); renderMetas(); actualizarDashboard(); checkFattieZone();
         }
 
-        // --- MOTOR MEJORADO DE GEMINI AI ---
+        // --- MOTOR GEMINI BLINDADO (A PRUEBA DE ERRORES) ---
         async function consultarAI() {
             const q = document.getElementById('busqueda-ai').value;
             const key = db.config.apiKey;
             
-            if (!key) return alert("❌ Primero pega tu API Key en la pestaña de Metas");
+            if (!key) return alert("❌ Primero pega tu API Key en la pestaña de Metas (Ajustes)");
             if (!q) return;
             
             document.getElementById('ai-loading').style.display = 'block';
             document.getElementById('ai-response').style.display = 'none';
             
-            const prompt = `Actúa como nutricionista chilena. El usuario comió: "${q}". 
-Calcula las calorías y macronutrientes aproximados. 
-Obligatorio: Responde ÚNICAMENTE con un objeto JSON válido con esta estructura exacta:
-{"nombre": "Nombre del plato (cantidad)", "calorias": numero_entero, "proteinas": numero_entero}`;
+            const prompt = `Actúa como nutricionista chilena. El usuario comió esto: "${q}". 
+Calcula las calorías y macronutrientes aproximados de manera realista. 
+IMPORTANTE: Tu respuesta debe ser ÚNICAMENTE un objeto JSON, sin texto antes ni después, con esta estructura exacta:
+{"nombre": "Nombre de la comida (porción)", "calorias": 100, "proteinas": 10}`;
 
             try {
                 const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
-                        contents: [{ parts: [{ text: prompt }] }],
-                        generationConfig: { responseMimeType: "application/json" } // Obliga a Gemini a devolver JSON perfecto
+                        contents: [{ parts: [{ text: prompt }] }] 
                     })
                 });
                 
+                const data = await res.json();
+
+                // DETECTOR DE ERRORES REALES DE GOOGLE
                 if (!res.ok) {
-                    throw new Error("Error en la conexión con Google. Verifica que la llave sea correcta.");
+                    throw new Error(`Google dice: ${data.error?.message || 'Error desconocido de API'}`);
                 }
 
-                const data = await res.json();
-                const textResponse = data.candidates[0].content.parts[0].text;
+                let textResponse = data.candidates[0].content.parts[0].text;
                 
-                // Como le exigimos MimeType JSON, no necesitamos hacer limpiezas raras
+                // LIMPIEZA MANUAL (Más seguro que responseMimeType)
+                textResponse = textResponse.replace(/```json/gi, '').replace(/```/g, '').trim();
                 currentAIResult = JSON.parse(textResponse);
+                
+                // Asegurar que devuelve números
+                currentAIResult.calorias = parseInt(currentAIResult.calorias) || 0;
+                currentAIResult.proteinas = parseInt(currentAIResult.proteinas) || 0;
                 
                 document.getElementById('ai-texto').innerHTML = `<b>${currentAIResult.nombre}</b><br><i class="ph-fill ph-fire" style="color:var(--accent);"></i> ${currentAIResult.calorias} kcal | <i class="ph-fill ph-barbell" style="color:var(--primary-dark);"></i> ${currentAIResult.proteinas}g prot`;
                 document.getElementById('ai-response').style.display = 'block';
                 document.getElementById('btn-add-ai').onclick = addComidaAI;
                 
             } catch (e) { 
-                alert("⚠️ " + e.message); 
+                alert(`⚠️ Error de conexión:\n\n${e.message}\n\nRevisa que tu API Key esté bien pegada y no tenga espacios en blanco.`); 
                 console.error(e);
             } finally {
                 document.getElementById('ai-loading').style.display = 'none';
@@ -419,7 +424,7 @@ Obligatorio: Responde ÚNICAMENTE con un objeto JSON válido con esta estructura
                 
                 const calWarn = document.getElementById('cal-warning');
                 if (rest <= 200 && rest > 0) {
-                    calWarn.style.display = 'flex'; calWarn.innerHTML = '<i class="ph-fill ph-warning"></i> ¡PELIGRO! Cerca de zona Fattie';
+                    calWarn.style.display = 'flex'; calWarn.innerHTML = '<i class="ph-fill ph-warning-octagon"></i> ¡PELIGRO! Cerca de zona Fattie';
                 } else if (rest <= 0) {
                     calWarn.style.display = 'flex'; calWarn.innerHTML = '<i class="ph-fill ph-skull"></i> ¡ZONA FATTIE! Límite superado';
                 } else { calWarn.style.display = 'none'; }
@@ -513,7 +518,7 @@ Obligatorio: Responde ÚNICAMENTE con un objeto JSON válido con esta estructura
             const a = document.createElement('a'); a.href = url; a.download = `Baddie_Backup.json`; a.click();
         }
         
-        function save() { localStorage.setItem('baddieData_V22', JSON.stringify(db)); }
+        function save() { localStorage.setItem('baddieData_V23', JSON.stringify(db)); }
         
         function renderChart() {
             const ctx = document.getElementById('graficoPeso').getContext('2d');
