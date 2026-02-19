@@ -39,7 +39,7 @@
         .app-wrapper { width: 100%; max-width: 500px; display: flex; flex-direction: column; gap: 12px; padding-bottom: 30px; }
         
         .baddie-banner { 
-            background-image: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)), url('banner.png'); 
+            background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url('banner.png'); 
             background-size: cover; background-position: center; color: white; text-align: center; 
             padding: 45px 20px 30px 20px; border-radius: 24px; box-shadow: 0 8px 20px rgba(0,0,0,0.08);
             position: relative; overflow: hidden;
@@ -66,11 +66,15 @@
             font-family: 'Nunito'; font-size: 10px; font-weight: 800; color: var(--text-light); 
             display: flex; flex-direction: column; align-items: center; gap: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
         }
-        .tab-btn i { font-size: 22px; color: var(--text-light); }
+        .tab-btn i { font-size: 24px; color: var(--text-light); }
         .tab-btn.active { background: var(--primary); color: white; }
         .tab-btn.active i { color: white; }
 
         .glass-panel { background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(15px); border-radius: 24px; padding: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.05); }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.2s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
         .alert-box { 
             background-color: var(--danger); color: white; text-align: center; padding: 12px; 
@@ -82,15 +86,15 @@
 
         .form-group { margin-bottom: 12px; }
         label { display: block; font-size: 10px; font-weight: 800; margin-bottom: 4px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px;}
-        input, select, textarea { width: 100%; padding: 12px; border: 2px solid #f0edea; border-radius: 14px; font-family: 'Nunito'; font-size: 15px; background: white; }
+        input, select { width: 100%; padding: 12px; border: 2px solid #f0edea; border-radius: 14px; font-family: 'Nunito'; font-size: 15px; background: white; }
         
         .btn-main { width: 100%; background: var(--primary); color: white; padding: 14px; border: none; border-radius: 14px; font-weight: 800; font-size: 14px; margin-top: 5px; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; }
         .btn-secondary { background: white; color: var(--primary); border: 2px solid var(--primary); }
 
         .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
         .kpi-card { background: white; border-radius: 20px; padding: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .kpi-card h2 { margin: 0; font-size: 18px; font-weight: 900; }
         .kpi-card h3 { font-size: 9px; text-transform: uppercase; color: var(--text-light); margin: 0 0 4px 0; font-weight: 800;}
+        .kpi-card h2 { margin: 0; font-size: 18px; font-weight: 900; }
         .progress-text { font-size: 11px; font-weight: 900; color: var(--success); margin-top: 4px; display: flex; justify-content: center; align-items: center; gap: 3px;}
 
         .search-container { display: flex; gap: 8px; margin-bottom: 12px; }
@@ -107,13 +111,14 @@
         .chart-wrapper { position: relative; height: 180px; width: 100%; background: white; border-radius: 20px; padding: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); margin-top: 10px; }
         .section-title { font-size: 15px; font-weight: 800; color: var(--primary-dark); margin: 15px 0 10px 0; display: flex; justify-content: space-between; align-items: center;}
         
-        /* AI AREA */
-        #ai-response { display: none; background: #fffdf2; border: 2px solid #ffe58f; border-radius: 16px; padding: 15px; margin-bottom: 15px; animation: fadeIn 0.3s; }
+        #ai-response { display: none; background: #fffdf2; border: 2px solid #ffe58f; border-radius: 16px; padding: 15px; margin-bottom: 15px; }
         .ai-loading { text-align: center; color: var(--text-light); font-size: 13px; font-weight: 800; padding: 10px; }
+        .health-badge { display: inline-block; padding: 6px 10px; border-radius: 10px; font-size: 11px; font-weight: 800; margin-top: 5px;}
+        .badge-good { background: #e8f5e9; color: #2e7d32; }
+        .badge-warn { background: #fff8e1; color: #f57f17; }
 
         #baddie-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(90, 80, 75, 0.7); backdrop-filter: blur(8px); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
         .modal-content { background: white; border-radius: 30px; padding: 35px 25px; text-align: center; max-width: 350px; border: 4px solid var(--accent); }
-        .health-badge { display: inline-block; padding: 6px 10px; border-radius: 10px; font-size: 11px; font-weight: 800; margin-top: 5px;}
     </style>
 </head>
 <body>
@@ -134,7 +139,7 @@
                 <input type="date" id="global-fecha" onchange="cambioFechaGlobal()">
             </div>
             <h1>From Fattie to Baddie</h1>
-            <p>AI Powered <i class="ph-fill ph-sparkle" style="color: var(--gold);"></i></p>
+            <p>AI Assistant <i class="ph-fill ph-sparkle" style="color: var(--gold);"></i></p>
         </header>
 
         <div id="cal-warning" class="alert-box"></div>
@@ -150,11 +155,12 @@
         </div>
 
         <div class="glass-panel">
+            
             <div id="dashboard" class="tab-content active">
                 <div class="kpi-card" style="background: var(--primary); color: white; margin-bottom: 12px; width: 100%;">
                     <h3 style="color: rgba(255,255,255,0.8);">Calorías Restantes</h3>
                     <h2 id="cal-restantes" style="font-size: 26px;">-- kcal</h2>
-                    <div style="font-size: 10px; margin-top: 4px; font-weight: 700; opacity: 0.9;" id="cal-detalle">Esperando datos...</div>
+                    <div style="font-size: 10px; margin-top: 4px; font-weight: 700; opacity: 0.9;" id="cal-detalle">Cargando...</div>
                 </div>
                 <div class="kpi-grid">
                     <div class="kpi-card"><h3>Déficit Real</h3><h2 id="deficit-hoy" style="color: var(--accent);">0</h2></div>
@@ -189,24 +195,18 @@
             </div>
 
             <div id="nutricion" class="tab-content">
-                <div class="section-title">Consultar a Gemini AI</div>
+                <div class="section-title">Buscador Inteligente</div>
                 <div class="search-container">
                     <input type="text" id="busqueda-ai" placeholder="Ej: media palta reina con té..." onkeydown="if(event.key==='Enter') consultarAI()">
                     <button class="btn-search" onclick="consultarAI()"><i class="ph-fill ph-lightning"></i></button>
                 </div>
-
                 <div id="ai-response">
                     <div id="ai-texto"></div>
                     <button class="btn-main" id="btn-add-ai" style="background: var(--success); margin-top: 10px;"><i class="ph-bold ph-plus"></i> Añadir al Diario</button>
                 </div>
-
-                <div id="ai-loading" class="ai-loading" style="display:none;">
-                    <i class="ph-bold ph-spinner ph-spin"></i> Gemini está calculando...
-                </div>
-
-                <div class="section-title">Registro Hoy</div>
+                <div id="ai-loading" class="ai-loading" style="display:none;"><i class="ph-bold ph-spinner ph-spin"></i> Gemini calculando...</div>
+                <div class="section-title">Comidas</div>
                 <div id="lista-comidas"></div>
-
                 <div class="section-title" style="margin-top: 25px;">Ejercicio</div>
                 <div class="form-group"><label>Actividad</label><input type="text" id="ej-nombre" placeholder="Ej: Pilates"></div>
                 <div class="row">
@@ -218,23 +218,23 @@
             </div>
 
             <div id="config" class="tab-content">
-                <div class="section-title">Ajustes Baddie</div>
+                <div class="section-title">Perfil Base</div>
                 <div class="row">
                     <div class="form-group"><label>Altura</label><input type="number" id="c-alt"></div>
                     <div class="form-group"><label>Edad</label><input type="number" id="c-edad"></div>
                 </div>
                 <div class="form-group"><label>Peso Inicio Oficial</label><input type="number" id="c-peso-i"></div>
                 <div class="form-group">
-                    <label>Pasos Diarios (NEAT)</label>
+                    <label>Actividad Física (NEAT)</label>
                     <select id="c-act">
-                        <option value="1.2">Sedentario (Menos de 5k)</option>
-                        <option value="1.3">Ligero (5k - 8k)</option>
-                        <option value="1.45">Moderado (8k - 10k)</option>
-                        <option value="1.6">Activo (Más de 10k)</option>
+                        <option value="1.2">Sedentario (Menos de 5k pasos)</option>
+                        <option value="1.3">Ligero (5k - 8k pasos)</option>
+                        <option value="1.45">Moderado (8k - 10k pasos)</option>
+                        <option value="1.6">Activo (Más de 10k pasos)</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Déficit Diario Meta</label>
+                    <label>Déficit Diario Deseado</label>
                     <select id="c-deficit">
                         <option value="300">Suave (-300 kcal)</option>
                         <option value="500">Recomendado (-500 kcal)</option>
@@ -247,8 +247,7 @@
                 </div>
                 <button class="btn-main" onclick="guardarConfig()">Actualizar Perfil</button>
                 <button class="btn-main" style="background-color: #e2e8e5; color: var(--primary-dark); margin-top: 10px;" onclick="descargarRespaldo()"><i class="ph-bold ph-download-simple"></i> Respaldar Datos</button>
-
-                <div class="section-title" style="margin-top: 40px; color: var(--accent);">Metas y Proyecciones</div>
+                <div class="section-title" style="margin-top: 30px; color: var(--accent);">Metas y Proyecciones</div>
                 <div class="row">
                     <input type="number" id="m-peso" placeholder="Meta kg" style="flex:1;">
                     <input type="text" id="m-premio" placeholder="Premio" style="flex:2;">
@@ -256,19 +255,15 @@
                 <button class="btn-main btn-secondary" onclick="agregarMeta()">Crear Meta</button>
                 <div id="lista-metas" style="margin-top: 15px;"></div>
             </div>
-        </div>
-    </div>
-
-    <script>
+            
+        </div> </div> <script>
         if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); }); }
-        
         let db = { registros: {}, metas: [], config: { altura: 160, edad: '', actividad: 1.2, pesoI: '', deficit: 500, apiKey: '' } };
-        let currentAIResult = null;
-        let chart = null;
+        let currentAIResult = null; let chart = null;
 
         function init() {
             try {
-                const saved = localStorage.getItem('baddieData_V20');
+                const saved = localStorage.getItem('baddieData_V21');
                 if (saved) db = JSON.parse(saved);
                 document.getElementById('global-fecha').valueAsDate = new Date();
                 cargarConfigUI(); cambioFechaGlobal();
@@ -293,49 +288,34 @@
             renderDiario(); renderMetas(); actualizarDashboard(); checkFattieZone();
         }
 
-        // --- LÓGICA DE IA GEMINI ---
         async function consultarAI() {
             const q = document.getElementById('busqueda-ai').value;
             const key = db.config.apiKey;
-            if (!key) return alert("Primero pega tu API Key en la pestaña de Metas (Configuración)");
+            if (!key) return alert("Pega tu API Key en la pestaña de Metas");
             if (!q) return;
-
-            const loader = document.getElementById('ai-loading');
-            const responseBox = document.getElementById('ai-response');
-            loader.style.display = 'block';
-            responseBox.style.display = 'none';
-
-            const prompt = `Eres un experto en nutrición chilena. El usuario comió: "${q}". 
-            Devuelve ÚNICAMENTE un objeto JSON con las claves: "nombre", "calorias", "proteinas". 
-            Sé preciso con las porciones mencionadas. Si no hay porción, asume una normal. 
-            Ejemplo de respuesta: {"nombre": "Media palta reina", "calorias": 180, "proteinas": 4}`;
-
+            document.getElementById('ai-loading').style.display = 'block';
+            document.getElementById('ai-response').style.display = 'none';
+            const prompt = `Nutricionista chilena. Analiza: "${q}". Devuelve JSON: {"nombre": "Plato", "calorias": 100, "proteinas": 10}. Solo JSON.`;
             try {
                 const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
-                    method: 'POST',
-                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                    method: 'POST', body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
                 });
                 const data = await res.json();
                 const text = data.candidates[0].content.parts[0].text;
                 const jsonMatch = text.match(/\{.*\}/s);
                 if (jsonMatch) {
                     currentAIResult = JSON.parse(jsonMatch[0]);
-                    document.getElementById('ai-texto').innerHTML = `<b>${currentAIResult.nombre}</b><br><i class="ph-fill ph-fire"></i> ${currentAIResult.calorias} kcal | <i class="ph-fill ph-barbell"></i> ${currentAIResult.proteinas}g prot`;
-                    responseBox.style.display = 'block';
+                    document.getElementById('ai-texto').innerHTML = `<b>${currentAIResult.nombre}</b><br><i class="ph-fill ph-fire"></i> ${currentAIResult.calorias} kcal | ${currentAIResult.proteinas}g prot`;
+                    document.getElementById('ai-response').style.display = 'block';
                     document.getElementById('btn-add-ai').onclick = addComidaAI;
                 }
-            } catch (e) { alert("Error con la IA. Revisa tu llave o conexión."); }
-            loader.style.display = 'none';
+            } catch (e) { alert("Error con la IA. Revisa tu llave."); }
+            document.getElementById('ai-loading').style.display = 'none';
         }
 
         function addComidaAI() {
             const f = document.getElementById('global-fecha').value;
-            db.registros[f].comidas.push({
-                id: Date.now(), 
-                n: currentAIResult.nombre, 
-                k: currentAIResult.calorias, 
-                p: currentAIResult.proteinas
-            });
+            db.registros[f].comidas.push({ id: Date.now(), n: currentAIResult.nombre, k: currentAIResult.calorias, p: currentAIResult.proteinas });
             save(); cambioFechaGlobal();
             document.getElementById('ai-response').style.display = 'none';
             document.getElementById('busqueda-ai').value = '';
@@ -365,7 +345,7 @@
                     document.getElementById('baddie-modal').style.display = 'flex';
                 }
             });
-            save(); cambioFechaGlobal(); alert("Medidas guardadas");
+            save(); cambioFechaGlobal(); alert("Guardado");
         }
 
         function renderDiario() {
@@ -388,29 +368,23 @@
             hoy.ejercicios.forEach(e => { tOut += e.k; });
             const pesos = Object.keys(db.registros).sort().map(k=>db.registros[k].peso).filter(p=>p>0);
             const uPeso = hoy.peso || pesos[pesos.length-1] || conf.pesoI || 0;
-            
             if(uPeso > 0 && conf.altura && conf.edad) {
                 const bmr = (10 * uPeso) + (6.25 * conf.altura) - (5 * conf.edad) - 161;
                 const neat = Math.round(bmr * conf.actividad); 
                 const metaDef = parseFloat(conf.deficit || 500);
                 const meta = neat - metaDef; 
                 const rest = meta - tIn + tOut;
-                
                 document.getElementById('cal-restantes').innerText = rest + ' kcal';
-                document.getElementById('cal-detalle').innerText = `Base: ${neat} | Comida: ${tIn} | Ejercicio: ${tOut}`;
+                document.getElementById('cal-detalle').innerText = `TDEE: ${neat} | Comida: ${tIn} | Ejer: ${tOut}`;
                 document.getElementById('prot-hoy').innerText = tP + 'g';
                 const defReal = (neat + tOut) - tIn;
                 document.getElementById('deficit-hoy').innerText = (defReal > 0 ? '-' : '+') + Math.abs(defReal);
-                
                 const calWarn = document.getElementById('cal-warning');
                 if (rest <= 200 && rest > 0) {
-                    calWarn.style.display = 'flex';
-                    calWarn.innerHTML = '<i class="ph-fill ph-warning-octagon"></i> ¡PELIGRO! estás a punto de entrar a la zona Fattie';
+                    calWarn.style.display = 'flex'; calWarn.innerHTML = '<i class="ph-fill ph-warning"></i> ¡PELIGRO! Cerca de zona Fattie';
                 } else if (rest <= 0) {
-                    calWarn.style.display = 'flex';
-                    calWarn.innerHTML = '<i class="ph-fill ph-skull"></i> ¡ZONA FATTIE! Has superado tu límite diario';
+                    calWarn.style.display = 'flex'; calWarn.innerHTML = '<i class="ph-fill ph-skull"></i> ¡ZONA FATTIE! Límite superado';
                 } else { calWarn.style.display = 'none'; }
-
                 if(hoy.cintura && hoy.cadera) {
                     const icc = (hoy.cintura / hoy.cadera).toFixed(2);
                     document.getElementById('icc-value').innerText = icc;
@@ -442,7 +416,6 @@
             const pesos = Object.values(db.registros).map(r=>r.peso).filter(p=>p>0);
             const uPeso = pesos[pesos.length-1] || db.config.pesoI || 0;
             const def = parseFloat(db.config.deficit || 500);
-
             db.metas.forEach(m => {
                 let proy = '';
                 if(!m.done && uPeso > m.p) {
@@ -476,10 +449,10 @@
             save(); cambioFechaGlobal();
         }
         function cargarConfigUI() {
-            document.getElementById('c-alt').value = db.config.altura;
-            document.getElementById('c-edad').value = db.config.edad;
-            document.getElementById('c-peso-i').value = db.config.pesoI;
-            document.getElementById('c-act').value = db.config.actividad;
+            document.getElementById('c-alt').value = db.config.altura || '';
+            document.getElementById('c-edad').value = db.config.edad || '';
+            document.getElementById('c-peso-i').value = db.config.pesoI || '';
+            document.getElementById('c-act').value = db.config.actividad || 1.2;
             document.getElementById('c-deficit').value = db.config.deficit || 500;
             document.getElementById('c-apikey').value = db.config.apiKey || '';
         }
@@ -497,7 +470,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a'); a.href = url; a.download = `Baddie_Backup.json`; a.click();
         }
-        function save() { localStorage.setItem('baddieData_V20', JSON.stringify(db)); }
+        function save() { localStorage.setItem('baddieData_V21', JSON.stringify(db)); }
         function renderChart() {
             const ctx = document.getElementById('graficoPeso').getContext('2d');
             const fechas = Object.keys(db.registros).sort().slice(-7);
