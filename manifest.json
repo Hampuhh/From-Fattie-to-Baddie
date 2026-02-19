@@ -1,0 +1,17 @@
+{
+  "name": "Wellness Tracker Baddie Edition",
+  "short_name": "BaddieApp",
+  "description": "Tu rastreador personal de bienestar, calorías y progreso.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f8f9fa",
+  "theme_color": "#d4a5a5",
+  "icons": [
+    {
+      "src": "icono.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
