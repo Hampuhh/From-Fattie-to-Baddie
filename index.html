@@ -155,6 +155,7 @@
         </div>
 
         <div class="glass-panel">
+            
             <div id="dashboard" class="tab-content active">
                 <div class="kpi-card" style="background: var(--primary); color: white; margin-bottom: 12px; width: 100%;">
                     <h3 style="color: rgba(255,255,255,0.8);">Calorías Restantes</h3>
@@ -194,9 +195,9 @@
             </div>
 
             <div id="nutricion" class="tab-content">
-                <div class="section-title">Buscador Inteligente</div>
+                <div class="section-title">Asistente Nutricional</div>
                 <div class="search-container">
-                    <input type="text" id="busqueda-ai" placeholder="Ej: media palta reina con té..." onkeydown="if(event.key==='Enter') consultarAI()">
+                    <input type="text" id="busqueda-ai" placeholder="Ej: Dos huevos duros y un té..." onkeydown="if(event.key==='Enter') consultarAI()">
                     <button class="btn-search" onclick="consultarAI()"><i class="ph-fill ph-lightning"></i></button>
                 </div>
                 
@@ -272,7 +273,7 @@
 
         function init() {
             try {
-                const saved = localStorage.getItem('baddieData_V23');
+                const saved = localStorage.getItem('baddieData_V24');
                 if (saved) db = JSON.parse(saved);
                 document.getElementById('global-fecha').valueAsDate = new Date();
                 cargarConfigUI(); 
@@ -299,7 +300,7 @@
             renderDiario(); renderMetas(); actualizarDashboard(); checkFattieZone();
         }
 
-        // --- MOTOR GEMINI BLINDADO (A PRUEBA DE ERRORES) ---
+        // --- MOTOR GEMINI V3 (CON FIX DE NOMBRE DE MODELO Y PARSEO ROBUSTO) ---
         async function consultarAI() {
             const q = document.getElementById('busqueda-ai').value;
             const key = db.config.apiKey;
@@ -311,12 +312,15 @@
             document.getElementById('ai-response').style.display = 'none';
             
             const prompt = `Actúa como nutricionista chilena. El usuario comió esto: "${q}". 
-Calcula las calorías y macronutrientes aproximados de manera realista. 
+Calcula las calorías y macronutrientes aproximados. 
 IMPORTANTE: Tu respuesta debe ser ÚNICAMENTE un objeto JSON, sin texto antes ni después, con esta estructura exacta:
 {"nombre": "Nombre de la comida (porción)", "calorias": 100, "proteinas": 10}`;
 
             try {
-                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+                // CAMBIO CLAVE: Usamos gemini-1.5-flash-latest
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${key}`;
+                
+                const res = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
@@ -326,18 +330,17 @@ IMPORTANTE: Tu respuesta debe ser ÚNICAMENTE un objeto JSON, sin texto antes ni
                 
                 const data = await res.json();
 
-                // DETECTOR DE ERRORES REALES DE GOOGLE
                 if (!res.ok) {
                     throw new Error(`Google dice: ${data.error?.message || 'Error desconocido de API'}`);
                 }
 
                 let textResponse = data.candidates[0].content.parts[0].text;
                 
-                // LIMPIEZA MANUAL (Más seguro que responseMimeType)
+                // Limpieza extra fuerte para asegurar que no haya formato markdown que rompa la app
                 textResponse = textResponse.replace(/```json/gi, '').replace(/```/g, '').trim();
+                
                 currentAIResult = JSON.parse(textResponse);
                 
-                // Asegurar que devuelve números
                 currentAIResult.calorias = parseInt(currentAIResult.calorias) || 0;
                 currentAIResult.proteinas = parseInt(currentAIResult.proteinas) || 0;
                 
@@ -346,7 +349,7 @@ IMPORTANTE: Tu respuesta debe ser ÚNICAMENTE un objeto JSON, sin texto antes ni
                 document.getElementById('btn-add-ai').onclick = addComidaAI;
                 
             } catch (e) { 
-                alert(`⚠️ Error de conexión:\n\n${e.message}\n\nRevisa que tu API Key esté bien pegada y no tenga espacios en blanco.`); 
+                alert(`⚠️ Error de conexión:\n\n${e.message}\n\nAsegúrate de que la llave no tenga espacios en blanco al inicio o al final.`); 
                 console.error(e);
             } finally {
                 document.getElementById('ai-loading').style.display = 'none';
@@ -518,7 +521,7 @@ IMPORTANTE: Tu respuesta debe ser ÚNICAMENTE un objeto JSON, sin texto antes ni
             const a = document.createElement('a'); a.href = url; a.download = `Baddie_Backup.json`; a.click();
         }
         
-        function save() { localStorage.setItem('baddieData_V23', JSON.stringify(db)); }
+        function save() { localStorage.setItem('baddieData_V24', JSON.stringify(db)); }
         
         function renderChart() {
             const ctx = document.getElementById('graficoPeso').getContext('2d');
