@@ -1,4 +1,4 @@
-const CACHE_NAME = 'baddie-tracker-v10'; // Cuando hagas un cambio en el futuro, solo sube este número (v8, v9...)
+const CACHE_NAME = 'baddie-tracker-v11'; // Cuando hagas un cambio en el futuro, solo sube este número (v8, v9...)
 const urlsToCache = [
   './',
   './index.html',
