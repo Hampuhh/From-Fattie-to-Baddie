@@ -64,7 +64,7 @@
         .tab-btn { 
             background: #ffffff; border: none; padding: 12px 5px; border-radius: 16px; 
             font-family: 'Nunito'; font-size: 10px; font-weight: 800; color: var(--text-light); 
-            display: flex; flex-direction: column; align-items: center; gap: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            display: flex; flex-direction: column; align-items: center; gap: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); cursor: pointer;
         }
         .tab-btn i { font-size: 24px; color: var(--text-light); }
         .tab-btn.active { background: var(--primary); color: white; }
@@ -195,9 +195,9 @@
             </div>
 
             <div id="nutricion" class="tab-content">
-                <div class="section-title">Asistente Nutricional</div>
+                <div class="section-title">Nutricionista AI</div>
                 <div class="search-container">
-                    <input type="text" id="busqueda-ai" placeholder="Ej: Dos huevos duros y un té..." onkeydown="if(event.key==='Enter') consultarAI()">
+                    <input type="text" id="busqueda-ai" placeholder="Ej: Dos huevos duros y té..." onkeydown="if(event.key==='Enter') consultarAI()">
                     <button class="btn-search" onclick="consultarAI()"><i class="ph-fill ph-lightning"></i></button>
                 </div>
                 
@@ -205,7 +205,7 @@
                     <div id="ai-texto"></div>
                     <button class="btn-main" id="btn-add-ai" style="background: var(--success); margin-top: 10px;"><i class="ph-bold ph-plus"></i> Añadir al Diario</button>
                 </div>
-                <div id="ai-loading" class="ai-loading" style="display:none;"><i class="ph-bold ph-spinner ph-spin"></i> Gemini está calculando...</div>
+                <div id="ai-loading" class="ai-loading" style="display:none;"><i class="ph-bold ph-spinner ph-spin"></i> Analizando plato...</div>
                 
                 <div class="section-title">Comidas de Hoy</div>
                 <div id="lista-comidas"></div>
@@ -273,7 +273,7 @@
 
         function init() {
             try {
-                const saved = localStorage.getItem('baddieData_V24');
+                const saved = localStorage.getItem('baddieData_V25');
                 if (saved) db = JSON.parse(saved);
                 document.getElementById('global-fecha').valueAsDate = new Date();
                 cargarConfigUI(); 
@@ -300,7 +300,19 @@
             renderDiario(); renderMetas(); actualizarDashboard(); checkFattieZone();
         }
 
-        // --- MOTOR GEMINI V3 (CON FIX DE NOMBRE DE MODELO Y PARSEO ROBUSTO) ---
+        // --- MOTOR GEMINI CON FALLBACK AUTOMÁTICO ---
+        async function fetchGemini(prompt, key, modelo) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${key}`;
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error?.message || "Error desconocido");
+            return data;
+        }
+
         async function consultarAI() {
             const q = document.getElementById('busqueda-ai').value;
             const key = db.config.apiKey;
@@ -312,33 +324,25 @@
             document.getElementById('ai-response').style.display = 'none';
             
             const prompt = `Actúa como nutricionista chilena. El usuario comió esto: "${q}". 
-Calcula las calorías y macronutrientes aproximados. 
-IMPORTANTE: Tu respuesta debe ser ÚNICAMENTE un objeto JSON, sin texto antes ni después, con esta estructura exacta:
+Calcula las calorías y macronutrientes aproximados de manera realista. 
+IMPORTANTE: Tu respuesta debe ser ÚNICAMENTE un objeto JSON, sin formato markdown ni texto extra, con esta estructura exacta:
 {"nombre": "Nombre de la comida (porción)", "calorias": 100, "proteinas": 10}`;
 
             try {
-                // CAMBIO CLAVE: Usamos gemini-1.5-flash-latest
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${key}`;
-                
-                const res = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        contents: [{ parts: [{ text: prompt }] }] 
-                    })
-                });
-                
-                const data = await res.json();
-
-                if (!res.ok) {
-                    throw new Error(`Google dice: ${data.error?.message || 'Error desconocido de API'}`);
+                let data;
+                try {
+                    // Intento 1: Modelo rápido y nuevo
+                    data = await fetchGemini(prompt, key, 'gemini-1.5-flash');
+                } catch (err1) {
+                    console.warn("Fallo modelo Flash, intentando modelo Pro...", err1);
+                    // Intento 2: Modelo clásico ultra compatible
+                    data = await fetchGemini(prompt, key, 'gemini-pro');
                 }
 
                 let textResponse = data.candidates[0].content.parts[0].text;
                 
-                // Limpieza extra fuerte para asegurar que no haya formato markdown que rompa la app
+                // Limpieza fuerte de texto
                 textResponse = textResponse.replace(/```json/gi, '').replace(/```/g, '').trim();
-                
                 currentAIResult = JSON.parse(textResponse);
                 
                 currentAIResult.calorias = parseInt(currentAIResult.calorias) || 0;
@@ -348,9 +352,8 @@ IMPORTANTE: Tu respuesta debe ser ÚNICAMENTE un objeto JSON, sin texto antes ni
                 document.getElementById('ai-response').style.display = 'block';
                 document.getElementById('btn-add-ai').onclick = addComidaAI;
                 
-            } catch (e) { 
-                alert(`⚠️ Error de conexión:\n\n${e.message}\n\nAsegúrate de que la llave no tenga espacios en blanco al inicio o al final.`); 
-                console.error(e);
+            } catch (finalErr) { 
+                alert(`⚠️ Error final de conexión:\n${finalErr.message}`); 
             } finally {
                 document.getElementById('ai-loading').style.display = 'none';
             }
@@ -521,7 +524,7 @@ IMPORTANTE: Tu respuesta debe ser ÚNICAMENTE un objeto JSON, sin texto antes ni
             const a = document.createElement('a'); a.href = url; a.download = `Baddie_Backup.json`; a.click();
         }
         
-        function save() { localStorage.setItem('baddieData_V24', JSON.stringify(db)); }
+        function save() { localStorage.setItem('baddieData_V25', JSON.stringify(db)); }
         
         function renderChart() {
             const ctx = document.getElementById('graficoPeso').getContext('2d');
