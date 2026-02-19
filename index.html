@@ -14,12 +14,13 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">    
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
     <style>
         :root { 
-            --primary: #84a99c; /* Menta/Teal de tu foto */
+            --primary: #84a99c; 
             --primary-dark: #6b8d81; 
-            --bg-color: #fdf6f5; /* Fondo ligeramente rosado pastel muy suave */
+            --bg-color: #fdf6f5; 
             --text-main: #5a504b; 
             --text-light: #a09894; 
             --accent: #f4a298; 
@@ -44,89 +45,69 @@
             min-height: 100vh; 
         }
 
-        .app-wrapper {
-            width: 100%;
-            max-width: 500px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            padding-bottom: 30px;
-        }
+        .app-wrapper { width: 100%; max-width: 500px; display: flex; flex-direction: column; gap: 15px; padding-bottom: 30px; }
         
-        /* BANNER KAWAII */
+        /* BANNER KAWAII CON LETRAS BURBUJA PERFECTAS */
         .baddie-banner { 
             background-image: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)), url('banner.png'); 
-            background-size: cover; 
-            background-position: center; 
-            color: white; 
-            text-align: center; 
-            padding: 40px 20px; 
-            border-radius: 24px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08); 
-            position: relative;
+            background-size: cover; background-position: center; color: white; text-align: center; 
+            padding: 40px 20px; border-radius: 24px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); position: relative;
         }
-   .baddie-banner h1 {
+        .baddie-banner h1 {
             margin: 0;
-            font-size: 40px;
-            font-family: 'Fredoka', sans-serif; /* Usamos la nueva fuente burbuja */
-            font-weight: 700; /* Bien gruesa */
-            color: #ffffff; /* Relleno blanco puro */
-            -webkit-text-stroke: 2.5px #5a504b; /* Borde café grueso y LIMPIO */
-            text-shadow: 3px 3px 0px rgba(90, 80, 75, 0.25); /* Sombra sólida tipo sticker */
-            letter-spacing: 0.5px;
+            font-size: 42px;
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 700;
+            color: #ffffff;
+            /* TRUCO MAGICO: Sombras sólidas para hacer un borde limpio hacia afuera */
+            text-shadow: 
+                -2.5px -2.5px 0 #5a504b,  
+                 2.5px -2.5px 0 #5a504b,
+                -2.5px  2.5px 0 #5a504b,
+                 2.5px  2.5px 0 #5a504b,
+                 0px   -2.5px 0 #5a504b,
+                 0px    2.5px 0 #5a504b,
+                -2.5px  0px   0 #5a504b,
+                 2.5px  0px   0 #5a504b,
+                 4px    6px   0 rgba(90, 80, 75, 0.25);
+            letter-spacing: 1.5px;
             line-height: 1.2;
         }
-        .baddie-banner p {
-            margin: 5px 0 0 0;
-            font-size: 14px;
-            font-family: 'Nunito', sans-serif;
-            font-weight: 800;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.4);
-        }
+        .baddie-banner p { margin: 5px 0 0 0; font-size: 15px; font-family: 'Nunito', sans-serif; font-weight: 800; text-shadow: 0 2px 5px rgba(0,0,0,0.6); }
         
         .fattie-warning { background-color: var(--danger); color: white; text-align: center; padding: 12px; border-radius: 16px; font-weight: 700; font-size: 13px; display: none; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 10px rgba(242, 139, 130, 0.3);}
 
-        /* TARJETA DE FECHA GLOBAL ARRIBA */
+        /* TARJETA DE FECHA (MÁS PEQUEÑA Y CUTE) */
         .date-card {
             background: #ffffff;
-            border-radius: 18px;
-            padding: 15px 20px;
+            border-radius: 20px;
+            padding: 8px 20px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            justify-content: center;
+            width: max-content;
+            margin: 0 auto; /* La centra */
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border: 2px solid #fdfdfd;
         }
-        .date-card i { font-size: 24px; color: var(--primary); }
-        .date-card input { 
-            border: none; background: transparent; font-size: 16px; font-weight: 800; color: var(--text-main); 
-            outline: none; flex: 1; text-align: center; font-family: 'Nunito', sans-serif; cursor: pointer;
-        }
+        .date-card i { font-size: 20px; color: var(--primary); }
+        .date-card input { border: none; background: transparent; font-size: 14px; font-weight: 800; color: var(--text-main); outline: none; text-align: center; font-family: 'Nunito', sans-serif; cursor: pointer; }
         
-        /* TABS ESTILO BOTONES SEPARADOS */
+        /* TABS */
         .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        .tab-btn { 
-            background: #ffffff; border: none; padding: 15px 5px; border-radius: 16px; 
-            font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 800; color: var(--text-light); 
-            display: flex; flex-direction: column; align-items: center; gap: 6px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.04); cursor: pointer; transition: 0.3s;
-        }
+        .tab-btn { background: #ffffff; border: none; padding: 15px 5px; border-radius: 16px; font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 800; color: var(--text-light); display: flex; flex-direction: column; align-items: center; gap: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); cursor: pointer; transition: 0.3s; }
         .tab-btn i { font-size: 24px; color: var(--text-light); transition: 0.3s;}
         .tab-btn.active { background: var(--primary); color: #ffffff; box-shadow: 0 6px 15px rgba(132, 169, 156, 0.3); }
         .tab-btn.active i { color: #ffffff; }
         
-        /* CONTENEDOR DE CRISTAL PARA EL RESTO */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(15px);
-            border-radius: 24px;
-            padding: 25px 20px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.05);
-        }
-
+        /* CONTENEDOR CRISTAL */
+        .glass-panel { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(15px); border-radius: 24px; padding: 25px 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.05); }
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* FORMULARIOS Y BOTONES */
         .form-group { margin-bottom: 15px; }
         label { display: block; font-size: 11px; font-weight: 800; margin-bottom: 6px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px;}
         input, select { width: 100%; padding: 14px; border: 2px solid #f0edea; border-radius: 14px; box-sizing: border-box; font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 600; color: var(--text-main); background-color: #ffffff; transition: border 0.3s;}
@@ -137,11 +118,11 @@
         .btn-main { width: 100%; background-color: var(--primary); color: white; padding: 14px; border: none; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; margin-top: 5px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px;}
         .btn-main:hover { background-color: var(--primary-dark); transform: translateY(-2px);}
         .btn-secondary { background-color: #ffffff; color: var(--primary); border: 2px solid var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.02);}
-        
         .search-row { display: flex; gap: 10px; align-items: flex-end; margin-bottom: 15px; }
         .btn-search { background-color: var(--accent); color: white; height: 50px; width: 50px; border: none; border-radius: 14px; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: 0.2s; box-shadow: 0 4px 10px rgba(244, 162, 152, 0.3);}
         .btn-search i { font-size: 22px; }
 
+        /* KPI Y LISTAS */
         .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
         .kpi-card { background: #ffffff; border: none; padding: 18px 15px; border-radius: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px;}
         .kpi-card h3 { margin: 0; font-size: 10px; text-transform: uppercase; color: var(--text-light); font-weight: 800; letter-spacing: 0.5px;}
@@ -163,12 +144,12 @@
         .resultados-api { display: none; background: #fff; border: 1px solid #e1e8e4; border-radius: 16px; padding: 5px; margin-bottom: 15px; max-height: 180px; overflow-y: auto; box-shadow: 0 8px 25px rgba(0,0,0,0.08); }
         .resultado-item { padding: 12px 15px; border-bottom: 1px solid #f9f8f6; cursor: pointer; transition: 0.2s; }
         .resultado-item:hover { background-color: #f2fbf6; border-radius: 10px;}
-        
-        #baddie-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(90, 80, 75, 0.6); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 40px; border-radius: 30px; text-align: center; max-width: 320px; box-shadow: 0 15px 50px rgba(0,0,0,0.15);}
-        .modal-content i { font-size: 56px; color: var(--gold); margin-bottom: 15px; display: block;}
-        .modal-content h2 { color: var(--accent); font-size: 26px; font-weight: 900; margin: 0 0 10px 0;}
-        .modal-content p#recompensa-texto { font-weight: 800; color: var(--primary-dark); font-size: 18px; margin: 20px 0; padding: 15px; background: #f2fbf6; border-radius: 16px;}
+
+        /* MODAL CUTE */
+        #baddie-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(90, 80, 75, 0.7); backdrop-filter: blur(8px); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: #fdf6f5; padding: 35px 25px; border-radius: 30px; text-align: center; max-width: 320px; box-shadow: 0 15px 50px rgba(0,0,0,0.2); border: 4px solid #ffffff;}
+        .modal-content h2 { color: var(--accent); font-family: 'Fredoka', sans-serif; font-size: 28px; font-weight: 700; margin: 10px 0;}
+        .modal-content p#recompensa-texto { font-family: 'Fredoka', sans-serif; font-weight: 700; color: var(--primary-dark); font-size: 20px; margin: 20px 0; padding: 15px; background: #ffffff; border-radius: 16px; border: 2px dashed var(--success); box-shadow: 0 4px 10px rgba(0,0,0,0.02);}
         
         .health-badge { display: inline-block; padding: 6px 10px; border-radius: 10px; font-size: 11px; font-weight: 800; margin-top: 5px;}
         .badge-good { background: #e8f5e9; color: #2e7d32; }
@@ -179,12 +160,12 @@
 
     <div id="baddie-modal">
         <div class="modal-content">
-            <i class="ph-fill ph-sparkle"></i>
-            <h2>¡LO LOGRASTE!</h2>
-            <p style="font-size: 14px; color: var(--text-main);">Eres oficialmente una BADDIE. Has alcanzado una meta y te ganaste esto:</p>
+            <i class="ph-fill ph-shooting-star" style="color: var(--gold); font-size: 56px;"></i>
+            <h2>¡Misión Cumplida!</h2>
+            <p style="font-size: 14px; font-weight: 800; color: var(--text-light); margin:0;">Eres oficialmente una BADDIE ✨ Has alcanzado tu meta de peso y te ganaste esto:</p>
             <p id="recompensa-texto">Tu premio aquí</p>
             <button class="btn-main" onclick="document.getElementById('baddie-modal').style.display='none'">
-                <i class="ph-bold ph-star"></i> A reclamar mi premio
+                <i class="ph-bold ph-heart"></i> ¡Me lo merezco!
             </button>
         </div>
     </div>
@@ -206,18 +187,10 @@
         </div>
 
         <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('dashboard')">
-                <i class="ph-fill ph-chart-pie-slice"></i> Resumen
-            </button>
-            <button class="tab-btn" onclick="switchTab('medidas')">
-                <i class="ph-fill ph-ruler"></i> Cuerpo
-            </button>
-            <button class="tab-btn" onclick="switchTab('nutricion')">
-                <i class="ph-fill ph-shopping-cart"></i> Diario
-            </button>
-            <button class="tab-btn" onclick="switchTab('config')">
-                <i class="ph-fill ph-target"></i> Metas
-            </button>
+            <button class="tab-btn active" onclick="switchTab('dashboard')"><i class="ph-fill ph-chart-pie-slice"></i> Resumen</button>
+            <button class="tab-btn" onclick="switchTab('medidas')"><i class="ph-fill ph-ruler"></i> Cuerpo</button>
+            <button class="tab-btn" onclick="switchTab('nutricion')"><i class="ph-fill ph-shopping-cart"></i> Diario</button>
+            <button class="tab-btn" onclick="switchTab('config')"><i class="ph-fill ph-target"></i> Metas</button>
         </div>
 
         <div class="glass-panel">
@@ -329,7 +302,7 @@
                 <button class="btn-main btn-secondary" onclick="guardarConfig()"><i class="ph-bold ph-check"></i> Guardar y Recalcular</button>
                 <button class="btn-main" style="background-color: #e2e8e5; color: var(--primary-dark); margin-top: 15px; box-shadow: none;" onclick="descargarRespaldo()"><i class="ph-bold ph-download-simple"></i> Respaldar base de datos</button>
 
-                <div class="section-title" style="margin-top: 40px; color: var(--accent);">Tus Metas y Premios</div>
+                <div class="section-title" style="margin-top: 40px; color: var(--accent);">Tus Metas y Proyecciones</div>
                 <div class="row">
                     <div class="form-group" style="flex: 1;"><label>Peso meta</label><input type="number" id="nuevo-peso-meta" step="0.1"></div>
                     <div class="form-group" style="flex: 2;"><label>Recompensa</label><input type="text" id="nueva-recompensa"></div>
@@ -366,9 +339,7 @@
             return db.registros[fecha];
         }
 
-        function cambioFechaGlobal() {
-            cargarMedidas(); renderizarDiario(); actualizarDashboard(); checkFattieZone();
-        }
+        function cambioFechaGlobal() { cargarMedidas(); renderizarDiario(); actualizarDashboard(); checkFattieZone(); }
 
         function cargarMedidas() {
             const fecha = document.getElementById('global-fecha').value; let db = obtenerDB(); let dia = obtenerDia(fecha, db);
@@ -417,7 +388,15 @@
                 if (!m.lograda && ultimoPeso > 0 && m.peso < ultimoPeso) {
                     const kilosAPerder = ultimoPeso - m.peso; const diasEstimados = Math.ceil((kilosAPerder * 7700) / deficitDiario);
                     const fechaEstimada = new Date(); fechaEstimada.setDate(fechaEstimada.getDate() + diasEstimados);
-                    etaHTML = `<div style="font-size:11px; color:var(--primary-dark); margin-top:8px; background: rgba(255,255,255,0.8); padding: 8px 10px; border-radius: 12px; display:flex; align-items:center; gap:8px;"><i class="ph-fill ph-calendar-heart" style="font-size:20px;"></i> <div><b>Proyección: ${fechaEstimada.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}</b></div></div>`;
+                    
+                    // DISEÑO DE PROYECCIÓN ACTUALIZADO CON DÍAS FALTANTES
+                    etaHTML = `<div style="font-size:11px; color:var(--primary-dark); margin-top:8px; background: rgba(255,255,255,0.8); padding: 8px 10px; border-radius: 12px; display:flex; align-items:center; gap:8px;">
+                                <i class="ph-fill ph-calendar-heart" style="font-size:24px; color:var(--accent);"></i> 
+                                <div>
+                                    <span style="font-size:13px; font-weight:800; color:var(--text-main);">Faltan aprox. ${diasEstimados} días</span><br>
+                                    <span>Llegarás el ${fechaEstimada.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                                </div>
+                               </div>`;
                 }
                 lista.innerHTML += `<div class="list-item ${clase}"><div class="info"><span style="font-weight:900; font-size:15px; color:var(--text-main);">Alcanzar ${m.peso} kg</span><span style="font-size:13px; margin-top: 2px; display:flex; align-items:center; gap:5px; font-weight:700;"><i class="ph-fill ph-gift" style="color:var(--accent);"></i> ${m.recompensa}</span>${etaHTML}</div><div class="stats" style="justify-content: space-between; align-items: flex-end; height:100%;"><span style="display:flex; align-items:center; gap:3px;">${status}</span><button class="delete-btn" onclick="borrarMeta(${m.id})"><i class="ph-bold ph-trash"></i></button></div></div>`;
             });
