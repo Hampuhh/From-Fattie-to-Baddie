@@ -207,6 +207,14 @@
                 </div>
                 <div id="ai-loading" class="ai-loading" style="display:none;"><i class="ph-bold ph-spinner ph-spin"></i> Analizando plato...</div>
                 
+                <div class="section-title" style="margin-top: 15px;">Añadir Manualmente</div>
+                <div class="form-group"><label>Alimento</label><input type="text" id="man-nombre" placeholder="Ej: Taza de avena..."></div>
+                <div class="row">
+                    <div class="form-group"><label>Kcal</label><input type="number" id="man-kcal"></div>
+                    <div class="form-group"><label>Proteínas (g)</label><input type="number" id="man-prot"></div>
+                </div>
+                <button class="btn-main btn-secondary" onclick="agregarComidaManual()" style="margin-bottom: 25px;">+ Ingreso Manual</button>
+
                 <div class="section-title">Comidas de Hoy</div>
                 <div id="lista-comidas"></div>
                 
@@ -300,20 +308,20 @@
             renderDiario(); renderMetas(); actualizarDashboard(); checkFattieZone();
         }
 
-        // --- MOTOR GEMINI CON FALLBACK AUTOMÁTICO ---
+        // --- MOTOR GEMINI ACTUALIZADO Y ESTABLE ---
         async function fetchGemini(prompt, key, modelo) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${key}`;
+            const url = `https://generativelanguage.googleapis.com/v1/models/${modelo}:generateContent?key=${key}`;
             const res = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
             });
             const data = await res.json();
-            if (!res.ok) throw new Error(data.error?.message || "Error desconocido");
+            if (!res.ok) throw new Error(data.error?.message || "Error desconocido en la API");
             return data;
         }
 
-      async function consultarAI() {
+        async function consultarAI() {
             const q = document.getElementById('busqueda-ai').value;
             const key = db.config.apiKey;
             
@@ -331,15 +339,14 @@ IMPORTANTE: Tu respuesta debe ser ÚNICAMENTE un objeto JSON, sin formato markdo
             try {
                 let data;
                 try {
-                    // Intento 1: Modelo rápido y nuevo
-                    data = await fetchGemini(prompt, key, 'gemini-1.5-flash');
+                    // Intento 1: Usamos la nomenclatura -latest para evitar errores 404
+                    data = await fetchGemini(prompt, key, 'gemini-1.5-flash-latest');
                 } catch (err1) {
-                    console.warn("Fallo modelo Flash, intentando modelo Pro...", err1);
-                    // Intento 2: ACTUALIZADO a la versión 1.5 correcta
-                    data = await fetchGemini(prompt, key, 'gemini-1.5-pro'); 
+                    console.warn("Fallo Flash, intentando Pro...", err1);
+                    // Intento 2: Modelo Pro con sufijo -latest
+                    data = await fetchGemini(prompt, key, 'gemini-1.5-pro-latest'); 
                 }
 
-                // NUEVO: Validación por si la API bloquea la respuesta o viene vacía
                 if (!data.candidates || !data.candidates[0].content) {
                     throw new Error("El modelo no devolvió texto o bloqueó la consulta.");
                 }
@@ -370,6 +377,23 @@ IMPORTANTE: Tu respuesta debe ser ÚNICAMENTE un objeto JSON, sin formato markdo
             save(); cambioFechaGlobal();
             document.getElementById('ai-response').style.display = 'none';
             document.getElementById('busqueda-ai').value = '';
+        }
+
+        function agregarComidaManual() {
+            const f = document.getElementById('global-fecha').value;
+            const n = document.getElementById('man-nombre').value;
+            const k = parseInt(document.getElementById('man-kcal').value);
+            const p = parseInt(document.getElementById('man-prot').value) || 0; 
+            
+            if (!n || isNaN(k)) return alert("¡Ups! Recuerda ingresar el nombre y las calorías.");
+            
+            db.registros[f].comidas.push({ id: Date.now(), n: n, k: k, p: p });
+            save(); 
+            cambioFechaGlobal();
+            
+            document.getElementById('man-nombre').value = ''; 
+            document.getElementById('man-kcal').value = ''; 
+            document.getElementById('man-prot').value = '';
         }
 
         function agregarEjercicio() {
