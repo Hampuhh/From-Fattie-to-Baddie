@@ -10,20 +10,21 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="icono.png">
+    <link rel="icon" type="image/png" href="icono.png">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
         :root { 
-            --primary: #84a99c; /* Menta/Teal de la foto */
+            --primary: #84a99c; 
             --primary-dark: #6b8d81; 
             --bg-color: #fcfaf8; 
-            --text-main: #5a504b; /* Marrón cálido oscuro */
+            --text-main: #5a504b; 
             --text-light: #a09894; 
-            --accent: #f4a298; /* Melocotón/Rosa suave */
+            --accent: #f4a298; 
             --danger: #f28b82; 
             --success: #81c784; 
             --gold: #ffd54f;
@@ -54,7 +55,7 @@
             padding-bottom: 30px;
         }
         
-        /* BANNER FLOTANTE (Igual a la foto) */
+        /* BANNER */
         .baddie-banner { 
             background-image: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)), url('banner.png'); 
             background-size: cover; 
@@ -69,20 +70,21 @@
         .baddie-banner h1 {
             margin: 0;
             font-size: 36px;
-            font-weight: 900;
+            font-family: 'Pacifico', cursive;
+            font-weight: 400;
             text-shadow: 0 3px 8px rgba(0,0,0,0.4);
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
         .baddie-banner p {
             margin: 5px 0 0 0;
             font-size: 14px;
-            font-weight: 700;
+            font-weight: 800;
             text-shadow: 0 2px 5px rgba(0,0,0,0.4);
         }
         
         .fattie-warning { background-color: var(--danger); color: white; text-align: center; padding: 12px; border-radius: 16px; font-weight: 700; font-size: 13px; display: none; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 10px rgba(242, 139, 130, 0.3);}
 
-        /* TARJETA DE FECHA GLOBAL */
+        /* FECHA GLOBAL */
         .date-card {
             background: #ffffff;
             border-radius: 18px;
@@ -95,10 +97,10 @@
         .date-card i { font-size: 24px; color: var(--primary); }
         .date-card input { 
             border: none; background: transparent; font-size: 16px; font-weight: 800; color: var(--text-main); 
-            outline: none; flex: 1; text-align: center; font-family: 'Nunito', sans-serif;
+            outline: none; flex: 1; text-align: center; font-family: 'Nunito', sans-serif; cursor: pointer;
         }
         
-        /* TABS (Grilla igual a la foto) */
+        /* TABS */
         .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
         .tab-btn { 
             background: #ffffff; border: none; padding: 15px 5px; border-radius: 16px; 
@@ -110,7 +112,7 @@
         .tab-btn.active { background: var(--primary); color: #ffffff; box-shadow: 0 6px 15px rgba(132, 169, 156, 0.3); }
         .tab-btn.active i { color: #ffffff; }
         
-        /* CONTENEDOR DE CRISTAL PARA EL CONTENIDO */
+        /* CONTENEDOR DE CRISTAL */
         .glass-panel {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(15px);
@@ -136,19 +138,23 @@
         .btn-main:hover { background-color: var(--primary-dark); transform: translateY(-2px);}
         .btn-secondary { background-color: #ffffff; color: var(--primary); border: 2px solid var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.02);}
         .btn-secondary:hover { background-color: #f0f4f2; }
+        
+        /* BUSCADOR */
         .search-row { display: flex; gap: 10px; align-items: flex-end; margin-bottom: 15px; }
         .btn-search { background-color: var(--accent); color: white; height: 50px; width: 50px; border: none; border-radius: 14px; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: 0.2s; box-shadow: 0 4px 10px rgba(244, 162, 152, 0.3);}
+        .btn-search i { font-size: 22px; }
 
-        /* KPI CARDS (Iguales a los ingresos/gastos de la foto) */
+        /* KPI CARDS */
         .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
         .kpi-card { background: #ffffff; border: none; padding: 18px 15px; border-radius: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px;}
         .kpi-card h3 { margin: 0; font-size: 10px; text-transform: uppercase; color: var(--text-light); font-weight: 800; letter-spacing: 0.5px;}
         .kpi-card h2 { margin: 0; font-size: 24px; font-weight: 900; }
         .section-title { font-size: 16px; font-weight: 800; color: var(--primary-dark); margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;}
+        .progress-text { font-size: 12px; font-weight: 800; color: var(--success); margin-top: 5px; display: flex; justify-content: center; align-items: center; gap: 4px;}
 
-        /* LISTAS (Diario y Metas) */
+        /* LISTAS */
         .list-section { margin-top: 25px; }
-        .list-item { display: flex; justify-content: space-between; align-items: center; background: #ffffff; border: none; padding: 15px; border-radius: 16px; margin-bottom: 12px; font-size: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);}
+        .list-item { display: flex; justify-content: space-between; align-items: center; background: #ffffff; border: none; padding: 15px; border-radius: 16px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);}
         .list-item .info { display: flex; flex-direction: column; flex: 1; gap: 3px;}
         .list-item .stats { font-weight: 800; color: var(--primary-dark); text-align: right; min-width: 75px; display: flex; flex-direction: column; align-items: flex-end; gap: 5px;}
         .delete-btn { color: #e0d8d5; background: none; border: none; cursor: pointer; padding: 0; transition: 0.2s;}
@@ -163,7 +169,7 @@
         .resultado-item:hover { background-color: #f2fbf6; border-radius: 10px;}
         .resultado-item:last-child { border-bottom: none; }
 
-        /* Modal Baddie */
+        /* MODAL BADDIE */
         #baddie-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(90, 80, 75, 0.6); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; }
         .modal-content { background: white; padding: 40px; border-radius: 30px; text-align: center; max-width: 320px; box-shadow: 0 15px 50px rgba(0,0,0,0.15);}
         .modal-content i { font-size: 56px; color: var(--gold); margin-bottom: 15px; display: block;}
@@ -181,7 +187,7 @@
         <div class="modal-content">
             <i class="ph-fill ph-sparkle"></i>
             <h2>¡LO LOGRASTE!</h2>
-            <p>Eres oficialmente una BADDIE. Has alcanzado una meta y te ganaste esto:</p>
+            <p style="font-size: 14px; color: var(--text-main);">Eres oficialmente una BADDIE. Has alcanzado una meta y te ganaste esto:</p>
             <p id="recompensa-texto">Tu premio aquí</p>
             <button class="btn-main" onclick="document.getElementById('baddie-modal').style.display='none'">
                 <i class="ph-bold ph-star"></i> A reclamar mi premio
@@ -198,7 +204,7 @@
         
         <div class="baddie-banner">
             <h1>From Fattie to Baddie</h1>
-            <p>Just do it ⭐</p>
+            <p>Just do it <i class="ph-fill ph-star" style="color: var(--gold);"></i></p>
         </div>
 
         <div class="date-card">
@@ -228,7 +234,7 @@
                     <div class="kpi-card" style="background: var(--primary); color: white;">
                         <h3 style="color: rgba(255,255,255,0.8);">Calorías Restantes Hoy</h3>
                         <h2 id="cal-restantes">-- kcal</h2>
-                        <div style="font-size: 11px; margin-top: 5px; font-weight: 600;" id="cal-detalle">BMR: -- | Movimiento: -- | Ejercicio: --</div>
+                        <div style="font-size: 11px; margin-top: 5px; font-weight: 700; opacity: 0.9;" id="cal-detalle">BMR: -- | Comida: -- | Ejercicio: --</div>
                     </div>
                 </div>
                 
@@ -263,7 +269,7 @@
             </div>
 
             <div id="medidas" class="tab-content">
-                <div class="section-title">Medidas del Día Seleccionado</div>
+                <div class="section-title">Medidas del Día</div>
                 <div class="row">
                     <div class="form-group"><label>Peso (kg)</label><input type="number" id="peso" step="0.1" placeholder="Ej. 74.5"></div>
                     <div class="form-group"><label>Cintura (cm)</label><input type="number" id="cintura" step="0.1"></div>
@@ -353,9 +359,14 @@
     </div>
 
     <script>
-        if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); }); }
+        if ('serviceWorker' in navigator) { 
+            window.addEventListener('load', () => { 
+                navigator.serviceWorker.register('sw.js'); 
+            }); 
+        }
 
-        let baseKcal100g = 0; let baseProt100g = 0;
+        let baseKcal100g = 0; 
+        let baseProt100g = 0;
         document.getElementById('global-fecha').valueAsDate = new Date();
         let chartInstance = null;
 
@@ -364,21 +375,25 @@
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             event.currentTarget.classList.add('active');
-            cambioFechaGlobal(); // Actualiza los datos visuales siempre que cambies de pestaña
+            cambioFechaGlobal(); 
         }
 
+        // Base de Datos versión 9
         function obtenerDB() {
             let db = JSON.parse(localStorage.getItem('baddieTrackerV9'));
             if (!db) db = { registros: {}, listaMetas: [], config: { altura: 160, edad: '', actividad: 1.2, deficit: 500, pesoInicial: '' } };
             return db;
         }
-        function guardarDB(db) { localStorage.setItem('baddieTrackerV9', JSON.stringify(db)); }
+        
+        function guardarDB(db) { 
+            localStorage.setItem('baddieTrackerV9', JSON.stringify(db)); 
+        }
+        
         function obtenerDia(fecha, db) {
             if (!db.registros[fecha]) db.registros[fecha] = { peso: 0, cintura: 0, cadera: 0, busto: 0, comidas: [], ejercicios: [] };
             return db.registros[fecha];
         }
 
-        // --- NUEVA LÓGICA DE FECHA GLOBAL ---
         function cambioFechaGlobal() {
             cargarMedidas();
             renderizarDiario();
@@ -401,7 +416,11 @@
             if(!db) return alert("Aún no hay datos para respaldar.");
             const blob = new Blob([db], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = `Respaldo_BaddieApp_${new Date().toISOString().split('T')[0]}.json`; a.click(); URL.revokeObjectURL(url);
+            const a = document.createElement('a'); 
+            a.href = url; 
+            a.download = `Respaldo_BaddieApp_${new Date().toISOString().split('T')[0]}.json`; 
+            a.click(); 
+            URL.revokeObjectURL(url);
         }
 
         function cargarConfig() {
@@ -421,19 +440,35 @@
             db.config.pesoInicial = parseFloat(document.getElementById('peso-inicial').value) || 0;
             db.config.actividad = parseFloat(document.getElementById('actividad').value);
             db.config.deficit = parseFloat(document.getElementById('deficit-config').value);
-            guardarDB(db); alert("Configuración guardada."); actualizarDashboard(); renderizarMetas();
+            guardarDB(db); 
+            alert("Configuración guardada."); 
+            actualizarDashboard(); 
+            renderizarMetas();
         }
 
         function agregarMeta() {
-            const pesoMeta = parseFloat(document.getElementById('nuevo-peso-meta').value); const recompensa = document.getElementById('nueva-recompensa').value;
+            const pesoMeta = parseFloat(document.getElementById('nuevo-peso-meta').value); 
+            const recompensa = document.getElementById('nueva-recompensa').value;
             if(!pesoMeta || !recompensa) return alert("Ingresa el peso y tu recompensa");
-            let db = obtenerDB(); db.listaMetas.push({ id: Date.now(), peso: pesoMeta, recompensa: recompensa, lograda: false });
-            guardarDB(db); document.getElementById('nuevo-peso-meta').value = ''; document.getElementById('nueva-recompensa').value = ''; renderizarMetas();
+            let db = obtenerDB(); 
+            db.listaMetas.push({ id: Date.now(), peso: pesoMeta, recompensa: recompensa, lograda: false });
+            guardarDB(db); 
+            document.getElementById('nuevo-peso-meta').value = ''; 
+            document.getElementById('nueva-recompensa').value = ''; 
+            renderizarMetas();
         }
-        function borrarMeta(id) { let db = obtenerDB(); db.listaMetas = db.listaMetas.filter(m => m.id !== id); guardarDB(db); renderizarMetas(); }
+        
+        function borrarMeta(id) { 
+            let db = obtenerDB(); 
+            db.listaMetas = db.listaMetas.filter(m => m.id !== id); 
+            guardarDB(db); 
+            renderizarMetas(); 
+        }
 
         function renderizarMetas() {
-            let db = obtenerDB(); const lista = document.getElementById('lista-metas'); lista.innerHTML = '';
+            let db = obtenerDB(); 
+            const lista = document.getElementById('lista-metas'); 
+            lista.innerHTML = '';
             const deficitDiario = document.getElementById('deficit-config').value || 500;
             const ultimoPeso = Object.values(db.registros).map(r=>r.peso).filter(p=>p>0).pop() || db.config.pesoInicial || 0;
 
@@ -441,27 +476,40 @@
                 const clase = m.lograda ? 'goal-item achieved' : 'goal-item';
                 const status = m.lograda ? '<i class="ph-fill ph-check-circle" style="color:var(--success); font-size:20px;"></i>' : '<i class="ph-fill ph-hourglass-high" style="color:var(--gold); font-size:20px;"></i>';
                 let etaHTML = "";
+                
                 if (!m.lograda && ultimoPeso > 0 && m.peso < ultimoPeso) {
-                    const kilosAPerder = ultimoPeso - m.peso; const diasEstimados = Math.ceil((kilosAPerder * 7700) / deficitDiario);
-                    const fechaEstimada = new Date(); fechaEstimada.setDate(fechaEstimada.getDate() + diasEstimados);
+                    const kilosAPerder = ultimoPeso - m.peso; 
+                    const diasEstimados = Math.ceil((kilosAPerder * 7700) / deficitDiario);
+                    const fechaEstimada = new Date(); 
+                    fechaEstimada.setDate(fechaEstimada.getDate() + diasEstimados);
                     etaHTML = `<div style="font-size:11px; color:var(--primary-dark); margin-top:8px; background: rgba(255,255,255,0.8); padding: 8px 10px; border-radius: 12px; display:flex; align-items:center; gap:8px;"><i class="ph-fill ph-calendar-heart" style="font-size:20px;"></i> <div><b>Proyección: ${fechaEstimada.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}</b></div></div>`;
                 }
+                
                 lista.innerHTML += `<div class="list-item ${clase}"><div class="info"><span style="font-weight:900; font-size:15px; color:var(--text-main);">Alcanzar ${m.peso} kg</span><span style="font-size:13px; margin-top: 2px; display:flex; align-items:center; gap:5px; font-weight:700;"><i class="ph-fill ph-gift" style="color:var(--accent);"></i> ${m.recompensa}</span>${etaHTML}</div><div class="stats" style="justify-content: space-between; align-items: flex-end; height:100%;"><span style="display:flex; align-items:center; gap:3px;">${status}</span><button class="delete-btn" onclick="borrarMeta(${m.id})"><i class="ph-bold ph-trash"></i></button></div></div>`;
             });
         }
 
         function guardarMedidas() {
             const fecha = document.getElementById('global-fecha').value;
-            let db = obtenerDB(); let dia = obtenerDia(fecha, db);
+            let db = obtenerDB(); 
+            let dia = obtenerDia(fecha, db);
+            
             const pesoNuevo = parseFloat(document.getElementById('peso').value) || dia.peso;
-            dia.peso = pesoNuevo; dia.cintura = parseFloat(document.getElementById('cintura').value) || dia.cintura;
-            dia.cadera = parseFloat(document.getElementById('cadera').value) || dia.cadera; dia.busto = parseFloat(document.getElementById('busto').value) || dia.busto;
-            guardarDB(db); alert("¡Progreso de este día guardado!"); 
+            dia.peso = pesoNuevo; 
+            dia.cintura = parseFloat(document.getElementById('cintura').value) || dia.cintura;
+            dia.cadera = parseFloat(document.getElementById('cadera').value) || dia.cadera; 
+            dia.busto = parseFloat(document.getElementById('busto').value) || dia.busto;
+            
+            guardarDB(db); 
+            alert("¡Progreso del día guardado!"); 
+            
+            // Verificar si el nuevo peso logra alguna meta
             if(pesoNuevo > 0) {
                 let huboLogro = false;
                 db.listaMetas.forEach(meta => {
                     if(!meta.lograda && pesoNuevo <= meta.peso) {
-                        meta.lograda = true; huboLogro = true;
+                        meta.lograda = true; 
+                        huboLogro = true;
                         document.getElementById('recompensa-texto').innerText = meta.recompensa;
                         document.getElementById('baddie-modal').style.display = 'flex';
                     }
@@ -472,115 +520,224 @@
         }
 
         async function buscarEnAPI() {
-            const query = document.getElementById('busqueda-comida').value; const contenedor = document.getElementById('contenedor-resultados');
+            const query = document.getElementById('busqueda-comida').value; 
+            const contenedor = document.getElementById('contenedor-resultados');
             if(!query) return;
-            contenedor.innerHTML = '<div style="padding:15px; font-size:13px; text-align:center; color:var(--text-light); font-weight:700;"><i class="ph-bold ph-spinner ph-spin"></i> Buscando...</div>'; contenedor.style.display = 'block';
+            
+            contenedor.innerHTML = '<div style="padding:15px; font-size:13px; text-align:center; color:var(--text-light); font-weight:700;"><i class="ph-bold ph-spinner ph-spin"></i> Buscando...</div>'; 
+            contenedor.style.display = 'block';
+            
             try {
                 const res = await fetch(`https://cl.openfoodfacts.org/cgi/search.pl?search_terms=${query}&search_simple=1&action=process&json=1&page_size=6`);
-                const data = await res.json(); contenedor.innerHTML = '';
+                const data = await res.json(); 
+                contenedor.innerHTML = '';
+                
                 if(data.products && data.products.length > 0) {
-                    const titulo = document.createElement('div'); titulo.style.cssText = "font-size:11px; font-weight:800; color:var(--primary-dark); padding:10px; border-bottom:1px solid #eee; display:flex; align-items:center; gap:5px;";
-                    titulo.innerHTML = "<i class='ph-bold ph-hand-pointing'></i> Toca tu opción:"; contenedor.appendChild(titulo);
+                    const titulo = document.createElement('div'); 
+                    titulo.style.cssText = "font-size:11px; font-weight:800; color:var(--primary-dark); padding:10px; border-bottom:1px solid #eee; display:flex; align-items:center; gap:5px;";
+                    titulo.innerHTML = "<i class='ph-bold ph-hand-pointing'></i> Toca tu opción:"; 
+                    contenedor.appendChild(titulo);
+                    
                     data.products.forEach(p => {
-                        const name = p.product_name_es || p.product_name || "Producto"; const brand = p.brands ? `(${p.brands.split(',')[0]})` : '';
-                        const kcal = p.nutriments['energy-kcal_100g'] ? Math.round(p.nutriments['energy-kcal_100g']) : 0; const prot = p.nutriments['proteins_100g'] ? Math.round(p.nutriments['proteins_100g']) : 0;
-                        const item = document.createElement('div'); item.className = "resultado-item";
+                        const name = p.product_name_es || p.product_name || "Producto"; 
+                        const brand = p.brands ? `(${p.brands.split(',')[0]})` : '';
+                        const kcal = p.nutriments['energy-kcal_100g'] ? Math.round(p.nutriments['energy-kcal_100g']) : 0; 
+                        const prot = p.nutriments['proteins_100g'] ? Math.round(p.nutriments['proteins_100g']) : 0;
+                        
+                        const item = document.createElement('div'); 
+                        item.className = "resultado-item";
                         item.innerHTML = `<span style="font-weight:800; font-size:14px; color:var(--text-main);">${name} ${brand}</span><br><span style="font-size:12px; color:var(--text-light); font-weight:700;"><i class="ph-fill ph-fire" style="color:var(--accent);"></i> ${kcal} kcal | <i class="ph-fill ph-barbell" style="color:var(--primary-dark);"></i> ${prot}g prot</span>`;
-                        item.onclick = () => { document.getElementById('nombre-comida').value = name; baseKcal100g = kcal; baseProt100g = prot; document.getElementById('gramos-comida').value = 100; recalcularPorcion(); contenedor.style.display = 'none'; };
+                        
+                        item.onclick = () => { 
+                            document.getElementById('nombre-comida').value = name; 
+                            baseKcal100g = kcal; 
+                            baseProt100g = prot; 
+                            document.getElementById('gramos-comida').value = 100; 
+                            recalcularPorcion(); 
+                            contenedor.style.display = 'none'; 
+                        };
                         contenedor.appendChild(item);
                     });
-                } else { contenedor.innerHTML = '<div style="padding:15px; font-size:13px; font-weight:700; text-align:center; color:var(--danger);"><i class="ph-fill ph-x-circle"></i> No encontrado.</div>'; setTimeout(() => contenedor.style.display = 'none', 3000); }
-            } catch(e) { contenedor.innerHTML = '<div style="padding:15px; font-size:13px; font-weight:700; text-align:center; color:var(--danger);"><i class="ph-bold ph-wifi-slash"></i> Error de conexión.</div>'; setTimeout(() => contenedor.style.display = 'none', 3000); }
+                } else { 
+                    contenedor.innerHTML = '<div style="padding:15px; font-size:13px; font-weight:700; text-align:center; color:var(--danger);"><i class="ph-fill ph-x-circle"></i> No encontrado.</div>'; 
+                    setTimeout(() => contenedor.style.display = 'none', 3000); 
+                }
+            } catch(e) { 
+                contenedor.innerHTML = '<div style="padding:15px; font-size:13px; font-weight:700; text-align:center; color:var(--danger);"><i class="ph-bold ph-wifi-slash"></i> Error de red.</div>'; 
+                setTimeout(() => contenedor.style.display = 'none', 3000); 
+            }
         }
 
         function recalcularPorcion() {
             const gramos = parseFloat(document.getElementById('gramos-comida').value) || 0;
-            document.getElementById('calorias-comida').value = Math.round((baseKcal100g / 100) * gramos); document.getElementById('proteina-comida').value = Math.round((baseProt100g / 100) * gramos);
+            document.getElementById('calorias-comida').value = Math.round((baseKcal100g / 100) * gramos); 
+            document.getElementById('proteina-comida').value = Math.round((baseProt100g / 100) * gramos);
         }
 
         function agregarComida() {
-            const fecha = document.getElementById('global-fecha').value; let db = obtenerDB(); let dia = obtenerDia(fecha, db);
-            let nombre = document.getElementById('nombre-comida').value; const gramos = document.getElementById('gramos-comida').value;
-            const cal = parseFloat(document.getElementById('calorias-comida').value) || 0; const prot = parseFloat(document.getElementById('proteina-comida').value) || 0;
+            const fecha = document.getElementById('global-fecha').value; 
+            let db = obtenerDB(); 
+            let dia = obtenerDia(fecha, db);
+            let nombre = document.getElementById('nombre-comida').value; 
+            const gramos = document.getElementById('gramos-comida').value;
+            const cal = parseFloat(document.getElementById('calorias-comida').value) || 0; 
+            const prot = parseFloat(document.getElementById('proteina-comida').value) || 0;
+            
             if(!nombre || cal === 0) return alert("Faltan datos");
-            nombre = `${nombre} (${gramos}g)`; dia.comidas.push({ id: Date.now(), nombre, cal, prot }); guardarDB(db);
-            document.getElementById('nombre-comida').value = ''; document.getElementById('gramos-comida').value = 100; document.getElementById('calorias-comida').value = ''; document.getElementById('proteina-comida').value = ''; document.getElementById('busqueda-comida').value = ''; document.getElementById('contenedor-resultados').style.display = 'none'; baseKcal100g = 0; baseProt100g = 0; 
+            
+            nombre = `${nombre} (${gramos}g)`; 
+            dia.comidas.push({ id: Date.now(), nombre, cal, prot }); 
+            guardarDB(db);
+            
+            document.getElementById('nombre-comida').value = ''; 
+            document.getElementById('gramos-comida').value = 100; 
+            document.getElementById('calorias-comida').value = ''; 
+            document.getElementById('proteina-comida').value = ''; 
+            document.getElementById('busqueda-comida').value = ''; 
+            document.getElementById('contenedor-resultados').style.display = 'none'; 
+            baseKcal100g = 0; 
+            baseProt100g = 0; 
             cambioFechaGlobal();
         }
 
         function agregarEjercicio() {
-            const fecha = document.getElementById('global-fecha').value; let db = obtenerDB(); let dia = obtenerDia(fecha, db);
-            const nombre = document.getElementById('nombre-ejercicio').value; const min = parseFloat(document.getElementById('tiempo-ejercicio').value) || 0; const cal = parseFloat(document.getElementById('calorias-ejercicio').value) || 0;
+            const fecha = document.getElementById('global-fecha').value; 
+            let db = obtenerDB(); 
+            let dia = obtenerDia(fecha, db);
+            const nombre = document.getElementById('nombre-ejercicio').value; 
+            const min = parseFloat(document.getElementById('tiempo-ejercicio').value) || 0; 
+            const cal = parseFloat(document.getElementById('calorias-ejercicio').value) || 0;
+            
             if(!nombre) return alert("Falta el nombre");
-            dia.ejercicios.push({ id: Date.now(), nombre, min, cal }); guardarDB(db);
-            document.getElementById('nombre-ejercicio').value = ''; document.getElementById('tiempo-ejercicio').value = ''; document.getElementById('calorias-ejercicio').value = ''; 
+            
+            dia.ejercicios.push({ id: Date.now(), nombre, min, cal }); 
+            guardarDB(db);
+            document.getElementById('nombre-ejercicio').value = ''; 
+            document.getElementById('tiempo-ejercicio').value = ''; 
+            document.getElementById('calorias-ejercicio').value = ''; 
             cambioFechaGlobal();
         }
 
         function borrarItem(tipo, id) {
-            const fecha = document.getElementById('global-fecha').value; let db = obtenerDB(); let dia = obtenerDia(fecha, db);
-            if(tipo === 'comida') dia.comidas = dia.comidas.filter(c => c.id !== id); if(tipo === 'ejercicio') dia.ejercicios = dia.ejercicios.filter(e => e.id !== id);
-            guardarDB(db); cambioFechaGlobal();
+            const fecha = document.getElementById('global-fecha').value; 
+            let db = obtenerDB(); 
+            let dia = obtenerDia(fecha, db);
+            
+            if(tipo === 'comida') dia.comidas = dia.comidas.filter(c => c.id !== id); 
+            if(tipo === 'ejercicio') dia.ejercicios = dia.ejercicios.filter(e => e.id !== id);
+            
+            guardarDB(db); 
+            cambioFechaGlobal();
         }
 
         function renderizarDiario() {
-            const fecha = document.getElementById('global-fecha').value; let db = obtenerDB(); let dia = obtenerDia(fecha, db);
-            const lc = document.getElementById('lista-comidas'); lc.innerHTML = '';
-            dia.comidas.forEach(c => { lc.innerHTML += `<div class="list-item"><div class="info"><span style="font-weight:800; font-size:14px; color:var(--text-main);">${c.nombre}</span><span style="font-size:11px; color:var(--text-light); font-weight:700;"><i class="ph-fill ph-barbell" style="color:var(--primary-dark);"></i> ${c.prot}g prot</span></div><div class="stats"><span style="display:flex; align-items:center; gap:4px; font-size:15px;"><i class="ph-fill ph-fire" style="color:var(--accent);"></i> ${c.cal} kcal</span><button class="delete-btn" onclick="borrarItem('comida', ${c.id})"><i class="ph-bold ph-trash"></i></button></div></div>`; });
-            const le = document.getElementById('lista-ejercicios'); le.innerHTML = '';
-            dia.ejercicios.forEach(e => { le.innerHTML += `<div class="list-item"><div class="info"><span style="font-weight:800; font-size:14px; color:var(--text-main);">${e.nombre}</span><span style="font-size:11px; color:var(--text-light); font-weight:700;"><i class="ph-fill ph-clock"></i> ${e.min} mins</span></div><div class="stats"><span style="display:flex; align-items:center; gap:4px; font-size:15px; color:var(--success);"><i class="ph-fill ph-fire"></i> -${e.cal} kcal</span><button class="delete-btn" onclick="borrarItem('ejercicio', ${e.id})"><i class="ph-bold ph-trash"></i></button></div></div>`; });
+            const fecha = document.getElementById('global-fecha').value; 
+            let db = obtenerDB(); 
+            let dia = obtenerDia(fecha, db);
+            
+            const lc = document.getElementById('lista-comidas'); 
+            lc.innerHTML = '';
+            dia.comidas.forEach(c => { 
+                lc.innerHTML += `<div class="list-item"><div class="info"><span style="font-weight:800; font-size:14px; color:var(--text-main);">${c.nombre}</span><span style="font-size:11px; color:var(--text-light); font-weight:700;"><i class="ph-fill ph-barbell" style="color:var(--primary-dark);"></i> ${c.prot}g prot</span></div><div class="stats"><span style="display:flex; align-items:center; gap:4px; font-size:15px;"><i class="ph-fill ph-fire" style="color:var(--accent);"></i> ${c.cal} kcal</span><button class="delete-btn" onclick="borrarItem('comida', ${c.id})"><i class="ph-bold ph-trash"></i></button></div></div>`; 
+            });
+            
+            const le = document.getElementById('lista-ejercicios'); 
+            le.innerHTML = '';
+            dia.ejercicios.forEach(e => { 
+                le.innerHTML += `<div class="list-item"><div class="info"><span style="font-weight:800; font-size:14px; color:var(--text-main);">${e.nombre}</span><span style="font-size:11px; color:var(--text-light); font-weight:700;"><i class="ph-fill ph-clock"></i> ${e.min} mins</span></div><div class="stats"><span style="display:flex; align-items:center; gap:4px; font-size:15px; color:var(--success);"><i class="ph-fill ph-fire"></i> -${e.cal} kcal</span><button class="delete-btn" onclick="borrarItem('ejercicio', ${e.id})"><i class="ph-bold ph-trash"></i></button></div></div>`; 
+            });
         }
 
         function formatearProgreso(idElemento, valores, unidad) {
-            const limpios = valores.filter(v => v > 0); const el = document.getElementById(idElemento);
-            if(limpios.length < 2) { el.innerHTML = "--"; el.style.color = 'var(--text-light)'; return; }
+            const limpios = valores.filter(v => v > 0); 
+            const el = document.getElementById(idElemento);
+            if(limpios.length < 2) { 
+                el.innerHTML = "--"; 
+                el.style.color = 'var(--text-light)'; 
+                return; 
+            }
             const diff = (limpios[0] - limpios[limpios.length-1]).toFixed(1);
-            if(diff > 0) { el.innerHTML = `<i class="ph-bold ph-trend-down"></i> -${diff} ${unidad}`; el.style.color = 'var(--success)'; }
-            else if (diff < 0) { el.innerHTML = `<i class="ph-bold ph-trend-up"></i> +${Math.abs(diff)} ${unidad}`; el.style.color = 'var(--danger)'; }
-            else { el.innerHTML = "Igual"; el.style.color = 'var(--text-light)'; }
+            if(diff > 0) { 
+                el.innerHTML = `<i class="ph-bold ph-trend-down"></i> -${diff} ${unidad}`; 
+                el.style.color = 'var(--success)'; 
+            } else if (diff < 0) { 
+                el.innerHTML = `<i class="ph-bold ph-trend-up"></i> +${Math.abs(diff)} ${unidad}`; 
+                el.style.color = 'var(--danger)'; 
+            } else { 
+                el.innerHTML = "Igual"; 
+                el.style.color = 'var(--text-light)'; 
+            }
         }
 
         function calcularSalud(db) {
             const fechas = Object.keys(db.registros).sort();
             const ultimoDiaConMedidas = fechas.reverse().find(f => db.registros[f].cintura > 0 && db.registros[f].cadera > 0);
-            const iccEl = document.getElementById('icc-value'); const iccBadge = document.getElementById('icc-badge');
+            const iccEl = document.getElementById('icc-value'); 
+            const iccBadge = document.getElementById('icc-badge');
+            
             if(ultimoDiaConMedidas) {
-                const cin = db.registros[ultimoDiaConMedidas].cintura; const cad = db.registros[ultimoDiaConMedidas].cadera;
-                const icc = (cin / cad).toFixed(2); iccEl.innerText = icc;
-                if(icc <= 0.80) { iccBadge.innerText = "Bajo Riesgo (Excelente)"; iccBadge.className = "health-badge badge-good"; }
-                else if (icc <= 0.85) { iccBadge.innerText = "Riesgo Moderado"; iccBadge.className = "health-badge badge-warn"; }
-                else { iccBadge.innerText = "Riesgo Alto"; iccBadge.className = "health-badge"; iccBadge.style.background = "#ffebee"; iccBadge.style.color = "#c62828"; }
+                const cin = db.registros[ultimoDiaConMedidas].cintura; 
+                const cad = db.registros[ultimoDiaConMedidas].cadera;
+                const icc = (cin / cad).toFixed(2); 
+                iccEl.innerText = icc;
+                
+                if(icc <= 0.80) { 
+                    iccBadge.innerText = "Bajo Riesgo (Excelente)"; 
+                    iccBadge.className = "health-badge badge-good"; 
+                } else if (icc <= 0.85) { 
+                    iccBadge.innerText = "Riesgo Moderado"; 
+                    iccBadge.className = "health-badge badge-warn"; 
+                } else { 
+                    iccBadge.innerText = "Riesgo Alto"; 
+                    iccBadge.className = "health-badge"; 
+                    iccBadge.style.background = "#ffebee"; 
+                    iccBadge.style.color = "#c62828"; 
+                }
             }
         }
 
         function actualizarDashboard() {
             cargarConfig(); 
-            // EL DASHBOARD AHORA MUESTRA LA DATA DEL DÍA SELECCIONADO ARRIBA
             const fechaSeleccionada = document.getElementById('global-fecha').value;
-            let db = obtenerDB(); let diaSeleccionado = obtenerDia(fechaSeleccionada, db);
+            let db = obtenerDB(); 
+            let diaSeleccionado = obtenerDia(fechaSeleccionada, db);
             
             const fechas = Object.keys(db.registros).sort();
             const pesos = fechas.map(f => db.registros[f].peso).filter(p => p > 0);
             const elPeso = document.getElementById('prog-peso');
+            
             if (pesos.length > 0) {
                 const primerPeso = (db.config.pesoInicial && db.config.pesoInicial > 0) ? db.config.pesoInicial : pesos[0];
                 const diff = (primerPeso - pesos[pesos.length - 1]).toFixed(1);
-                if(diff > 0) { elPeso.innerHTML = `<i class="ph-bold ph-trend-down"></i> -${diff} kg`; elPeso.style.color = 'var(--success)'; }
-                else if (diff < 0) { elPeso.innerHTML = `<i class="ph-bold ph-trend-up"></i> +${Math.abs(diff)} kg`; elPeso.style.color = 'var(--danger)'; }
-                else { elPeso.innerHTML = "Igual"; elPeso.style.color = 'var(--text-light)'; }
-            } else { elPeso.innerHTML = "--"; elPeso.style.color = 'var(--text-light)'; }
+                if(diff > 0) { 
+                    elPeso.innerHTML = `<i class="ph-bold ph-trend-down"></i> -${diff} kg`; 
+                    elPeso.style.color = 'var(--success)'; 
+                } else if (diff < 0) { 
+                    elPeso.innerHTML = `<i class="ph-bold ph-trend-up"></i> +${Math.abs(diff)} kg`; 
+                    elPeso.style.color = 'var(--danger)'; 
+                } else { 
+                    elPeso.innerHTML = "Igual"; 
+                    elPeso.style.color = 'var(--text-light)'; 
+                }
+            } else { 
+                elPeso.innerHTML = "--"; 
+                elPeso.style.color = 'var(--text-light)'; 
+            }
 
             formatearProgreso('prog-cintura', fechas.map(f => db.registros[f].cintura), 'cm');
             formatearProgreso('prog-cadera', fechas.map(f => db.registros[f].cadera), 'cm');
             formatearProgreso('prog-busto', fechas.map(f => db.registros[f].busto), 'cm');
             calcularSalud(db);
 
+            // Cálculos diarios basados en la fecha global seleccionada
             let totalIn = 0; let totalProt = 0; let totalOut = 0;
             diaSeleccionado.comidas.forEach(c => { totalIn += c.cal; totalProt += c.prot; });
             diaSeleccionado.ejercicios.forEach(e => { totalOut += e.cal; });
 
             document.getElementById('prot-hoy').innerText = `${totalProt} g`;
-            let ultimoPeso = diaSeleccionado.peso > 0 ? diaSeleccionado.peso : pesos.pop() || db.config.pesoInicial || 0;
+            
+            // Usar el peso registrado ese día, o el último peso histórico disponible, o el peso inicial
+            let ultimoPeso = diaSeleccionado.peso > 0 ? diaSeleccionado.peso : (pesos.length > 0 ? pesos[pesos.length - 1] : (db.config.pesoInicial || 0));
 
             if (db.config.edad && db.config.altura && ultimoPeso > 0) {
                 const bmr = (10 * ultimoPeso) + (6.25 * db.config.altura) - (5 * db.config.edad) - 161;
@@ -591,34 +748,81 @@
                 const elRestantes = document.getElementById('cal-restantes');
                 
                 elRestantes.innerText = `${caloriasRestantes} kcal`;
-                if(caloriasRestantes < 0) { elRestantes.style.color = "var(--danger)"; elRestantes.innerText = `${Math.abs(caloriasRestantes)} kcal sobre límite`; } 
-                else { elRestantes.style.color = "white"; }
+                if(caloriasRestantes < 0) { 
+                    elRestantes.style.color = "var(--danger)"; 
+                    elRestantes.innerText = `${Math.abs(caloriasRestantes)} kcal sobre límite`; 
+                } else { 
+                    elRestantes.style.color = "white"; 
+                }
 
                 document.getElementById('cal-detalle').innerText = `Base: ${Math.round(neatGasto)} | Comida: ${totalIn} | Ejercicio: ${totalOut}`;
                 
                 if (totalIn === 0) {
-                    document.getElementById('deficit-hoy').innerText = "0 kcal"; document.getElementById('deficit-hoy').style.color = "var(--text-light)";
+                    document.getElementById('deficit-hoy').innerText = "0 kcal"; 
+                    document.getElementById('deficit-hoy').style.color = "var(--text-light)";
                 } else {
                     const deficitReal = (neatGasto + totalOut) - totalIn;
                     document.getElementById('deficit-hoy').innerText = deficitReal > 0 ? `-${Math.round(deficitReal)} kcal` : `+${Math.round(Math.abs(deficitReal))} kcal`;
                     document.getElementById('deficit-hoy').style.color = deficitReal > 0 ? "var(--success)" : "var(--danger)";
                 }
-            } else { document.getElementById('cal-detalle').innerText = "Llena tu edad y peso en Config / Cuerpo"; }
+            } else { 
+                document.getElementById('cal-detalle').innerText = "Llena tu edad y peso en Config / Cuerpo"; 
+            }
 
             const pesosArray = fechas.map(f => db.registros[f].peso).filter(p => p > 0);
             const labelsArray = fechas.filter(f => db.registros[f].peso > 0).map(f => f.slice(5));
-            if(db.config.pesoInicial && db.config.pesoInicial > 0) { pesosArray.unshift(db.config.pesoInicial); labelsArray.unshift("Inicio"); }
+            
+            if(db.config.pesoInicial && db.config.pesoInicial > 0) { 
+                pesosArray.unshift(db.config.pesoInicial); 
+                labelsArray.unshift("Inicio"); 
+            }
 
             if (chartInstance) chartInstance.destroy();
-            chartInstance = new Chart(document.getElementById('graficoPeso').getContext('2d'), { type: 'line', data: { labels: labelsArray, datasets: [{ label: 'Peso (kg)', data: pesosArray, borderColor: '#f4a298', backgroundColor: 'rgba(244, 162, 152, 0.2)', borderWidth: 4, pointBackgroundColor: '#fff', fill: true, tension: 0.4 }] }, options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: false, border: {display: false}, grid: {display: false} }, x: {border: {display: false}, grid: {display: false}} } } });
+            chartInstance = new Chart(document.getElementById('graficoPeso').getContext('2d'), { 
+                type: 'line', 
+                data: { 
+                    labels: labelsArray, 
+                    datasets: [{ 
+                        label: 'Peso (kg)', 
+                        data: pesosArray, 
+                        borderColor: '#f4a298', 
+                        backgroundColor: 'rgba(244, 162, 152, 0.2)', 
+                        borderWidth: 4, 
+                        pointBackgroundColor: '#fff', 
+                        fill: true, 
+                        tension: 0.4 
+                    }] 
+                }, 
+                options: { 
+                    responsive: true, 
+                    plugins: { legend: { display: false } }, 
+                    scales: { 
+                        y: { beginAtZero: false, border: {display: false}, grid: {display: false} }, 
+                        x: {border: {display: false}, grid: {display: false}} 
+                    } 
+                } 
+            });
         }
 
         function checkFattieZone() {
-            const fechaHoy = new Date().toISOString().split('T')[0]; let db = obtenerDB(); let hoy = obtenerDia(fechaHoy, db); const hora = new Date().getHours();
-            document.getElementById('fattie-warning').style.display = (hora >= 22 && hoy.ejercicios.length === 0) ? 'flex' : 'none';
+            const fechaHoy = new Date().toISOString().split('T')[0]; 
+            let db = obtenerDB(); 
+            let hoy = obtenerDia(fechaHoy, db); 
+            const hora = new Date().getHours();
+            
+            // Revisa si es la fecha actual para lanzar la advertencia
+            if (document.getElementById('global-fecha').value === fechaHoy) {
+                document.getElementById('fattie-warning').style.display = (hora >= 22 && hoy.ejercicios.length === 0) ? 'flex' : 'none';
+            } else {
+                document.getElementById('fattie-warning').style.display = 'none';
+            }
         }
 
-        window.onload = () => { cargarConfig(); cambioFechaGlobal(); setInterval(checkFattieZone, 300000); };
+        window.onload = () => { 
+            cargarConfig(); 
+            cambioFechaGlobal(); 
+            setInterval(checkFattieZone, 300000); 
+        };
     </script>
 </body>
 </html>
