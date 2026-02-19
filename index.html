@@ -308,16 +308,19 @@
             renderDiario(); renderMetas(); actualizarDashboard(); checkFattieZone();
         }
 
-        // --- MOTOR GEMINI ACTUALIZADO Y ESTABLE ---
+       // --- MOTOR GEMINI A PRUEBA DE FALLOS ---
         async function fetchGemini(prompt, key, modelo) {
-            const url = `https://generativelanguage.googleapis.com/v1/models/${modelo}:generateContent?key=${key}`;
+            // Volvemos a v1beta que es donde están los modelos más rápidos (Flash) de última generación
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${key}`;
             const res = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                body: JSON.stringify({ 
+                    contents: [{ parts: [{ text: prompt }] }] 
+                })
             });
             const data = await res.json();
-            if (!res.ok) throw new Error(data.error?.message || "Error desconocido en la API");
+            if (!res.ok) throw new Error(data.error?.message || "Error en la API");
             return data;
         }
 
@@ -338,22 +341,35 @@ IMPORTANTE: Tu respuesta debe ser ÚNICAMENTE un objeto JSON, sin formato markdo
 
             try {
                 let data;
-                try {
-                    // Intento 1: Usamos la nomenclatura -latest para evitar errores 404
-                    data = await fetchGemini(prompt, key, 'gemini-1.5-flash-latest');
-                } catch (err1) {
-                    console.warn("Fallo Flash, intentando Pro...", err1);
-                    // Intento 2: Modelo Pro con sufijo -latest
-                    data = await fetchGemini(prompt, key, 'gemini-1.5-pro-latest'); 
+                let errorLog = "";
+                
+                // ARRAY DE MODELOS: Del más nuevo y capaz, al más antiguo
+                const modelosPosibles = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-flash-8b'];
+                let exito = false;
+
+                // Intentamos con cada modelo de la lista uno por uno
+                for (let modelo of modelosPosibles) {
+                    try {
+                        data = await fetchGemini(prompt, key, modelo);
+                        exito = true;
+                        break; // Si el modelo funciona, rompemos el ciclo y continuamos
+                    } catch (e) {
+                        console.warn(`El modelo ${modelo} falló o no existe:`, e.message);
+                        errorLog = e.message; // Guardamos el error por si todos fallan
+                    }
                 }
 
+                // Si recorrió todos los modelos y ninguno funcionó, lanzamos la alerta
+                if (!exito) {
+                    throw new Error(`Google rechazó los modelos. Último error: ${errorLog}`);
+                }
+
+                // Validación de seguridad de la respuesta
                 if (!data.candidates || !data.candidates[0].content) {
-                    throw new Error("El modelo no devolvió texto o bloqueó la consulta.");
+                    throw new Error("El modelo bloqueó la consulta por seguridad o vino vacía.");
                 }
 
                 let textResponse = data.candidates[0].content.parts[0].text;
-                
-                // Limpieza fuerte de texto
                 textResponse = textResponse.replace(/```json/gi, '').replace(/```/g, '').trim();
                 currentAIResult = JSON.parse(textResponse);
                 
@@ -365,7 +381,7 @@ IMPORTANTE: Tu respuesta debe ser ÚNICAMENTE un objeto JSON, sin formato markdo
                 document.getElementById('btn-add-ai').onclick = addComidaAI;
                 
             } catch (finalErr) { 
-                alert(`⚠️ Error final de conexión:\n${finalErr.message}`); 
+                alert(`⚠️ Error de IA:\n${finalErr.message}`); 
             } finally {
                 document.getElementById('ai-loading').style.display = 'none';
             }
