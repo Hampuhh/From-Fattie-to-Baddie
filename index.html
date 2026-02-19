@@ -9,7 +9,7 @@
     <link rel="apple-touch-icon" href="icono.png">
     <link rel="icon" type="image/png" href="icono.png">
 
-    <title>Baddie Wellness Tracker</title>
+    <title>Baddie Wellness Tracker AI</title>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -47,7 +47,7 @@
         
         .date-mini {
             position: absolute; top: 10px; right: 10px;
-            background: rgba(255, 255, 255, 0.85); border-radius: 30px; padding: 3px 10px; 
+            background: rgba(255, 255, 255, 0.9); border-radius: 30px; padding: 3px 10px; 
             display: flex; align-items: center; gap: 5px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             backdrop-filter: blur(4px); z-index: 10;
         }
@@ -62,7 +62,7 @@
 
         .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
         .tab-btn { 
-            background: #ffffff; border: none; padding: 10px 5px; border-radius: 16px; 
+            background: #ffffff; border: none; padding: 12px 5px; border-radius: 16px; 
             font-family: 'Nunito'; font-size: 10px; font-weight: 800; color: var(--text-light); 
             display: flex; flex-direction: column; align-items: center; gap: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
         }
@@ -71,11 +71,7 @@
         .tab-btn.active i { color: white; }
 
         .glass-panel { background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(15px); border-radius: 24px; padding: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.05); }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.2s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; } }
 
-        /* ALERTAS */
         .alert-box { 
             background-color: var(--danger); color: white; text-align: center; padding: 12px; 
             border-radius: 14px; font-weight: 800; font-size: 12px; display: none; 
@@ -86,19 +82,19 @@
 
         .form-group { margin-bottom: 12px; }
         label { display: block; font-size: 10px; font-weight: 800; margin-bottom: 4px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px;}
-        input, select { width: 100%; padding: 12px; border: 2px solid #f0edea; border-radius: 14px; font-family: 'Nunito'; font-size: 15px; background: white; }
+        input, select, textarea { width: 100%; padding: 12px; border: 2px solid #f0edea; border-radius: 14px; font-family: 'Nunito'; font-size: 15px; background: white; }
         
         .btn-main { width: 100%; background: var(--primary); color: white; padding: 14px; border: none; border-radius: 14px; font-weight: 800; font-size: 14px; margin-top: 5px; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; }
         .btn-secondary { background: white; color: var(--primary); border: 2px solid var(--primary); }
 
         .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
         .kpi-card { background: white; border-radius: 20px; padding: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .kpi-card h3 { font-size: 9px; text-transform: uppercase; color: var(--text-light); margin: 0 0 4px 0; font-weight: 800;}
         .kpi-card h2 { margin: 0; font-size: 18px; font-weight: 900; }
+        .kpi-card h3 { font-size: 9px; text-transform: uppercase; color: var(--text-light); margin: 0 0 4px 0; font-weight: 800;}
         .progress-text { font-size: 11px; font-weight: 900; color: var(--success); margin-top: 4px; display: flex; justify-content: center; align-items: center; gap: 3px;}
 
         .search-container { display: flex; gap: 8px; margin-bottom: 12px; }
-        .btn-search { background: var(--accent); color: white; border: none; border-radius: 14px; width: 55px; display: flex; justify-content: center; align-items: center; font-size: 20px; cursor: pointer;}
+        .btn-search { background: var(--accent); color: white; border: none; border-radius: 14px; width: 60px; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer;}
 
         .list-item { display: flex; justify-content: space-between; align-items: center; background: white; padding: 12px; border-radius: 15px; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
         .list-item .info { display: flex; flex-direction: column; flex: 1; gap: 2px; }
@@ -108,16 +104,16 @@
         .row { display: flex; gap: 10px; }
         .row .form-group { flex: 1; }
 
-        .section-title { font-size: 15px; font-weight: 800; color: var(--primary-dark); margin: 15px 0 10px 0; display: flex; justify-content: space-between; align-items: center;}
-        .health-badge { display: inline-block; padding: 6px 10px; border-radius: 10px; font-size: 11px; font-weight: 800; margin-top: 5px;}
-        
-        /* FIX GRÁFICO: Contenedor con altura controlada */
         .chart-wrapper { position: relative; height: 180px; width: 100%; background: white; border-radius: 20px; padding: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); margin-top: 10px; }
+        .section-title { font-size: 15px; font-weight: 800; color: var(--primary-dark); margin: 15px 0 10px 0; display: flex; justify-content: space-between; align-items: center;}
+        
+        /* AI AREA */
+        #ai-response { display: none; background: #fffdf2; border: 2px solid #ffe58f; border-radius: 16px; padding: 15px; margin-bottom: 15px; animation: fadeIn 0.3s; }
+        .ai-loading { text-align: center; color: var(--text-light); font-size: 13px; font-weight: 800; padding: 10px; }
 
         #baddie-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(90, 80, 75, 0.7); backdrop-filter: blur(8px); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: white; border-radius: 30px; padding: 35px 25px; text-align: center; max-width: 350px; border: 4px solid var(--accent); box-shadow: 0 15px 50px rgba(0,0,0,0.2); animation: pop 0.3s ease-out; }
-        .resultados-api { display: none; background: white; border-radius: 16px; margin-bottom: 12px; max-height: 180px; overflow-y: auto; border: 1px solid #eee; }
-        .resultado-item { padding: 10px 15px; border-bottom: 1px solid #f9f8f6; cursor: pointer; font-size: 13px; }
+        .modal-content { background: white; border-radius: 30px; padding: 35px 25px; text-align: center; max-width: 350px; border: 4px solid var(--accent); }
+        .health-badge { display: inline-block; padding: 6px 10px; border-radius: 10px; font-size: 11px; font-weight: 800; margin-top: 5px;}
     </style>
 </head>
 <body>
@@ -138,18 +134,18 @@
                 <input type="date" id="global-fecha" onchange="cambioFechaGlobal()">
             </div>
             <h1>From Fattie to Baddie</h1>
-            <p>Just do it <i class="ph-fill ph-star" style="color: var(--gold);"></i></p>
+            <p>AI Powered <i class="ph-fill ph-sparkle" style="color: var(--gold);"></i></p>
         </header>
 
         <div id="cal-warning" class="alert-box"></div>
         <div id="fattie-warning" class="alert-box" style="background-color: #5a504b;">
-            <i class="ph-fill ph-moon"></i> <span>Sin ejercicio y es tarde. ¡Peligro Fattie Zone!</span>
+            <i class="ph-fill ph-moon"></i> <span>Tarde y sin ejercicio. ¡Peligro Fattie Zone!</span>
         </div>
 
         <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('dashboard', this)"><i class="ph-fill ph-chart-pie-slice"></i>Resumen</button>
             <button class="tab-btn" onclick="switchTab('medidas', this)"><i class="ph-fill ph-ruler"></i>Cuerpo</button>
-            <button class="tab-btn" onclick="switchTab('nutricion', this)"><i class="ph-fill ph-shopping-cart"></i>Diario</button>
+            <button class="tab-btn" onclick="switchTab('nutricion', this)"><i class="ph-fill ph-magic-wand"></i>Diario</button>
             <button class="tab-btn" onclick="switchTab('config', this)"><i class="ph-fill ph-target"></i>Metas</button>
         </div>
 
@@ -158,7 +154,7 @@
                 <div class="kpi-card" style="background: var(--primary); color: white; margin-bottom: 12px; width: 100%;">
                     <h3 style="color: rgba(255,255,255,0.8);">Calorías Restantes</h3>
                     <h2 id="cal-restantes" style="font-size: 26px;">-- kcal</h2>
-                    <div style="font-size: 10px; margin-top: 4px; font-weight: 700; opacity: 0.9;" id="cal-detalle">Cargando...</div>
+                    <div style="font-size: 10px; margin-top: 4px; font-weight: 700; opacity: 0.9;" id="cal-detalle">Esperando datos...</div>
                 </div>
                 <div class="kpi-grid">
                     <div class="kpi-card"><h3>Déficit Real</h3><h2 id="deficit-hoy" style="color: var(--accent);">0</h2></div>
@@ -180,7 +176,7 @@
             </div>
 
             <div id="medidas" class="tab-content">
-                <div class="section-title">Registrar Medidas</div>
+                <div class="section-title">Medidas del Día</div>
                 <div class="row">
                     <div class="form-group"><label>Peso (kg)</label><input type="number" id="peso" step="0.1"></div>
                     <div class="form-group"><label>Busto (cm)</label><input type="number" id="busto" step="0.1"></div>
@@ -193,58 +189,71 @@
             </div>
 
             <div id="nutricion" class="tab-content">
-                <div class="section-title">Buscador Chile</div>
+                <div class="section-title">Consultar a Gemini AI</div>
                 <div class="search-container">
-                    <input type="text" id="busqueda-comida" placeholder="¿Qué comiste?">
-                    <button class="btn-search" onclick="buscarEnAPI()"><i class="ph-bold ph-magnifying-glass"></i></button>
+                    <input type="text" id="busqueda-ai" placeholder="Ej: media palta reina con té..." onkeydown="if(event.key==='Enter') consultarAI()">
+                    <button class="btn-search" onclick="consultarAI()"><i class="ph-fill ph-lightning"></i></button>
                 </div>
-                <div id="contenedor-resultados" class="resultados-api"></div>
-                <div class="row">
-                    <div class="form-group" style="flex: 2;"><label>Nombre</label><input type="text" id="nombre-comida"></div>
-                    <div class="form-group"><label>Gramos</label><input type="number" id="gramos-comida" value="100" oninput="recalcularPorcion()"></div>
+
+                <div id="ai-response">
+                    <div id="ai-texto"></div>
+                    <button class="btn-main" id="btn-add-ai" style="background: var(--success); margin-top: 10px;"><i class="ph-bold ph-plus"></i> Añadir al Diario</button>
                 </div>
-                <div class="row">
-                    <div class="form-group"><label>Kcal</label><input type="number" id="calorias-comida"></div>
-                    <div class="form-group"><label>Proteína</label><input type="number" id="proteina-comida"></div>
+
+                <div id="ai-loading" class="ai-loading" style="display:none;">
+                    <i class="ph-bold ph-spinner ph-spin"></i> Gemini está calculando...
                 </div>
-                <button class="btn-main btn-secondary" onclick="agregarComida()"><i class="ph-bold ph-plus"></i> Añadir Comida</button>
-                <div id="lista-comidas" style="margin-top:15px;"></div>
+
+                <div class="section-title">Registro Hoy</div>
+                <div id="lista-comidas"></div>
 
                 <div class="section-title" style="margin-top: 25px;">Ejercicio</div>
-                <div class="form-group"><label>Actividad</label><input type="text" id="nombre-ejercicio" placeholder="Ej. Pilates"></div>
+                <div class="form-group"><label>Actividad</label><input type="text" id="ej-nombre" placeholder="Ej: Pilates"></div>
                 <div class="row">
-                    <div class="form-group"><label>Minutos</label><input type="number" id="tiempo-ejercicio"></div>
-                    <div class="form-group"><label>Kcal</label><input type="number" id="calorias-ejercicio"></div>
+                    <div class="form-group"><label>Mins</label><input type="number" id="ej-tiempo"></div>
+                    <div class="form-group"><label>Kcal</label><input type="number" id="ej-kcal"></div>
                 </div>
-                <button class="btn-main btn-secondary" onclick="agregarEjercicio()"><i class="ph-bold ph-plus"></i> Añadir Ejercicio</button>
+                <button class="btn-main btn-secondary" onclick="agregarEjercicio()">+ Añadir Ejercicio</button>
                 <div id="lista-ejercicios" style="margin-top:15px;"></div>
             </div>
 
             <div id="config" class="tab-content">
-                <div class="section-title">Perfil Base</div>
+                <div class="section-title">Ajustes Baddie</div>
                 <div class="row">
-                    <div class="form-group"><label>Altura</label><input type="number" id="c-alt" value="160"></div>
+                    <div class="form-group"><label>Altura</label><input type="number" id="c-alt"></div>
                     <div class="form-group"><label>Edad</label><input type="number" id="c-edad"></div>
                 </div>
                 <div class="form-group"><label>Peso Inicio Oficial</label><input type="number" id="c-peso-i"></div>
                 <div class="form-group">
-                    <label>Actividad Física (Pasos)</label>
+                    <label>Pasos Diarios (NEAT)</label>
                     <select id="c-act">
-                        <option value="1.2">Sedentario (Menos de 5k pasos)</option>
-                        <option value="1.3">Ligero (5k - 8k pasos)</option>
-                        <option value="1.45">Moderado (8k - 10k pasos)</option>
-                        <option value="1.6">Activo (Más de 10k pasos)</option>
+                        <option value="1.2">Sedentario (Menos de 5k)</option>
+                        <option value="1.3">Ligero (5k - 8k)</option>
+                        <option value="1.45">Moderado (8k - 10k)</option>
+                        <option value="1.6">Activo (Más de 10k)</option>
                     </select>
+                </div>
+                <div class="form-group">
+                    <label>Déficit Diario Meta</label>
+                    <select id="c-deficit">
+                        <option value="300">Suave (-300 kcal)</option>
+                        <option value="500">Recomendado (-500 kcal)</option>
+                        <option value="700">Agresivo (-700 kcal)</option>
+                    </select>
+                </div>
+                <div class="form-group" style="background: #fff0f0; padding: 10px; border-radius: 12px;">
+                    <label style="color: var(--danger);">Gemini API Key (Privada)</label>
+                    <input type="password" id="c-apikey" placeholder="Pega tu llave aquí...">
                 </div>
                 <button class="btn-main" onclick="guardarConfig()">Actualizar Perfil</button>
                 <button class="btn-main" style="background-color: #e2e8e5; color: var(--primary-dark); margin-top: 10px;" onclick="descargarRespaldo()"><i class="ph-bold ph-download-simple"></i> Respaldar Datos</button>
 
-                <div class="section-title" style="margin-top: 40px; color: var(--accent);">Tus Metas y Proyecciones</div>
+                <div class="section-title" style="margin-top: 40px; color: var(--accent);">Metas y Proyecciones</div>
                 <div class="row">
                     <input type="number" id="m-peso" placeholder="Meta kg" style="flex:1;">
                     <input type="text" id="m-premio" placeholder="Premio" style="flex:2;">
                 </div>
-                <button class="btn-main btn-secondary" onclick="agregarMeta()"><i class="ph-bold ph-plus"></i> Crear Meta</button>
+                <button class="btn-main btn-secondary" onclick="agregarMeta()">Crear Meta</button>
                 <div id="lista-metas" style="margin-top: 15px;"></div>
             </div>
         </div>
@@ -252,12 +261,14 @@
 
     <script>
         if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); }); }
-        let db = { registros: {}, metas: [], config: { altura: 160, edad: '', actividad: 1.2, pesoI: '' } };
-        let baseK = 0, baseP = 0, chart = null;
+        
+        let db = { registros: {}, metas: [], config: { altura: 160, edad: '', actividad: 1.2, pesoI: '', deficit: 500, apiKey: '' } };
+        let currentAIResult = null;
+        let chart = null;
 
         function init() {
             try {
-                const saved = localStorage.getItem('baddieData_V18');
+                const saved = localStorage.getItem('baddieData_V20');
                 if (saved) db = JSON.parse(saved);
                 document.getElementById('global-fecha').valueAsDate = new Date();
                 cargarConfigUI(); cambioFechaGlobal();
@@ -282,67 +293,63 @@
             renderDiario(); renderMetas(); actualizarDashboard(); checkFattieZone();
         }
 
-        async function buscarEnAPI() {
-            const q = document.getElementById('busqueda-comida').value;
-            const resDiv = document.getElementById('contenedor-resultados');
-            if(!q) return;
-            resDiv.innerHTML = '<p style="padding:15px; text-align:center;">Buscando...</p>';
-            resDiv.style.display = 'block';
+        // --- LÓGICA DE IA GEMINI ---
+        async function consultarAI() {
+            const q = document.getElementById('busqueda-ai').value;
+            const key = db.config.apiKey;
+            if (!key) return alert("Primero pega tu API Key en la pestaña de Metas (Configuración)");
+            if (!q) return;
+
+            const loader = document.getElementById('ai-loading');
+            const responseBox = document.getElementById('ai-response');
+            loader.style.display = 'block';
+            responseBox.style.display = 'none';
+
+            const prompt = `Eres un experto en nutrición chilena. El usuario comió: "${q}". 
+            Devuelve ÚNICAMENTE un objeto JSON con las claves: "nombre", "calorias", "proteinas". 
+            Sé preciso con las porciones mencionadas. Si no hay porción, asume una normal. 
+            Ejemplo de respuesta: {"nombre": "Media palta reina", "calorias": 180, "proteinas": 4}`;
+
             try {
-                const r = await fetch(`https://cl.openfoodfacts.org/cgi/search.pl?search_terms=${q}&json=1&page_size=5`);
-                const d = await r.json(); resDiv.innerHTML = '';
-                if(d.products.length > 0) {
-                    d.products.forEach(p => {
-                        const n = p.product_name_es || p.product_name;
-                        const k = Math.round(p.nutriments['energy-kcal_100g'] || 0);
-                        const pr = Math.round(p.nutriments['proteins_100g'] || 0);
-                        const i = document.createElement('div'); i.className = 'resultado-item';
-                        i.innerHTML = `<b>${n}</b><br><small>${k} kcal | ${pr}g prot</small>`;
-                        i.onclick = () => {
-                            document.getElementById('nombre-comida').value = n; baseK = k; baseP = pr;
-                            document.getElementById('gramos-comida').value = 100; recalcularPorcion();
-                            resDiv.style.display = 'none';
-                        };
-                        resDiv.appendChild(i);
-                    });
-                } else { resDiv.innerHTML = '<p style="padding:10px; text-align:center;">No encontrado.</p>'; }
-            } catch(e) { resDiv.style.display = 'none'; }
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+                    method: 'POST',
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
+                const data = await res.json();
+                const text = data.candidates[0].content.parts[0].text;
+                const jsonMatch = text.match(/\{.*\}/s);
+                if (jsonMatch) {
+                    currentAIResult = JSON.parse(jsonMatch[0]);
+                    document.getElementById('ai-texto').innerHTML = `<b>${currentAIResult.nombre}</b><br><i class="ph-fill ph-fire"></i> ${currentAIResult.calorias} kcal | <i class="ph-fill ph-barbell"></i> ${currentAIResult.proteinas}g prot`;
+                    responseBox.style.display = 'block';
+                    document.getElementById('btn-add-ai').onclick = addComidaAI;
+                }
+            } catch (e) { alert("Error con la IA. Revisa tu llave o conexión."); }
+            loader.style.display = 'none';
         }
 
-        function recalcularPorcion() {
-            const g = document.getElementById('gramos-comida').value / 100;
-            document.getElementById('calorias-comida').value = Math.round(baseK * g);
-            document.getElementById('proteina-comida').value = Math.round(baseP * g);
-        }
-
-        function agregarComida() {
+        function addComidaAI() {
             const f = document.getElementById('global-fecha').value;
-            const n = document.getElementById('nombre-comida').value;
-            const k = parseFloat(document.getElementById('calorias-comida').value);
-            const p = parseFloat(document.getElementById('proteina-comida').value) || 0;
-            const g = document.getElementById('gramos-comida').value;
-            if(!n || isNaN(k)) return;
-            db.registros[f].comidas.push({id: Date.now(), n: `${n} (${g}g)`, k, p});
+            db.registros[f].comidas.push({
+                id: Date.now(), 
+                n: currentAIResult.nombre, 
+                k: currentAIResult.calorias, 
+                p: currentAIResult.proteinas
+            });
             save(); cambioFechaGlobal();
-            document.getElementById('nombre-comida').value = ''; document.getElementById('calorias-comida').value = ''; document.getElementById('proteina-comida').value = '';
+            document.getElementById('ai-response').style.display = 'none';
+            document.getElementById('busqueda-ai').value = '';
         }
 
         function agregarEjercicio() {
             const f = document.getElementById('global-fecha').value;
-            const n = document.getElementById('nombre-ejercicio').value;
-            const t = document.getElementById('tiempo-ejercicio').value;
-            const k = parseFloat(document.getElementById('calorias-ejercicio').value);
+            const n = document.getElementById('ej-nombre').value;
+            const t = document.getElementById('ej-tiempo').value;
+            const k = parseFloat(document.getElementById('ej-kcal').value);
             if(!n || isNaN(k)) return;
             db.registros[f].ejercicios.push({id: Date.now(), n, t, k});
             save(); cambioFechaGlobal();
-            document.getElementById('nombre-ejercicio').value = ''; document.getElementById('tiempo-ejercicio').value = ''; document.getElementById('calorias-ejercicio').value = '';
-        }
-
-        function borrarItem(tipo, id) {
-            const f = document.getElementById('global-fecha').value;
-            if(tipo==='c') db.registros[f].comidas = db.registros[f].comidas.filter(i=>i.id!==id);
-            else db.registros[f].ejercicios = db.registros[f].ejercicios.filter(i=>i.id!==id);
-            save(); cambioFechaGlobal();
+            document.getElementById('ej-nombre').value = ''; document.getElementById('ej-tiempo').value = ''; document.getElementById('ej-kcal').value = '';
         }
 
         function guardarMedidas() {
@@ -358,7 +365,7 @@
                     document.getElementById('baddie-modal').style.display = 'flex';
                 }
             });
-            save(); cambioFechaGlobal(); alert("¡Progreso actualizado!");
+            save(); cambioFechaGlobal(); alert("Medidas guardadas");
         }
 
         function renderDiario() {
@@ -381,15 +388,20 @@
             hoy.ejercicios.forEach(e => { tOut += e.k; });
             const pesos = Object.keys(db.registros).sort().map(k=>db.registros[k].peso).filter(p=>p>0);
             const uPeso = hoy.peso || pesos[pesos.length-1] || conf.pesoI || 0;
+            
             if(uPeso > 0 && conf.altura && conf.edad) {
                 const bmr = (10 * uPeso) + (6.25 * conf.altura) - (5 * conf.edad) - 161;
-                const neat = Math.round(bmr * conf.actividad); const meta = neat - 500; const rest = meta - tIn + tOut;
+                const neat = Math.round(bmr * conf.actividad); 
+                const metaDef = parseFloat(conf.deficit || 500);
+                const meta = neat - metaDef; 
+                const rest = meta - tIn + tOut;
+                
                 document.getElementById('cal-restantes').innerText = rest + ' kcal';
                 document.getElementById('cal-detalle').innerText = `Base: ${neat} | Comida: ${tIn} | Ejercicio: ${tOut}`;
                 document.getElementById('prot-hoy').innerText = tP + 'g';
                 const defReal = (neat + tOut) - tIn;
                 document.getElementById('deficit-hoy').innerText = (defReal > 0 ? '-' : '+') + Math.abs(defReal);
-
+                
                 const calWarn = document.getElementById('cal-warning');
                 if (rest <= 200 && rest > 0) {
                     calWarn.style.display = 'flex';
@@ -429,10 +441,12 @@
             const cont = document.getElementById('lista-metas'); cont.innerHTML = '';
             const pesos = Object.values(db.registros).map(r=>r.peso).filter(p=>p>0);
             const uPeso = pesos[pesos.length-1] || db.config.pesoI || 0;
+            const def = parseFloat(db.config.deficit || 500);
+
             db.metas.forEach(m => {
                 let proy = '';
                 if(!m.done && uPeso > m.p) {
-                    const dias = Math.ceil(((uPeso - m.p) * 7700) / 500);
+                    const dias = Math.ceil(((uPeso - m.p) * 7700) / def);
                     const fechaE = new Date(); fechaE.setDate(fechaE.getDate() + dias);
                     proy = `<div style="font-size:11px; margin-top:8px; color:var(--primary-dark); background:rgba(255,255,255,0.7); padding:8px; border-radius:12px; display:flex; align-items:center; gap:8px;">
                         <i class="ph-fill ph-calendar-heart" style="font-size:24px; color:var(--accent);"></i>
@@ -455,17 +469,27 @@
             document.getElementById('m-peso').value = ''; document.getElementById('m-premio').value = '';
         }
         function delMeta(id) { if(confirm("¿Borrar?")) { db.metas = db.metas.filter(m=>m.id!==id); save(); cambioFechaGlobal(); } }
+        function borrarItem(tipo, id) {
+            const f = document.getElementById('global-fecha').value;
+            if(tipo==='c') db.registros[f].comidas = db.registros[f].comidas.filter(i=>i.id!==id);
+            else db.registros[f].ejercicios = db.registros[f].ejercicios.filter(i=>i.id!==id);
+            save(); cambioFechaGlobal();
+        }
         function cargarConfigUI() {
             document.getElementById('c-alt').value = db.config.altura;
             document.getElementById('c-edad').value = db.config.edad;
             document.getElementById('c-peso-i').value = db.config.pesoI;
             document.getElementById('c-act').value = db.config.actividad;
+            document.getElementById('c-deficit').value = db.config.deficit || 500;
+            document.getElementById('c-apikey').value = db.config.apiKey || '';
         }
         function guardarConfig() {
             db.config.altura = document.getElementById('c-alt').value;
             db.config.edad = document.getElementById('c-edad').value;
             db.config.pesoI = document.getElementById('c-peso-i').value;
             db.config.actividad = document.getElementById('c-act').value;
+            db.config.deficit = document.getElementById('c-deficit').value;
+            db.config.apiKey = document.getElementById('c-apikey').value;
             save(); alert("Perfil actualizado"); cambioFechaGlobal();
         }
         function descargarRespaldo() {
@@ -473,8 +497,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a'); a.href = url; a.download = `Baddie_Backup.json`; a.click();
         }
-        function save() { localStorage.setItem('baddieData_V18', JSON.stringify(db)); }
-        
+        function save() { localStorage.setItem('baddieData_V20', JSON.stringify(db)); }
         function renderChart() {
             const ctx = document.getElementById('graficoPeso').getContext('2d');
             const fechas = Object.keys(db.registros).sort().slice(-7);
