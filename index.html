@@ -6,74 +6,173 @@
     <title>Wellness Tracker</title>
     
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#d4a5a5">
+    <meta name="theme-color" content="#84a99c">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="icono.png">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
-        :root { --primary: #9bbfab; --primary-dark: #7a9e8a; --bg-color: #f8f9fa; --text-main: #4a4a4a; --text-light: #888888; --accent: #d4a5a5; --danger: #e74c3c; --success: #2ecc71; --gold: #f1c40f;}
-        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); background-image: url('fondo.png'); background-size: cover; background-position: center; background-attachment: fixed; color: var(--text-main); margin: 0; padding: 15px; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
-        .app-container { background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); width: 100%; max-width: 500px; min-height: 85vh; border-radius: 28px; box-shadow: 0 12px 40px rgba(0,0,0,0.12); overflow: hidden; padding-bottom: 20px; position: relative; }
+        :root { 
+            --primary: #84a99c; /* Menta/Teal de la foto */
+            --primary-dark: #6b8d81; 
+            --bg-color: #fcfaf8; 
+            --text-main: #5a504b; /* Marrón cálido oscuro */
+            --text-light: #a09894; 
+            --accent: #f4a298; /* Melocotón/Rosa suave */
+            --danger: #f28b82; 
+            --success: #81c784; 
+            --gold: #ffd54f;
+        }
         
-        .baddie-banner { background-image: linear-gradient(rgba(212, 165, 165, 0.35), rgba(181, 131, 141, 0.35)), url('banner.png'); background-size: cover; background-position: center; color: white; text-align: center; padding: 55px 20px; font-size: 38px; font-family: 'Pacifico', cursive; font-weight: 400; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); margin-bottom: 20px; text-shadow: 2px 2px 5px rgba(0,0,0,0.7); }
-        .fattie-warning { background-color: var(--danger); color: white; text-align: center; padding: 10px; font-weight: 600; font-size: 13px; display: none; align-items: center; justify-content: center; gap: 8px;}
+        body { 
+            font-family: 'Nunito', sans-serif; 
+            background-color: var(--bg-color); 
+            background-image: url('fondo.png'); 
+            background-size: cover; 
+            background-position: center; 
+            background-attachment: fixed; 
+            color: var(--text-main); 
+            margin: 0; 
+            padding: 15px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-start; 
+            min-height: 100vh; 
+        }
+
+        .app-wrapper {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding-bottom: 30px;
+        }
         
-        .content-padding { padding: 0 25px; }
-        .tabs { display: flex; justify-content: space-between; margin-bottom: 20px; background: rgba(240, 244, 242, 0.8); border-radius: 16px; padding: 6px; }
-        .tab-btn { flex: 1; background: none; border: none; padding: 10px 0; font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 600; color: var(--text-light); cursor: pointer; border-radius: 12px; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; gap: 4px;}
-        .tab-btn i { font-size: 20px; }
-        .tab-btn.active { background: #ffffff; color: var(--primary-dark); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+        /* BANNER FLOTANTE (Igual a la foto) */
+        .baddie-banner { 
+            background-image: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)), url('banner.png'); 
+            background-size: cover; 
+            background-position: center; 
+            color: white; 
+            text-align: center; 
+            padding: 40px 20px; 
+            border-radius: 24px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08); 
+            position: relative;
+        }
+        .baddie-banner h1 {
+            margin: 0;
+            font-size: 36px;
+            font-weight: 900;
+            text-shadow: 0 3px 8px rgba(0,0,0,0.4);
+            letter-spacing: 0.5px;
+        }
+        .baddie-banner p {
+            margin: 5px 0 0 0;
+            font-size: 14px;
+            font-weight: 700;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.4);
+        }
+        
+        .fattie-warning { background-color: var(--danger); color: white; text-align: center; padding: 12px; border-radius: 16px; font-weight: 700; font-size: 13px; display: none; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 10px rgba(242, 139, 130, 0.3);}
+
+        /* TARJETA DE FECHA GLOBAL */
+        .date-card {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        }
+        .date-card i { font-size: 24px; color: var(--primary); }
+        .date-card input { 
+            border: none; background: transparent; font-size: 16px; font-weight: 800; color: var(--text-main); 
+            outline: none; flex: 1; text-align: center; font-family: 'Nunito', sans-serif;
+        }
+        
+        /* TABS (Grilla igual a la foto) */
+        .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .tab-btn { 
+            background: #ffffff; border: none; padding: 15px 5px; border-radius: 16px; 
+            font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 800; color: var(--text-light); 
+            display: flex; flex-direction: column; align-items: center; gap: 6px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04); cursor: pointer; transition: 0.3s;
+        }
+        .tab-btn i { font-size: 24px; color: var(--text-light); transition: 0.3s;}
+        .tab-btn.active { background: var(--primary); color: #ffffff; box-shadow: 0 6px 15px rgba(132, 169, 156, 0.3); }
+        .tab-btn.active i { color: #ffffff; }
+        
+        /* CONTENEDOR DE CRISTAL PARA EL CONTENIDO */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(15px);
+            border-radius: 24px;
+            padding: 25px 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.05);
+        }
+
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* FORMULARIOS */
         .form-group { margin-bottom: 15px; }
-        label { display: block; font-size: 11px; font-weight: 600; margin-bottom: 6px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px;}
-        input, select { width: 100%; padding: 12px; border: 1px solid #e1e8e4; border-radius: 12px; box-sizing: border-box; font-family: 'Poppins', sans-serif; font-size: 14px; background-color: #fafbfa; transition: border 0.3s;}
-        input:focus, select:focus { outline: none; border-color: var(--primary); background-color: #fff;}
+        label { display: block; font-size: 11px; font-weight: 800; margin-bottom: 6px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px;}
+        input, select { width: 100%; padding: 14px; border: 2px solid #f0edea; border-radius: 14px; box-sizing: border-box; font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 600; color: var(--text-main); background-color: #ffffff; transition: border 0.3s;}
+        input:focus, select:focus { outline: none; border-color: var(--primary); }
         .row { display: flex; gap: 12px; }
         .row .form-group { flex: 1; }
 
-        .btn-main { width: 100%; background-color: var(--primary); color: white; padding: 14px; border: none; border-radius: 14px; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 5px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px;}
-        .btn-main:hover { background-color: var(--primary-dark); transform: translateY(-1px);}
-        .btn-secondary { background-color: #f0f4f2; color: var(--primary-dark); }
+        /* BOTONES */
+        .btn-main { width: 100%; background-color: var(--primary); color: white; padding: 14px; border: none; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; margin-top: 5px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px;}
+        .btn-main:hover { background-color: var(--primary-dark); transform: translateY(-2px);}
+        .btn-secondary { background-color: #ffffff; color: var(--primary); border: 2px solid var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.02);}
+        .btn-secondary:hover { background-color: #f0f4f2; }
         .search-row { display: flex; gap: 10px; align-items: flex-end; margin-bottom: 15px; }
-        .btn-search { background-color: var(--accent); color: white; height: 45px; width: 45px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: 0.2s;}
+        .btn-search { background-color: var(--accent); color: white; height: 50px; width: 50px; border: none; border-radius: 14px; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: 0.2s; box-shadow: 0 4px 10px rgba(244, 162, 152, 0.3);}
 
-        .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
-        .kpi-grid-4 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-        .kpi-card { background: #fff; border: 1px solid #eee; padding: 15px 12px; border-radius: 18px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
-        .kpi-card.main-kpi { grid-column: 1 / -1; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; }
-        .kpi-card h3 { margin: 0 0 5px 0; font-size: 11px; text-transform: uppercase; opacity: 0.9; }
-        .kpi-card h2 { margin: 0; font-size: 26px; }
-        .progress-text { font-size: 12px; font-weight: 600; color: var(--success); margin-top: 5px; display: flex; justify-content: center; align-items: center; gap: 4px;}
-        .section-title { font-size: 16px; font-weight: 600; color: var(--primary-dark); margin-bottom: 12px; display: flex; justify-content: space-between; border-bottom: 2px solid #f0f4f2; padding-bottom: 8px;}
+        /* KPI CARDS (Iguales a los ingresos/gastos de la foto) */
+        .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .kpi-card { background: #ffffff; border: none; padding: 18px 15px; border-radius: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px;}
+        .kpi-card h3 { margin: 0; font-size: 10px; text-transform: uppercase; color: var(--text-light); font-weight: 800; letter-spacing: 0.5px;}
+        .kpi-card h2 { margin: 0; font-size: 24px; font-weight: 900; }
+        .section-title { font-size: 16px; font-weight: 800; color: var(--primary-dark); margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;}
 
+        /* LISTAS (Diario y Metas) */
         .list-section { margin-top: 25px; }
-        .list-item { display: flex; justify-content: space-between; align-items: center; background: rgba(255, 255, 255, 0.8); border: 1px solid #eee; padding: 12px; border-radius: 14px; margin-bottom: 10px; font-size: 13px; }
-        .list-item .info { display: flex; flex-direction: column; flex: 1; gap: 2px;}
-        .list-item .stats { font-weight: 600; color: var(--primary-dark); text-align: right; min-width: 75px; display: flex; flex-direction: column; align-items: flex-end;}
-        .delete-btn { color: #d4a5a5; background: none; border: none; cursor: pointer; padding: 5px; margin-top: 2px;}
-        .delete-btn i { font-size: 18px; }
-        .goal-item { border-left: 5px solid var(--accent); align-items: flex-start;}
-        .goal-item.achieved { background: #f0f9f4; border-left: 5px solid var(--success); opacity: 0.85;}
+        .list-item { display: flex; justify-content: space-between; align-items: center; background: #ffffff; border: none; padding: 15px; border-radius: 16px; margin-bottom: 12px; font-size: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);}
+        .list-item .info { display: flex; flex-direction: column; flex: 1; gap: 3px;}
+        .list-item .stats { font-weight: 800; color: var(--primary-dark); text-align: right; min-width: 75px; display: flex; flex-direction: column; align-items: flex-end; gap: 5px;}
+        .delete-btn { color: #e0d8d5; background: none; border: none; cursor: pointer; padding: 0; transition: 0.2s;}
+        .delete-btn:hover { color: var(--danger); transform: scale(1.1);}
+        .delete-btn i { font-size: 20px; }
         
-        .resultados-api { display: none; background: #fff; border: 1px solid #e1e8e4; border-radius: 12px; padding: 5px; margin-bottom: 15px; max-height: 180px; overflow-y: auto; box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
-        .resultado-item { padding: 12px; border-bottom: 1px solid #f0f4f2; cursor: pointer; transition: 0.2s; }
+        .goal-item { border-left: 6px solid var(--accent); align-items: flex-start;}
+        .goal-item.achieved { background: #f2fbf6; border-left: 6px solid var(--success);}
         
-        #baddie-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 35px; border-radius: 24px; text-align: center; max-width: 320px; }
-        .modal-content i { font-size: 48px; color: var(--gold); margin-bottom: 10px; display: block;}
-        .modal-content h2 { color: var(--accent); font-size: 24px; margin: 0 0 10px 0;}
-        .modal-content p#recompensa-texto { font-weight: 600; color: var(--primary-dark); font-size: 16px; margin: 20px 0; padding: 15px; background: #f0f4f2; border-radius: 14px;}
+        .resultados-api { display: none; background: #fff; border: 1px solid #e1e8e4; border-radius: 16px; padding: 5px; margin-bottom: 15px; max-height: 180px; overflow-y: auto; box-shadow: 0 8px 25px rgba(0,0,0,0.08); }
+        .resultado-item { padding: 12px 15px; border-bottom: 1px solid #f9f8f6; cursor: pointer; transition: 0.2s; }
+        .resultado-item:hover { background-color: #f2fbf6; border-radius: 10px;}
+        .resultado-item:last-child { border-bottom: none; }
+
+        /* Modal Baddie */
+        #baddie-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(90, 80, 75, 0.6); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 40px; border-radius: 30px; text-align: center; max-width: 320px; box-shadow: 0 15px 50px rgba(0,0,0,0.15);}
+        .modal-content i { font-size: 56px; color: var(--gold); margin-bottom: 15px; display: block;}
+        .modal-content h2 { color: var(--accent); font-size: 26px; font-weight: 900; margin: 0 0 10px 0;}
+        .modal-content p#recompensa-texto { font-weight: 800; color: var(--primary-dark); font-size: 18px; margin: 20px 0; padding: 15px; background: #f2fbf6; border-radius: 16px;}
         
-        .health-badge { display: inline-block; padding: 4px 8px; border-radius: 8px; font-size: 10px; font-weight: 600; margin-top: 4px;}
-        .badge-good { background: #d4edda; color: #155724; }
-        .badge-warn { background: #fff3cd; color: #856404; }
+        .health-badge { display: inline-block; padding: 6px 10px; border-radius: 10px; font-size: 11px; font-weight: 800; margin-top: 5px;}
+        .badge-good { background: #e8f5e9; color: #2e7d32; }
+        .badge-warn { background: #fff8e1; color: #f57f17; }
     </style>
 </head>
 <body>
@@ -82,51 +181,81 @@
         <div class="modal-content">
             <i class="ph-fill ph-sparkle"></i>
             <h2>¡LO LOGRASTE!</h2>
-            <p>Eres oficialmente una BADDIE indiscutible. Has alcanzado una de tus metas y te has ganado esto:</p>
+            <p>Eres oficialmente una BADDIE. Has alcanzado una meta y te ganaste esto:</p>
             <p id="recompensa-texto">Tu premio aquí</p>
             <button class="btn-main" onclick="document.getElementById('baddie-modal').style.display='none'">
-                <i class="ph-bold ph-star"></i> ¡A reclamar mi premio!
+                <i class="ph-bold ph-star"></i> A reclamar mi premio
             </button>
         </div>
     </div>
 
-    <div class="app-container">
+    <div class="app-wrapper">
+        
         <div id="fattie-warning" class="fattie-warning">
-            <i class="ph-fill ph-warning-circle" style="font-size: 20px;"></i>
-            <span>Son más de las 10 PM y no hay ejercicio. Estás en riesgo de Fattie Zone.</span>
+            <i class="ph-fill ph-warning-circle" style="font-size: 22px;"></i>
+            <span>Sin ejercicio hoy. ¡Peligro de Fattie Zone!</span>
         </div>
         
-        <div class="baddie-banner">From Fattie to Baddie</div>
+        <div class="baddie-banner">
+            <h1>From Fattie to Baddie</h1>
+            <p>Just do it ⭐</p>
+        </div>
 
-        <div class="content-padding">
-            <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('dashboard')"><i class="ph-fill ph-squares-four"></i> Resumen</button>
-                <button class="tab-btn" onclick="switchTab('medidas')"><i class="ph-fill ph-ruler"></i> Cuerpo</button>
-                <button class="tab-btn" onclick="switchTab('nutricion')"><i class="ph-fill ph-book-open-text"></i> Diario</button>
-                <button class="tab-btn" onclick="switchTab('config')"><i class="ph-fill ph-gear-six"></i> Config</button>
-            </div>
+        <div class="date-card">
+            <i class="ph-fill ph-calendar-blank"></i>
+            <input type="date" id="global-fecha" onchange="cambioFechaGlobal()">
+        </div>
 
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('dashboard')">
+                <i class="ph-fill ph-chart-pie-slice"></i> Resumen
+            </button>
+            <button class="tab-btn" onclick="switchTab('medidas')">
+                <i class="ph-fill ph-ruler"></i> Cuerpo
+            </button>
+            <button class="tab-btn" onclick="switchTab('nutricion')">
+                <i class="ph-fill ph-shopping-cart"></i> Diario
+            </button>
+            <button class="tab-btn" onclick="switchTab('config')">
+                <i class="ph-fill ph-target"></i> Metas
+            </button>
+        </div>
+
+        <div class="glass-panel">
+            
             <div id="dashboard" class="tab-content active">
-                <div class="kpi-grid">
-                    <div class="kpi-card main-kpi">
-                        <h3>Calorías Restantes Hoy</h3>
+                <div class="kpi-grid" style="grid-template-columns: 1fr;">
+                    <div class="kpi-card" style="background: var(--primary); color: white;">
+                        <h3 style="color: rgba(255,255,255,0.8);">Calorías Restantes Hoy</h3>
                         <h2 id="cal-restantes">-- kcal</h2>
-                        <p style="font-size: 11px; margin: 5px 0 0 0; opacity: 0.9;" id="cal-detalle">BMR: -- | Movimiento: -- | Ejercicio: --</p>
+                        <div style="font-size: 11px; margin-top: 5px; font-weight: 600;" id="cal-detalle">BMR: -- | Movimiento: -- | Ejercicio: --</div>
                     </div>
-                    <div class="kpi-card"><h3>Proteínas Hoy</h3><h2 id="prot-hoy" style="color: var(--primary-dark);">0 g</h2></div>
-                    <div class="kpi-card"><h3>Déficit Total</h3><h2 id="deficit-hoy" style="color: var(--accent);">0 kcal</h2></div>
+                </div>
+                
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <h3>Déficit Diario</h3>
+                        <h2 id="deficit-hoy" style="color: var(--accent);">0 kcal</h2>
+                    </div>
+                    <div class="kpi-card">
+                        <h3>Proteínas Hoy</h3>
+                        <h2 id="prot-hoy" style="color: var(--primary-dark);">0 g</h2>
+                    </div>
                 </div>
 
-                <div class="section-title"><span>Tu Baddievolution</span><i class="ph-fill ph-sparkle" style="color: var(--gold);"></i></div>
-                <div class="kpi-grid-4">
+                <div class="section-title">
+                    <span>Tu Baddievolution</span>
+                    <i class="ph-fill ph-sparkle" style="color: var(--gold); font-size: 20px;"></i>
+                </div>
+                <div class="kpi-grid" style="gap: 10px;">
                     <div class="kpi-card"><h3>Peso</h3><div id="prog-peso" class="progress-text">--</div></div>
                     <div class="kpi-card"><h3>Cintura</h3><div id="prog-cintura" class="progress-text">--</div></div>
                     <div class="kpi-card"><h3>Cadera</h3><div id="prog-cadera" class="progress-text">--</div></div>
                     <div class="kpi-card"><h3>Busto</h3><div id="prog-busto" class="progress-text">--</div></div>
                 </div>
                 
-                <div id="health-indicators" style="background: #f0f4f2; padding: 10px; border-radius: 12px; margin-bottom: 20px; font-size: 12px; text-align: center;">
-                    <strong style="color: var(--primary-dark);">Índice Cintura-Cadera (ICC):</strong> <span id="icc-value">--</span>
+                <div id="health-indicators" style="background: #ffffff; padding: 15px; border-radius: 20px; margin-bottom: 20px; font-size: 13px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+                    <strong style="color: var(--primary-dark); font-weight: 800;">Índice Cintura-Cadera (ICC):</strong> <span id="icc-value" style="font-weight: 900;">--</span><br>
                     <div id="icc-badge" class="health-badge">Registra medidas</div>
                 </div>
 
@@ -134,8 +263,7 @@
             </div>
 
             <div id="medidas" class="tab-content">
-                <div class="form-group"><label>Fecha</label><input type="date" id="fecha-medidas"></div>
-                <div class="section-title">Tus Medidas Actuales</div>
+                <div class="section-title">Medidas del Día Seleccionado</div>
                 <div class="row">
                     <div class="form-group"><label>Peso (kg)</label><input type="number" id="peso" step="0.1" placeholder="Ej. 74.5"></div>
                     <div class="form-group"><label>Cintura (cm)</label><input type="number" id="cintura" step="0.1"></div>
@@ -144,63 +272,62 @@
                     <div class="form-group"><label>Cadera (cm)</label><input type="number" id="cadera" step="0.1"></div>
                     <div class="form-group"><label>Busto (cm)</label><input type="number" id="busto" step="0.1"></div>
                 </div>
-                <button class="btn-main" onclick="guardarMedidas()"><i class="ph-bold ph-floppy-disk"></i> Registrar Progreso</button>
+                <button class="btn-main" onclick="guardarMedidas()"><i class="ph-bold ph-floppy-disk"></i> Guardar Progreso del Día</button>
             </div>
 
             <div id="nutricion" class="tab-content">
-                <div class="form-group"><label>Fecha</label><input type="date" id="fecha-nutricion" onchange="renderizarDiario()"></div>
                 <div class="list-section" style="margin-top:0;">
-                    <div class="section-title">Comidas <span>(Buscador Chile)</span></div>
+                    <div class="section-title">Buscar Alimento <span>(Chile)</span></div>
                     <div class="search-row">
-                        <div class="form-group" style="flex: 1; margin-bottom: 0;"><input type="text" id="busqueda-comida" placeholder="Ej. Lider, Cuisine & Co, Avena..."></div>
+                        <div class="form-group" style="flex: 1; margin-bottom: 0;"><input type="text" id="busqueda-comida" placeholder="Ej. Lider, Cuisine & Co..."></div>
                         <button class="btn-search" onclick="buscarEnAPI()"><i class="ph-bold ph-magnifying-glass"></i></button>
                     </div>
                     <div id="contenedor-resultados" class="resultados-api"></div>
 
                     <div class="row">
-                        <div class="form-group" style="flex: 2;"><label>Alimento</label><input type="text" id="nombre-comida" placeholder="Ej. Menú antiinflamatorio"></div>
+                        <div class="form-group" style="flex: 2;"><label>Alimento</label><input type="text" id="nombre-comida" placeholder="Ej. Avena con fruta"></div>
                         <div class="form-group" style="flex: 1;"><label>Cant. (g)</label><input type="number" id="gramos-comida" value="100" oninput="recalcularPorcion()"></div>
                     </div>
                     <div class="row">
                         <div class="form-group" style="flex: 1;"><label>Kcal</label><input type="number" id="calorias-comida"></div>
                         <div class="form-group" style="flex: 1;"><label>Prot (g)</label><input type="number" id="proteina-comida"></div>
                     </div>
-                    <button class="btn-main btn-secondary" onclick="agregarComida()"><i class="ph-bold ph-plus"></i> Agregar Comida</button>
-                    <div id="lista-comidas" style="margin-top:15px;"></div>
+                    <button class="btn-main btn-secondary" onclick="agregarComida()"><i class="ph-bold ph-plus"></i> Añadir Comida</button>
+                    <div id="lista-comidas" style="margin-top:20px;"></div>
                 </div>
 
                 <div class="list-section">
-                    <div class="section-title">Ejercicios</div>
-                    <div class="form-group"><label>Actividad</label><input type="text" id="nombre-ejercicio" placeholder="Ej. Pesas, Pilates, Cardio..."></div>
+                    <div class="section-title">Registrar Ejercicio</div>
+                    <div class="form-group"><label>Actividad</label><input type="text" id="nombre-ejercicio" placeholder="Ej. Pesas, Pilates, Caminata..."></div>
                     <div class="row">
-                        <div class="form-group"><label>Duración (min)</label><input type="number" id="tiempo-ejercicio"></div>
+                        <div class="form-group"><label>Minutos</label><input type="number" id="tiempo-ejercicio"></div>
                         <div class="form-group"><label>Kcal Quemadas</label><input type="number" id="calorias-ejercicio"></div>
                     </div>
-                    <button class="btn-main btn-secondary" onclick="agregarEjercicio()"><i class="ph-bold ph-plus"></i> Agregar Ejercicio</button>
-                    <div id="lista-ejercicios" style="margin-top:15px;"></div>
+                    <button class="btn-main btn-secondary" onclick="agregarEjercicio()"><i class="ph-bold ph-plus"></i> Añadir Ejercicio</button>
+                    <div id="lista-ejercicios" style="margin-top:20px;"></div>
                 </div>
             </div>
 
             <div id="config" class="tab-content">
-                <div class="section-title">Datos Biomédicos</div>
+                <div class="section-title">Tu Base Metabólica</div>
                 <div class="row">
                     <div class="form-group"><label>Altura (cm)</label><input type="number" id="altura" value="160"></div>
                     <div class="form-group"><label>Edad</label><input type="number" id="edad"></div>
                 </div>
-                <div class="form-group"><label>Peso Inicial Oficial (kg)</label><input type="number" id="peso-inicial" placeholder="Tu peso base (ej. 74.5)"></div>
-                
-                <div class="section-title" style="margin-top: 20px;">Tu Gasto Energético (TDEE)</div>
-                <div class="form-group">
-                    <label>Promedio de Pasos Diarios (Tu NEAT)</label>
-                    <select id="actividad">
-                        <option value="1.2">Menos de 5,000 pasos (Sedentario)</option>
-                        <option value="1.3">5,000 - 8,000 pasos (Ligero)</option>
-                        <option value="1.45">8,000 - 10,000 pasos (Moderado)</option>
-                        <option value="1.6">Más de 10,000 pasos (Muy Activo)</option>
-                    </select>
+                <div class="row">
+                    <div class="form-group"><label>Peso Oficial Inicio</label><input type="number" id="peso-inicial" placeholder="Tu base"></div>
+                    <div class="form-group">
+                        <label>Pasos Diarios (NEAT)</label>
+                        <select id="actividad">
+                            <option value="1.2">Sedentario (< 5k)</option>
+                            <option value="1.3">Ligero (5k - 8k)</option>
+                            <option value="1.45">Moderado (8k - 10k)</option>
+                            <option value="1.6">Activo (> 10k)</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label>Déficit Calórico Objetivo</label>
+                    <label>Déficit Calórico Diario</label>
                     <select id="deficit-config" onchange="renderizarMetas()">
                         <option value="300">Suave (-300 kcal)</option>
                         <option value="500" selected>Recomendado (-500 kcal)</option>
@@ -209,18 +336,19 @@
                 </div>
                 <button class="btn-main btn-secondary" onclick="guardarConfig()"><i class="ph-bold ph-check"></i> Guardar y Recalcular</button>
                 
-                <button class="btn-main" style="background-color: #34495e; margin-top: 15px;" onclick="descargarRespaldo()">
-                    <i class="ph-bold ph-download-simple"></i> Respaldar mis datos (Seguridad)
+                <button class="btn-main" style="background-color: #e2e8e5; color: var(--primary-dark); margin-top: 15px; box-shadow: none;" onclick="descargarRespaldo()">
+                    <i class="ph-bold ph-download-simple"></i> Respaldar base de datos
                 </button>
 
-                <div class="section-title" style="margin-top: 35px; color: var(--accent);">Tus Metas y Proyecciones</div>
+                <div class="section-title" style="margin-top: 40px; color: var(--accent);">Tus Metas y Premios</div>
                 <div class="row">
                     <div class="form-group" style="flex: 1;"><label>Peso meta</label><input type="number" id="nuevo-peso-meta" step="0.1"></div>
-                    <div class="form-group" style="flex: 2;"><label>Tu Recompensa</label><input type="text" id="nueva-recompensa"></div>
+                    <div class="form-group" style="flex: 2;"><label>Recompensa</label><input type="text" id="nueva-recompensa"></div>
                 </div>
                 <button class="btn-main" style="background-color: var(--accent);" onclick="agregarMeta()"><i class="ph-bold ph-target"></i> Agregar Meta</button>
-                <div id="lista-metas" style="margin-top: 15px;"></div>
+                <div id="lista-metas" style="margin-top: 20px;"></div>
             </div>
+            
         </div>
     </div>
 
@@ -228,8 +356,7 @@
         if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); }); }
 
         let baseKcal100g = 0; let baseProt100g = 0;
-        document.getElementById('fecha-medidas').valueAsDate = new Date();
-        document.getElementById('fecha-nutricion').valueAsDate = new Date();
+        document.getElementById('global-fecha').valueAsDate = new Date();
         let chartInstance = null;
 
         function switchTab(tabId) {
@@ -237,12 +364,9 @@
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             event.currentTarget.classList.add('active');
-            if(tabId === 'dashboard') actualizarDashboard();
-            if(tabId === 'nutricion') renderizarDiario();
-            if(tabId === 'config') cargarConfig();
+            cambioFechaGlobal(); // Actualiza los datos visuales siempre que cambies de pestaña
         }
 
-        // V9 para la nueva estructura
         function obtenerDB() {
             let db = JSON.parse(localStorage.getItem('baddieTrackerV9'));
             if (!db) db = { registros: {}, listaMetas: [], config: { altura: 160, edad: '', actividad: 1.2, deficit: 500, pesoInicial: '' } };
@@ -254,16 +378,30 @@
             return db.registros[fecha];
         }
 
+        // --- NUEVA LÓGICA DE FECHA GLOBAL ---
+        function cambioFechaGlobal() {
+            cargarMedidas();
+            renderizarDiario();
+            actualizarDashboard();
+            checkFattieZone();
+        }
+
+        function cargarMedidas() {
+            const fecha = document.getElementById('global-fecha').value;
+            let db = obtenerDB();
+            let dia = obtenerDia(fecha, db);
+            document.getElementById('peso').value = dia.peso || '';
+            document.getElementById('cintura').value = dia.cintura || '';
+            document.getElementById('cadera').value = dia.cadera || '';
+            document.getElementById('busto').value = dia.busto || '';
+        }
+
         function descargarRespaldo() {
             const db = localStorage.getItem('baddieTrackerV9');
             if(!db) return alert("Aún no hay datos para respaldar.");
             const blob = new Blob([db], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Respaldo_BaddieApp_${new Date().toISOString().split('T')[0]}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
+            const a = document.createElement('a'); a.href = url; a.download = `Respaldo_BaddieApp_${new Date().toISOString().split('T')[0]}.json`; a.click(); URL.revokeObjectURL(url);
         }
 
         function cargarConfig() {
@@ -287,8 +425,7 @@
         }
 
         function agregarMeta() {
-            const pesoMeta = parseFloat(document.getElementById('nuevo-peso-meta').value);
-            const recompensa = document.getElementById('nueva-recompensa').value;
+            const pesoMeta = parseFloat(document.getElementById('nuevo-peso-meta').value); const recompensa = document.getElementById('nueva-recompensa').value;
             if(!pesoMeta || !recompensa) return alert("Ingresa el peso y tu recompensa");
             let db = obtenerDB(); db.listaMetas.push({ id: Date.now(), peso: pesoMeta, recompensa: recompensa, lograda: false });
             guardarDB(db); document.getElementById('nuevo-peso-meta').value = ''; document.getElementById('nueva-recompensa').value = ''; renderizarMetas();
@@ -302,47 +439,58 @@
 
             db.listaMetas.sort((a,b) => b.peso - a.peso).forEach(m => {
                 const clase = m.lograda ? 'goal-item achieved' : 'goal-item';
-                const status = m.lograda ? '<i class="ph-fill ph-check-circle" style="color:var(--success);"></i> Lograda' : '<i class="ph-fill ph-hourglass-high" style="color:var(--gold);"></i> Pendiente';
+                const status = m.lograda ? '<i class="ph-fill ph-check-circle" style="color:var(--success); font-size:20px;"></i>' : '<i class="ph-fill ph-hourglass-high" style="color:var(--gold); font-size:20px;"></i>';
                 let etaHTML = "";
                 if (!m.lograda && ultimoPeso > 0 && m.peso < ultimoPeso) {
-                    const kilosAPerder = ultimoPeso - m.peso;
-                    const diasEstimados = Math.ceil((kilosAPerder * 7700) / deficitDiario);
+                    const kilosAPerder = ultimoPeso - m.peso; const diasEstimados = Math.ceil((kilosAPerder * 7700) / deficitDiario);
                     const fechaEstimada = new Date(); fechaEstimada.setDate(fechaEstimada.getDate() + diasEstimados);
-                    etaHTML = `<div style="font-size:11px; color:var(--primary-dark); margin-top:6px; background: rgba(255,255,255,0.7); padding: 6px; border-radius: 8px; display:flex; align-items:center; gap:5px;"><i class="ph-fill ph-calendar-heart" style="font-size:16px;"></i> <div><b>Aprox: ${fechaEstimada.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}</b></div></div>`;
+                    etaHTML = `<div style="font-size:11px; color:var(--primary-dark); margin-top:8px; background: rgba(255,255,255,0.8); padding: 8px 10px; border-radius: 12px; display:flex; align-items:center; gap:8px;"><i class="ph-fill ph-calendar-heart" style="font-size:20px;"></i> <div><b>Proyección: ${fechaEstimada.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}</b></div></div>`;
                 }
-                lista.innerHTML += `<div class="list-item ${clase}"><div class="info"><span style="font-weight:bold; font-size:14px;">Alcanzar ${m.peso} kg</span><span style="font-size:12px; margin-top: 3px; display:flex; align-items:center; gap:4px;"><i class="ph-fill ph-gift" style="color:var(--accent);"></i> ${m.recompensa}</span>${etaHTML}</div><div class="stats" style="justify-content: flex-start; align-items: flex-end;"><span style="font-size:11px; display:flex; align-items:center; gap:3px;">${status}</span><button class="delete-btn" onclick="borrarMeta(${m.id})"><i class="ph-bold ph-trash"></i></button></div></div>`;
+                lista.innerHTML += `<div class="list-item ${clase}"><div class="info"><span style="font-weight:900; font-size:15px; color:var(--text-main);">Alcanzar ${m.peso} kg</span><span style="font-size:13px; margin-top: 2px; display:flex; align-items:center; gap:5px; font-weight:700;"><i class="ph-fill ph-gift" style="color:var(--accent);"></i> ${m.recompensa}</span>${etaHTML}</div><div class="stats" style="justify-content: space-between; align-items: flex-end; height:100%;"><span style="display:flex; align-items:center; gap:3px;">${status}</span><button class="delete-btn" onclick="borrarMeta(${m.id})"><i class="ph-bold ph-trash"></i></button></div></div>`;
             });
         }
 
         function guardarMedidas() {
-            const fecha = document.getElementById('fecha-medidas').value;
+            const fecha = document.getElementById('global-fecha').value;
             let db = obtenerDB(); let dia = obtenerDia(fecha, db);
             const pesoNuevo = parseFloat(document.getElementById('peso').value) || dia.peso;
             dia.peso = pesoNuevo; dia.cintura = parseFloat(document.getElementById('cintura').value) || dia.cintura;
             dia.cadera = parseFloat(document.getElementById('cadera').value) || dia.cadera; dia.busto = parseFloat(document.getElementById('busto').value) || dia.busto;
-            guardarDB(db); alert("¡Cuerpo actualizado!"); actualizarDashboard(); renderizarMetas();
+            guardarDB(db); alert("¡Progreso de este día guardado!"); 
+            if(pesoNuevo > 0) {
+                let huboLogro = false;
+                db.listaMetas.forEach(meta => {
+                    if(!meta.lograda && pesoNuevo <= meta.peso) {
+                        meta.lograda = true; huboLogro = true;
+                        document.getElementById('recompensa-texto').innerText = meta.recompensa;
+                        document.getElementById('baddie-modal').style.display = 'flex';
+                    }
+                });
+                if(huboLogro) guardarDB(db);
+            }
+            cambioFechaGlobal(); 
         }
 
         async function buscarEnAPI() {
             const query = document.getElementById('busqueda-comida').value; const contenedor = document.getElementById('contenedor-resultados');
             if(!query) return;
-            contenedor.innerHTML = '<div style="padding:15px; font-size:13px; text-align:center; color:var(--text-light);"><i class="ph-bold ph-spinner ph-spin"></i> Buscando en Chile...</div>'; contenedor.style.display = 'block';
+            contenedor.innerHTML = '<div style="padding:15px; font-size:13px; text-align:center; color:var(--text-light); font-weight:700;"><i class="ph-bold ph-spinner ph-spin"></i> Buscando...</div>'; contenedor.style.display = 'block';
             try {
                 const res = await fetch(`https://cl.openfoodfacts.org/cgi/search.pl?search_terms=${query}&search_simple=1&action=process&json=1&page_size=6`);
                 const data = await res.json(); contenedor.innerHTML = '';
                 if(data.products && data.products.length > 0) {
-                    const titulo = document.createElement('div'); titulo.style.cssText = "font-size:11px; font-weight:bold; color:var(--primary-dark); padding:8px; border-bottom:1px solid #eee; display:flex; align-items:center; gap:5px;";
-                    titulo.innerHTML = "<i class='ph-bold ph-hand-pointing'></i> Opciones encontradas:"; contenedor.appendChild(titulo);
+                    const titulo = document.createElement('div'); titulo.style.cssText = "font-size:11px; font-weight:800; color:var(--primary-dark); padding:10px; border-bottom:1px solid #eee; display:flex; align-items:center; gap:5px;";
+                    titulo.innerHTML = "<i class='ph-bold ph-hand-pointing'></i> Toca tu opción:"; contenedor.appendChild(titulo);
                     data.products.forEach(p => {
-                        const name = p.product_name_es || p.product_name || "Producto sin nombre"; const brand = p.brands ? `(${p.brands.split(',')[0]})` : '';
+                        const name = p.product_name_es || p.product_name || "Producto"; const brand = p.brands ? `(${p.brands.split(',')[0]})` : '';
                         const kcal = p.nutriments['energy-kcal_100g'] ? Math.round(p.nutriments['energy-kcal_100g']) : 0; const prot = p.nutriments['proteins_100g'] ? Math.round(p.nutriments['proteins_100g']) : 0;
                         const item = document.createElement('div'); item.className = "resultado-item";
-                        item.innerHTML = `<span style="font-weight:600; font-size:13px; color:var(--text-main);">${name} ${brand}</span><br><span style="font-size:11px; color:var(--text-light);"><i class="ph-fill ph-fire" style="color:var(--accent);"></i> ${kcal} kcal | <i class="ph-fill ph-barbell" style="color:var(--primary-dark);"></i> ${prot}g prot (por 100g)</span>`;
+                        item.innerHTML = `<span style="font-weight:800; font-size:14px; color:var(--text-main);">${name} ${brand}</span><br><span style="font-size:12px; color:var(--text-light); font-weight:700;"><i class="ph-fill ph-fire" style="color:var(--accent);"></i> ${kcal} kcal | <i class="ph-fill ph-barbell" style="color:var(--primary-dark);"></i> ${prot}g prot</span>`;
                         item.onclick = () => { document.getElementById('nombre-comida').value = name; baseKcal100g = kcal; baseProt100g = prot; document.getElementById('gramos-comida').value = 100; recalcularPorcion(); contenedor.style.display = 'none'; };
                         contenedor.appendChild(item);
                     });
-                } else { contenedor.innerHTML = '<div style="padding:15px; font-size:13px; text-align:center; color:var(--danger);"><i class="ph-fill ph-x-circle"></i> No encontrado. Ingresa manual.</div>'; setTimeout(() => contenedor.style.display = 'none', 3000); }
-            } catch(e) { contenedor.innerHTML = '<div style="padding:15px; font-size:13px; text-align:center; color:var(--danger);"><i class="ph-bold ph-wifi-slash"></i> Error de conexión.</div>'; setTimeout(() => contenedor.style.display = 'none', 3000); }
+                } else { contenedor.innerHTML = '<div style="padding:15px; font-size:13px; font-weight:700; text-align:center; color:var(--danger);"><i class="ph-fill ph-x-circle"></i> No encontrado.</div>'; setTimeout(() => contenedor.style.display = 'none', 3000); }
+            } catch(e) { contenedor.innerHTML = '<div style="padding:15px; font-size:13px; font-weight:700; text-align:center; color:var(--danger);"><i class="ph-bold ph-wifi-slash"></i> Error de conexión.</div>'; setTimeout(() => contenedor.style.display = 'none', 3000); }
         }
 
         function recalcularPorcion() {
@@ -351,34 +499,36 @@
         }
 
         function agregarComida() {
-            const fecha = document.getElementById('fecha-nutricion').value; let db = obtenerDB(); let dia = obtenerDia(fecha, db);
+            const fecha = document.getElementById('global-fecha').value; let db = obtenerDB(); let dia = obtenerDia(fecha, db);
             let nombre = document.getElementById('nombre-comida').value; const gramos = document.getElementById('gramos-comida').value;
             const cal = parseFloat(document.getElementById('calorias-comida').value) || 0; const prot = parseFloat(document.getElementById('proteina-comida').value) || 0;
             if(!nombre || cal === 0) return alert("Faltan datos");
             nombre = `${nombre} (${gramos}g)`; dia.comidas.push({ id: Date.now(), nombre, cal, prot }); guardarDB(db);
-            document.getElementById('nombre-comida').value = ''; document.getElementById('gramos-comida').value = 100; document.getElementById('calorias-comida').value = ''; document.getElementById('proteina-comida').value = ''; document.getElementById('busqueda-comida').value = ''; document.getElementById('contenedor-resultados').style.display = 'none'; baseKcal100g = 0; baseProt100g = 0; renderizarDiario(); actualizarDashboard();
+            document.getElementById('nombre-comida').value = ''; document.getElementById('gramos-comida').value = 100; document.getElementById('calorias-comida').value = ''; document.getElementById('proteina-comida').value = ''; document.getElementById('busqueda-comida').value = ''; document.getElementById('contenedor-resultados').style.display = 'none'; baseKcal100g = 0; baseProt100g = 0; 
+            cambioFechaGlobal();
         }
 
         function agregarEjercicio() {
-            const fecha = document.getElementById('fecha-nutricion').value; let db = obtenerDB(); let dia = obtenerDia(fecha, db);
+            const fecha = document.getElementById('global-fecha').value; let db = obtenerDB(); let dia = obtenerDia(fecha, db);
             const nombre = document.getElementById('nombre-ejercicio').value; const min = parseFloat(document.getElementById('tiempo-ejercicio').value) || 0; const cal = parseFloat(document.getElementById('calorias-ejercicio').value) || 0;
             if(!nombre) return alert("Falta el nombre");
             dia.ejercicios.push({ id: Date.now(), nombre, min, cal }); guardarDB(db);
-            document.getElementById('nombre-ejercicio').value = ''; document.getElementById('tiempo-ejercicio').value = ''; document.getElementById('calorias-ejercicio').value = ''; renderizarDiario(); actualizarDashboard(); checkFattieZone();
+            document.getElementById('nombre-ejercicio').value = ''; document.getElementById('tiempo-ejercicio').value = ''; document.getElementById('calorias-ejercicio').value = ''; 
+            cambioFechaGlobal();
         }
 
         function borrarItem(tipo, id) {
-            const fecha = document.getElementById('fecha-nutricion').value; let db = obtenerDB(); let dia = obtenerDia(fecha, db);
+            const fecha = document.getElementById('global-fecha').value; let db = obtenerDB(); let dia = obtenerDia(fecha, db);
             if(tipo === 'comida') dia.comidas = dia.comidas.filter(c => c.id !== id); if(tipo === 'ejercicio') dia.ejercicios = dia.ejercicios.filter(e => e.id !== id);
-            guardarDB(db); renderizarDiario(); actualizarDashboard(); checkFattieZone();
+            guardarDB(db); cambioFechaGlobal();
         }
 
         function renderizarDiario() {
-            const fecha = document.getElementById('fecha-nutricion').value; let db = obtenerDB(); let dia = obtenerDia(fecha, db);
+            const fecha = document.getElementById('global-fecha').value; let db = obtenerDB(); let dia = obtenerDia(fecha, db);
             const lc = document.getElementById('lista-comidas'); lc.innerHTML = '';
-            dia.comidas.forEach(c => { lc.innerHTML += `<div class="list-item"><div class="info"><span style="font-weight:600; font-size:13px; color:var(--text-main);">${c.nombre}</span><span style="font-size:11px; color:var(--text-light);"><i class="ph-fill ph-barbell" style="color:var(--primary-dark);"></i> ${c.prot}g prot</span></div><div class="stats"><span style="display:flex; align-items:center; gap:3px;"><i class="ph-fill ph-fire" style="color:var(--accent);"></i> ${c.cal} kcal</span><button class="delete-btn" onclick="borrarItem('comida', ${c.id})"><i class="ph-bold ph-trash"></i></button></div></div>`; });
+            dia.comidas.forEach(c => { lc.innerHTML += `<div class="list-item"><div class="info"><span style="font-weight:800; font-size:14px; color:var(--text-main);">${c.nombre}</span><span style="font-size:11px; color:var(--text-light); font-weight:700;"><i class="ph-fill ph-barbell" style="color:var(--primary-dark);"></i> ${c.prot}g prot</span></div><div class="stats"><span style="display:flex; align-items:center; gap:4px; font-size:15px;"><i class="ph-fill ph-fire" style="color:var(--accent);"></i> ${c.cal} kcal</span><button class="delete-btn" onclick="borrarItem('comida', ${c.id})"><i class="ph-bold ph-trash"></i></button></div></div>`; });
             const le = document.getElementById('lista-ejercicios'); le.innerHTML = '';
-            dia.ejercicios.forEach(e => { le.innerHTML += `<div class="list-item"><div class="info"><span style="font-weight:600; font-size:13px; color:var(--text-main);">${e.nombre}</span><span style="font-size:11px; color:var(--text-light);"><i class="ph-fill ph-clock"></i> ${e.min} mins</span></div><div class="stats"><span style="display:flex; align-items:center; gap:3px; color:var(--accent);"><i class="ph-fill ph-fire"></i> -${e.cal} kcal</span><button class="delete-btn" onclick="borrarItem('ejercicio', ${e.id})"><i class="ph-bold ph-trash"></i></button></div></div>`; });
+            dia.ejercicios.forEach(e => { le.innerHTML += `<div class="list-item"><div class="info"><span style="font-weight:800; font-size:14px; color:var(--text-main);">${e.nombre}</span><span style="font-size:11px; color:var(--text-light); font-weight:700;"><i class="ph-fill ph-clock"></i> ${e.min} mins</span></div><div class="stats"><span style="display:flex; align-items:center; gap:4px; font-size:15px; color:var(--success);"><i class="ph-fill ph-fire"></i> -${e.cal} kcal</span><button class="delete-btn" onclick="borrarItem('ejercicio', ${e.id})"><i class="ph-bold ph-trash"></i></button></div></div>`; });
         }
 
         function formatearProgreso(idElemento, valores, unidad) {
@@ -391,26 +541,23 @@
         }
 
         function calcularSalud(db) {
-            // Indice Cintura-Cadera
             const fechas = Object.keys(db.registros).sort();
             const ultimoDiaConMedidas = fechas.reverse().find(f => db.registros[f].cintura > 0 && db.registros[f].cadera > 0);
-            const iccEl = document.getElementById('icc-value');
-            const iccBadge = document.getElementById('icc-badge');
-            
+            const iccEl = document.getElementById('icc-value'); const iccBadge = document.getElementById('icc-badge');
             if(ultimoDiaConMedidas) {
-                const cin = db.registros[ultimoDiaConMedidas].cintura;
-                const cad = db.registros[ultimoDiaConMedidas].cadera;
-                const icc = (cin / cad).toFixed(2);
-                iccEl.innerText = icc;
+                const cin = db.registros[ultimoDiaConMedidas].cintura; const cad = db.registros[ultimoDiaConMedidas].cadera;
+                const icc = (cin / cad).toFixed(2); iccEl.innerText = icc;
                 if(icc <= 0.80) { iccBadge.innerText = "Bajo Riesgo (Excelente)"; iccBadge.className = "health-badge badge-good"; }
                 else if (icc <= 0.85) { iccBadge.innerText = "Riesgo Moderado"; iccBadge.className = "health-badge badge-warn"; }
-                else { iccBadge.innerText = "Riesgo Alto"; iccBadge.className = "health-badge"; iccBadge.style.background = "#f8d7da"; iccBadge.style.color = "#721c24"; }
+                else { iccBadge.innerText = "Riesgo Alto"; iccBadge.className = "health-badge"; iccBadge.style.background = "#ffebee"; iccBadge.style.color = "#c62828"; }
             }
         }
 
         function actualizarDashboard() {
-            cargarConfig(); const fechaHoy = new Date().toISOString().split('T')[0];
-            let db = obtenerDB(); let hoy = obtenerDia(fechaHoy, db);
+            cargarConfig(); 
+            // EL DASHBOARD AHORA MUESTRA LA DATA DEL DÍA SELECCIONADO ARRIBA
+            const fechaSeleccionada = document.getElementById('global-fecha').value;
+            let db = obtenerDB(); let diaSeleccionado = obtenerDia(fechaSeleccionada, db);
             
             const fechas = Object.keys(db.registros).sort();
             const pesos = fechas.map(f => db.registros[f].peso).filter(p => p > 0);
@@ -429,15 +576,14 @@
             calcularSalud(db);
 
             let totalIn = 0; let totalProt = 0; let totalOut = 0;
-            hoy.comidas.forEach(c => { totalIn += c.cal; totalProt += c.prot; });
-            hoy.ejercicios.forEach(e => { totalOut += e.cal; });
+            diaSeleccionado.comidas.forEach(c => { totalIn += c.cal; totalProt += c.prot; });
+            diaSeleccionado.ejercicios.forEach(e => { totalOut += e.cal; });
 
             document.getElementById('prot-hoy').innerText = `${totalProt} g`;
-            let ultimoPeso = hoy.peso > 0 ? hoy.peso : pesos.pop() || db.config.pesoInicial || 0;
+            let ultimoPeso = diaSeleccionado.peso > 0 ? diaSeleccionado.peso : pesos.pop() || db.config.pesoInicial || 0;
 
             if (db.config.edad && db.config.altura && ultimoPeso > 0) {
                 const bmr = (10 * ultimoPeso) + (6.25 * db.config.altura) - (5 * db.config.edad) - 161;
-                // Calculamos gasto solo por moverse (NEAT) sin el ejercicio formal aún
                 const neatGasto = bmr * db.config.actividad; 
                 const metaCalorias = Math.round(neatGasto - db.config.deficit); 
                 
@@ -445,17 +591,17 @@
                 const elRestantes = document.getElementById('cal-restantes');
                 
                 elRestantes.innerText = `${caloriasRestantes} kcal`;
-                if(caloriasRestantes < 0) { elRestantes.classList.add('exceeded'); elRestantes.innerText = `${Math.abs(caloriasRestantes)} kcal extras`; } 
-                else { elRestantes.classList.remove('exceeded'); }
+                if(caloriasRestantes < 0) { elRestantes.style.color = "var(--danger)"; elRestantes.innerText = `${Math.abs(caloriasRestantes)} kcal sobre límite`; } 
+                else { elRestantes.style.color = "white"; }
 
-                document.getElementById('cal-detalle').innerText = `Base/NEAT: ${Math.round(neatGasto)} | Comida: ${totalIn} | Ejercicio: ${totalOut}`;
+                document.getElementById('cal-detalle').innerText = `Base: ${Math.round(neatGasto)} | Comida: ${totalIn} | Ejercicio: ${totalOut}`;
                 
                 if (totalIn === 0) {
                     document.getElementById('deficit-hoy').innerText = "0 kcal"; document.getElementById('deficit-hoy').style.color = "var(--text-light)";
                 } else {
                     const deficitReal = (neatGasto + totalOut) - totalIn;
                     document.getElementById('deficit-hoy').innerText = deficitReal > 0 ? `-${Math.round(deficitReal)} kcal` : `+${Math.round(Math.abs(deficitReal))} kcal`;
-                    document.getElementById('deficit-hoy').style.color = deficitReal > 0 ? "var(--accent)" : "var(--danger)";
+                    document.getElementById('deficit-hoy').style.color = deficitReal > 0 ? "var(--success)" : "var(--danger)";
                 }
             } else { document.getElementById('cal-detalle').innerText = "Llena tu edad y peso en Config / Cuerpo"; }
 
@@ -464,7 +610,7 @@
             if(db.config.pesoInicial && db.config.pesoInicial > 0) { pesosArray.unshift(db.config.pesoInicial); labelsArray.unshift("Inicio"); }
 
             if (chartInstance) chartInstance.destroy();
-            chartInstance = new Chart(document.getElementById('graficoPeso').getContext('2d'), { type: 'line', data: { labels: labelsArray, datasets: [{ label: 'Peso (kg)', data: pesosArray, borderColor: '#d4a5a5', backgroundColor: 'rgba(212, 165, 165, 0.2)', borderWidth: 3, pointBackgroundColor: '#fff', fill: true, tension: 0.4 }] }, options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: false } } } });
+            chartInstance = new Chart(document.getElementById('graficoPeso').getContext('2d'), { type: 'line', data: { labels: labelsArray, datasets: [{ label: 'Peso (kg)', data: pesosArray, borderColor: '#f4a298', backgroundColor: 'rgba(244, 162, 152, 0.2)', borderWidth: 4, pointBackgroundColor: '#fff', fill: true, tension: 0.4 }] }, options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: false, border: {display: false}, grid: {display: false} }, x: {border: {display: false}, grid: {display: false}} } } });
         }
 
         function checkFattieZone() {
@@ -472,7 +618,7 @@
             document.getElementById('fattie-warning').style.display = (hora >= 22 && hoy.ejercicios.length === 0) ? 'flex' : 'none';
         }
 
-        window.onload = () => { cargarConfig(); actualizarDashboard(); renderizarDiario(); checkFattieZone(); setInterval(checkFattieZone, 300000); };
+        window.onload = () => { cargarConfig(); cambioFechaGlobal(); setInterval(checkFattieZone, 300000); };
     </script>
 </body>
 </html>
