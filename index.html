@@ -16,10 +16,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #9bbfab; --primary-dark: #7a9e8a; --bg-color: #f8f9fa; --text-main: #4a4a4a; --text-light: #888888; --accent: #d4a5a5; --danger: #e74c3c; --success: #2ecc71; }
-        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); background-image: url('fondo.jpg'); background-size: cover; background-position: center; background-attachment: fixed; color: var(--text-main); margin: 0; padding: 15px; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
+        
+        /* AQUÍ ESTÁN TUS IMÁGENES .PNG */
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); background-image: url('fondo.png'); background-size: cover; background-position: center; background-attachment: fixed; color: var(--text-main); margin: 0; padding: 15px; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
         .app-container { background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); width: 100%; max-width: 500px; min-height: 85vh; border-radius: 24px; box-shadow: 0 12px 35px rgba(0,0,0,0.15); overflow: hidden; padding-bottom: 20px; position: relative; }
         
-        .baddie-banner { background-image: linear-gradient(rgba(212, 165, 165, 0.75), rgba(181, 131, 141, 0.75)), url('banner.jpg'); background-size: cover; background-position: center; color: white; text-align: center; padding: 35px 20px; font-size: 26px; font-weight: 700; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        /* BANNER EN .PNG */
+        .baddie-banner { background-image: linear-gradient(rgba(212, 165, 165, 0.75), rgba(181, 131, 141, 0.75)), url('banner.png'); background-size: cover; background-position: center; color: white; text-align: center; padding: 35px 20px; font-size: 26px; font-weight: 700; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        
         .fattie-warning { background-color: var(--danger); color: white; text-align: center; padding: 10px; font-weight: 600; font-size: 14px; display: none; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { background-color: #e74c3c; } 50% { background-color: #c0392b; } 100% { background-color: #e74c3c; } }
 
@@ -66,6 +70,12 @@
         .modal-content { background: white; padding: 30px; border-radius: 20px; text-align: center; max-width: 300px; }
         .modal-content h2 { color: var(--accent); font-size: 24px; margin-bottom: 10px;}
         .modal-content p#recompensa-texto { font-weight: 600; color: var(--primary-dark); font-size: 16px; margin: 15px 0; padding: 10px; background: #f0f4f2; border-radius: 10px;}
+        
+        /* Estilos del nuevo buscador */
+        .resultados-api { display: none; background: #fff; border: 1px solid #e1e8e4; border-radius: 10px; padding: 5px; margin-bottom: 15px; max-height: 180px; overflow-y: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .resultado-item { padding: 10px; border-bottom: 1px solid #f0f4f2; cursor: pointer; transition: 0.2s; }
+        .resultado-item:hover { background-color: #f0f9f4; }
+        .resultado-item:last-child { border-bottom: none; }
     </style>
 </head>
 <body>
@@ -134,11 +144,14 @@
                 <div class="form-group"><label>Fecha</label><input type="date" id="fecha-nutricion" onchange="renderizarDiario()"></div>
                 
                 <div class="list-section" style="margin-top:0;">
-                    <div class="section-title">Comidas <span>(Buscador Online)</span></div>
+                    <div class="section-title">Comidas <span>(Buscador de Alimentos)</span></div>
                     <div class="row">
-                        <div class="form-group" style="flex: 2;"><input type="text" id="busqueda-comida" placeholder="Buscar en español..."></div>
+                        <div class="form-group" style="flex: 2;"><input type="text" id="busqueda-comida" placeholder="Ej. Avena, Huevo, Manzana..."></div>
                         <button class="btn-search" onclick="buscarEnAPI()">🔍 Buscar</button>
                     </div>
+                    
+                    <div id="contenedor-resultados" class="resultados-api"></div>
+
                     <div class="row">
                         <div class="form-group" style="flex: 2;"><label>Alimento</label><input type="text" id="nombre-comida"></div>
                         <div class="form-group" style="flex: 1;"><label>Kcal</label><input type="number" id="calorias-comida"></div>
@@ -198,15 +211,8 @@
     </div>
 
     <script>
-        // Registro del Service Worker para PWA
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').then(reg => {
-                    console.log('PWA Service Worker registrado con éxito.', reg);
-                }).catch(err => {
-                    console.log('Error al registrar el Service Worker.', err);
-                });
-            });
+            window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); });
         }
 
         document.getElementById('fecha-medidas').valueAsDate = new Date();
@@ -224,13 +230,13 @@
         }
 
         function obtenerDB() {
-            let db = JSON.parse(localStorage.getItem('baddieTrackerV5'));
+            let db = JSON.parse(localStorage.getItem('baddieTrackerV6'));
             if (!db) db = { registros: {}, listaMetas: [], config: { altura: 160, edad: '', actividad: 1.2, deficit: 500 } };
             if (!db.listaMetas) db.listaMetas = [];
             if (!db.config) db.config = { altura: 160, edad: '', actividad: 1.2, deficit: 500 };
             return db;
         }
-        function guardarDB(db) { localStorage.setItem('baddieTrackerV5', JSON.stringify(db)); }
+        function guardarDB(db) { localStorage.setItem('baddieTrackerV6', JSON.stringify(db)); }
         function obtenerDia(fecha, db) {
             if (!db.registros[fecha]) db.registros[fecha] = { peso: 0, cintura: 0, cadera: 0, busto: 0, comidas: [], ejercicios: [] };
             return db.registros[fecha];
@@ -266,42 +272,25 @@
         function borrarMeta(id) { let db = obtenerDB(); db.listaMetas = db.listaMetas.filter(m => m.id !== id); guardarDB(db); renderizarMetas(); }
 
         function renderizarMetas() {
-            let db = obtenerDB(); 
-            const lista = document.getElementById('lista-metas'); 
-            lista.innerHTML = '';
-            
-            // Lógica de Proyección
+            let db = obtenerDB(); const lista = document.getElementById('lista-metas'); lista.innerHTML = '';
             const deficitDiario = document.getElementById('deficit-config').value || 500;
             const ultimoPeso = Object.values(db.registros).map(r=>r.peso).filter(p=>p>0).pop() || 0;
 
             db.listaMetas.sort((a,b) => b.peso - a.peso).forEach(m => {
                 const clase = m.lograda ? 'goal-item achieved' : 'goal-item';
                 const status = m.lograda ? '✅ ¡Lograda!' : '⏳ Pendiente';
-                
                 let etaHTML = "";
                 if (!m.lograda && ultimoPeso > 0 && m.peso < ultimoPeso) {
                     const kilosAPerder = ultimoPeso - m.peso;
-                    const caloriasTotales = kilosAPerder * 7700; 
-                    const diasEstimados = Math.ceil(caloriasTotales / deficitDiario);
+                    const diasEstimados = Math.ceil((kilosAPerder * 7700) / deficitDiario);
                     const fechaEstimada = new Date();
                     fechaEstimada.setDate(fechaEstimada.getDate() + diasEstimados);
-                    const opcionesFecha = { day: 'numeric', month: 'short', year: 'numeric' };
-                    etaHTML = `<div style="font-size:11px; color:var(--primary-dark); margin-top:5px; background: rgba(255,255,255,0.7); padding: 5px; border-radius: 5px;">🗓️ <b>Llegarás aprox. el ${fechaEstimada.toLocaleDateString('es-ES', opcionesFecha)}</b><br>(en ${diasEstimados} días manteniendo tu déficit)</div>`;
+                    etaHTML = `<div style="font-size:11px; color:var(--primary-dark); margin-top:5px; background: rgba(255,255,255,0.7); padding: 5px; border-radius: 5px;">🗓️ <b>Llegarás aprox. el ${fechaEstimada.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}</b><br>(en ${diasEstimados} días manteniendo tu déficit)</div>`;
                 } else if (!m.lograda && ultimoPeso > 0 && m.peso >= ultimoPeso) {
                      etaHTML = `<div style="font-size:11px; color:var(--danger); margin-top:5px;">⚠️ Meta superior a tu peso actual.</div>`;
                 }
 
-                lista.innerHTML += `<div class="list-item ${clase}">
-                    <div class="info">
-                        <span style="font-weight:bold; font-size:14px;">Alcanzar ${m.peso} kg</span>
-                        <span style="font-size:12px; margin-top: 3px;">🎁 ${m.recompensa}</span>
-                        ${etaHTML}
-                    </div>
-                    <div class="stats">
-                        <span style="font-size:10px;">${status}</span><br>
-                        <button class="delete-btn" onclick="borrarMeta(${m.id})">✖</button>
-                    </div>
-                </div>`;
+                lista.innerHTML += `<div class="list-item ${clase}"><div class="info"><span style="font-weight:bold; font-size:14px;">Alcanzar ${m.peso} kg</span><span style="font-size:12px; margin-top: 3px;">🎁 ${m.recompensa}</span>${etaHTML}</div><div class="stats"><span style="font-size:10px;">${status}</span><br><button class="delete-btn" onclick="borrarMeta(${m.id})">✖</button></div></div>`;
             });
         }
 
@@ -329,20 +318,52 @@
             guardarDB(db); alert("¡Cuerpo actualizado!"); verificarMetasAlRegistrarPeso(pesoNuevo, db); actualizarDashboard(); renderizarMetas();
         }
 
+        // --- NUEVO BUSCADOR MEJORADO ---
         async function buscarEnAPI() {
             const query = document.getElementById('busqueda-comida').value;
+            const contenedor = document.getElementById('contenedor-resultados');
             if(!query) return;
+            
+            contenedor.innerHTML = '<div style="padding:10px; font-size:12px; text-align:center;">⏳ Buscando...</div>';
+            contenedor.style.display = 'block';
+
             try {
-                const res = await fetch(`https://es.openfoodfacts.org/cgi/search.pl?search_terms=${query}&search_simple=1&action=process&json=1`);
+                const res = await fetch(`https://es.openfoodfacts.org/cgi/search.pl?search_terms=${query}&search_simple=1&action=process&json=1&page_size=6`);
                 const data = await res.json();
+                
+                contenedor.innerHTML = '';
                 if(data.products && data.products.length > 0) {
-                    const p = data.products[0];
-                    document.getElementById('nombre-comida').value = p.product_name_es || p.product_name || query;
-                    document.getElementById('calorias-comida').value = p.nutriments['energy-kcal_100g'] || 0;
-                    document.getElementById('proteina-comida').value = p.nutriments['proteins_100g'] || 0;
-                    alert(`✅ Encontrado: ${p.product_name_es || p.product_name}. (Valores por 100g).`);
-                } else { alert("❌ No encontrado. Ingresa manual."); }
-            } catch(e) { alert("Error de conexión."); }
+                    const titulo = document.createElement('div');
+                    titulo.style.cssText = "font-size:11px; font-weight:bold; color:var(--primary-dark); padding:5px; border-bottom:1px solid #eee;";
+                    titulo.innerText = "Haz clic en la opción que más se parezca:";
+                    contenedor.appendChild(titulo);
+
+                    data.products.forEach(p => {
+                        const name = p.product_name_es || p.product_name || "Producto sin nombre";
+                        const brand = p.brands ? `(${p.brands.split(',')[0]})` : '';
+                        const kcal = p.nutriments['energy-kcal_100g'] ? Math.round(p.nutriments['energy-kcal_100g']) : 0;
+                        const prot = p.nutriments['proteins_100g'] ? Math.round(p.nutriments['proteins_100g']) : 0;
+                        
+                        const item = document.createElement('div');
+                        item.className = "resultado-item";
+                        item.innerHTML = `<span style="font-weight:600; font-size:13px; color:var(--text-main);">${name} ${brand}</span><br><span style="font-size:11px; color:var(--text-light);">${kcal} kcal | ${prot}g prot (por 100g)</span>`;
+                        
+                        item.onclick = () => {
+                            document.getElementById('nombre-comida').value = name;
+                            document.getElementById('calorias-comida').value = kcal;
+                            document.getElementById('proteina-comida').value = prot;
+                            contenedor.style.display = 'none'; // Ocultar al seleccionar
+                        };
+                        contenedor.appendChild(item);
+                    });
+                } else { 
+                    contenedor.innerHTML = '<div style="padding:10px; font-size:12px; text-align:center; color:var(--danger);">❌ No encontrado. Ingresa manual.</div>';
+                    setTimeout(() => contenedor.style.display = 'none', 3000);
+                }
+            } catch(e) { 
+                contenedor.innerHTML = '<div style="padding:10px; font-size:12px; text-align:center;">Error de conexión.</div>';
+                setTimeout(() => contenedor.style.display = 'none', 3000);
+            }
         }
 
         function agregarComida() {
@@ -353,7 +374,8 @@
             const prot = parseFloat(document.getElementById('proteina-comida').value) || 0;
             if(!nombre || cal === 0) return alert("Faltan datos");
             dia.comidas.push({ id: Date.now(), nombre, cal, prot }); guardarDB(db);
-            document.getElementById('nombre-comida').value = ''; document.getElementById('calorias-comida').value = ''; document.getElementById('proteina-comida').value = '';
+            document.getElementById('nombre-comida').value = ''; document.getElementById('calorias-comida').value = ''; document.getElementById('proteina-comida').value = ''; document.getElementById('busqueda-comida').value = '';
+            document.getElementById('contenedor-resultados').style.display = 'none';
             renderizarDiario(); actualizarDashboard();
         }
 
@@ -381,9 +403,9 @@
             const fecha = document.getElementById('fecha-nutricion').value;
             let db = obtenerDB(); let dia = obtenerDia(fecha, db);
             const lc = document.getElementById('lista-comidas'); lc.innerHTML = '';
-            dia.comidas.forEach(c => { lc.innerHTML += `<div class="list-item"><div class="info"><span>${c.nombre}</span><span style="font-size:10px; color:#888;">${c.prot}g prot</span></div><div class="stats">${c.cal} kcal <button class="delete-btn" onclick="borrarItem('comida', ${c.id})">✖</button></div></div>`; });
+            dia.comidas.forEach(c => { lc.innerHTML += `<div class="list-item"><div class="info"><span style="font-weight:600; font-size:13px;">${c.nombre}</span><span style="font-size:10px; color:#888;">${c.prot}g prot</span></div><div class="stats">${c.cal} kcal <button class="delete-btn" onclick="borrarItem('comida', ${c.id})">✖</button></div></div>`; });
             const le = document.getElementById('lista-ejercicios'); le.innerHTML = '';
-            dia.ejercicios.forEach(e => { le.innerHTML += `<div class="list-item"><div class="info"><span>${e.nombre}</span><span style="font-size:10px; color:#888;">${e.min} mins</span></div><div class="stats">🔥 ${e.cal} kcal <button class="delete-btn" onclick="borrarItem('ejercicio', ${e.id})">✖</button></div></div>`; });
+            dia.ejercicios.forEach(e => { le.innerHTML += `<div class="list-item"><div class="info"><span style="font-weight:600; font-size:13px;">${e.nombre}</span><span style="font-size:10px; color:#888;">${e.min} mins</span></div><div class="stats">🔥 ${e.cal} kcal <button class="delete-btn" onclick="borrarItem('ejercicio', ${e.id})">✖</button></div></div>`; });
         }
 
         function formatearProgreso(idElemento, valores, unidad) {
@@ -428,8 +450,16 @@
                 else { elRestantes.classList.remove('exceeded'); }
 
                 document.getElementById('cal-detalle').innerText = `Meta: ${metaCalorias} | Consumido: ${totalIn} | Ejercicio: ${totalOut}`;
-                const deficitReal = (tdee + totalOut) - totalIn;
-                document.getElementById('deficit-hoy').innerText = deficitReal > 0 ? `-${Math.round(deficitReal)} kcal` : `+${Math.round(Math.abs(deficitReal))} kcal`;
+                
+                // LÓGICA DE DÉFICIT CORREGIDA: Empieza en 0 si no has comido nada.
+                if (totalIn === 0) {
+                    document.getElementById('deficit-hoy').innerText = "0 kcal";
+                    document.getElementById('deficit-hoy').style.color = "var(--text-light)";
+                } else {
+                    const deficitReal = (tdee + totalOut) - totalIn;
+                    document.getElementById('deficit-hoy').innerText = deficitReal > 0 ? `-${Math.round(deficitReal)} kcal` : `+${Math.round(Math.abs(deficitReal))} kcal`;
+                    document.getElementById('deficit-hoy').style.color = deficitReal > 0 ? "var(--accent)" : "var(--danger)";
+                }
             } else { document.getElementById('cal-detalle').innerText = "Llena tu edad y peso en Config / Cuerpo"; }
 
             const fechasOrd = Object.keys(db.registros).sort();
