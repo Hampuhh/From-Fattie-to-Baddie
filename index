@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Wellness Tracker</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#d4a5a5">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icono.png">
+    <link rel="icon" type="image/png" href="icono.png">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #9bbfab; --primary-dark: #7a9e8a; --bg-color: #f8f9fa; --text-main: #4a4a4a; --text-light: #888888; --accent: #d4a5a5; --danger: #e74c3c; --success: #2ecc71; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); background-image: url('fondo.jpg'); background-size: cover; background-position: center; background-attachment: fixed; color: var(--text-main); margin: 0; padding: 15px; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
+        .app-container { background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); width: 100%; max-width: 500px; min-height: 85vh; border-radius: 24px; box-shadow: 0 12px 35px rgba(0,0,0,0.15); overflow: hidden; padding-bottom: 20px; position: relative; }
+        
+        .baddie-banner { background-image: linear-gradient(rgba(212, 165, 165, 0.75), rgba(181, 131, 141, 0.75)), url('banner.jpg'); background-size: cover; background-position: center; color: white; text-align: center; padding: 35px 20px; font-size: 26px; font-weight: 700; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .fattie-warning { background-color: var(--danger); color: white; text-align: center; padding: 10px; font-weight: 600; font-size: 14px; display: none; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { background-color: #e74c3c; } 50% { background-color: #c0392b; } 100% { background-color: #e74c3c; } }
+
+        .content-padding { padding: 0 25px; }
+        .tabs { display: flex; justify-content: space-between; margin-bottom: 20px; background: rgba(240, 244, 242, 0.8); border-radius: 12px; padding: 6px; }
+        .tab-btn { flex: 1; background: none; border: none; padding: 8px 0; font-family: 'Poppins', sans-serif; font-size: 12px; font-weight: 600; color: var(--text-light); cursor: pointer; border-radius: 8px; transition: all 0.3s ease; }
+        .tab-btn.active { background: #ffffff; color: var(--primary-dark); box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 11px; font-weight: 600; margin-bottom: 6px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px;}
+        input, select { width: 100%; padding: 10px 12px; border: 1px solid #e1e8e4; border-radius: 10px; box-sizing: border-box; font-family: 'Poppins', sans-serif; font-size: 14px; background-color: #fafbfa; }
+        input:focus, select:focus { outline: none; border-color: var(--primary); }
+        .row { display: flex; gap: 10px; }
+        .row .form-group { flex: 1; }
+
+        .btn-main { width: 100%; background-color: var(--primary); color: white; padding: 12px; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 5px; transition: 0.2s;}
+        .btn-main:hover { background-color: var(--primary-dark); }
+        .btn-secondary { background-color: #f0f4f2; color: var(--primary-dark); }
+        .btn-search { background-color: var(--accent); color: white; padding: 10px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 12px;}
+
+        .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .kpi-grid-4 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .kpi-card { background: #fff; border: 1px solid #eee; padding: 12px; border-radius: 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+        .kpi-card.main-kpi { grid-column: 1 / -1; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; }
+        .kpi-card h3 { margin: 0 0 5px 0; font-size: 11px; text-transform: uppercase; opacity: 0.9; }
+        .kpi-card h2 { margin: 0; font-size: 24px; }
+        .kpi-card.main-kpi h2.exceeded { color: #ffcccc; }
+        .progress-text { font-size: 12px; font-weight: 600; color: var(--success); margin-top: 5px;}
+        .section-title { font-size: 15px; font-weight: 600; color: var(--primary-dark); margin-bottom: 10px; display: flex; justify-content: space-between; border-bottom: 2px solid #f0f4f2; padding-bottom: 5px;}
+
+        .list-section { margin-top: 20px; }
+        .list-item { display: flex; justify-content: space-between; align-items: center; background: rgba(253, 253, 253, 0.9); border: 1px solid #eee; padding: 10px; border-radius: 10px; margin-bottom: 8px; font-size: 12px; }
+        .list-item .info { display: flex; flex-direction: column; flex: 1;}
+        .list-item .stats { font-weight: 600; color: var(--primary-dark); text-align: right; min-width: 70px;}
+        .delete-btn { color: var(--danger); background: none; border: none; font-weight: bold; cursor: pointer; }
+        
+        .goal-item { border-left: 4px solid var(--accent); align-items: flex-start;}
+        .goal-item.achieved { background: #f0f9f4; border-left: 4px solid var(--success); opacity: 0.8;}
+
+        #baddie-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 30px; border-radius: 20px; text-align: center; max-width: 300px; }
+        .modal-content h2 { color: var(--accent); font-size: 24px; margin-bottom: 10px;}
+        .modal-content p#recompensa-texto { font-weight: 600; color: var(--primary-dark); font-size: 16px; margin: 15px 0; padding: 10px; background: #f0f4f2; border-radius: 10px;}
+    </style>
+</head>
+<body>
+
+    <div id="baddie-modal">
+        <div class="modal-content">
+            <h2>✨ ¡LO LOGRASTE! ✨</h2>
+            <p>Eres oficialmente una BADDIE indiscutible. Has alcanzado una de tus metas y te has ganado esto:</p>
+            <p id="recompensa-texto">Tu premio aquí</p>
+            <button class="btn-main" onclick="document.getElementById('baddie-modal').style.display='none'">¡A reclamar mi premio!</button>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <div id="fattie-warning" class="fattie-warning">
+            🚨 ¡PELIGRO! Son más de las 10 PM y no hay ejercicio. Estás en riesgo de entrar en la Fattie Zone. 🚨
+        </div>
+        <div class="baddie-banner">From Fattie to Baddie ✨</div>
+
+        <div class="content-padding">
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('dashboard')">Resumen</button>
+                <button class="tab-btn" onclick="switchTab('medidas')">Cuerpo</button>
+                <button class="tab-btn" onclick="switchTab('nutricion')">Diario</button>
+                <button class="tab-btn" onclick="switchTab('config')">Config</button>
+            </div>
+
+            <div id="dashboard" class="tab-content active">
+                <div class="kpi-grid">
+                    <div class="kpi-card main-kpi">
+                        <h3>Calorías Restantes Hoy</h3>
+                        <h2 id="cal-restantes">-- kcal</h2>
+                        <p style="font-size: 11px; margin: 5px 0 0 0;" id="cal-detalle">Objetivo: -- | Consumido: -- | Ejercicio: --</p>
+                    </div>
+                    <div class="kpi-card"><h3>Proteínas Hoy</h3><h2 id="prot-hoy" style="color: var(--primary-dark);">0 g</h2></div>
+                    <div class="kpi-card"><h3>Déficit Total</h3><h2 id="deficit-hoy" style="color: var(--accent);">0 kcal</h2></div>
+                </div>
+
+                <div class="section-title">Tu Evolución Baddie</div>
+                <div class="kpi-grid-4">
+                    <div class="kpi-card"><h3>Peso</h3><div id="prog-peso" class="progress-text">--</div></div>
+                    <div class="kpi-card"><h3>Cintura</h3><div id="prog-cintura" class="progress-text">--</div></div>
+                    <div class="kpi-card"><h3>Cadera</h3><div id="prog-cadera" class="progress-text">--</div></div>
+                    <div class="kpi-card"><h3>Busto</h3><div id="prog-busto" class="progress-text">--</div></div>
+                </div>
+
+                <canvas id="graficoPeso"></canvas>
+            </div>
+
+            <div id="medidas" class="tab-content">
+                <div class="form-group"><label>Fecha</label><input type="date" id="fecha-medidas"></div>
+                
+                <div class="section-title">Tus Medidas Actuales</div>
+                <div class="row">
+                    <div class="form-group"><label>Peso (kg)</label><input type="number" id="peso" step="0.1"></div>
+                    <div class="form-group"><label>Cintura (cm)</label><input type="number" id="cintura" step="0.1"></div>
+                </div>
+                <div class="row">
+                    <div class="form-group"><label>Cadera (cm)</label><input type="number" id="cadera" step="0.1"></div>
+                    <div class="form-group"><label>Busto (cm)</label><input type="number" id="busto" step="0.1"></div>
+                </div>
+                <button class="btn-main" onclick="guardarMedidas()">Registrar Progreso</button>
+            </div>
+
+            <div id="nutricion" class="tab-content">
+                <div class="form-group"><label>Fecha</label><input type="date" id="fecha-nutricion" onchange="renderizarDiario()"></div>
+                
+                <div class="list-section" style="margin-top:0;">
+                    <div class="section-title">Comidas <span>(Buscador Online)</span></div>
+                    <div class="row">
+                        <div class="form-group" style="flex: 2;"><input type="text" id="busqueda-comida" placeholder="Buscar en español..."></div>
+                        <button class="btn-search" onclick="buscarEnAPI()">🔍 Buscar</button>
+                    </div>
+                    <div class="row">
+                        <div class="form-group" style="flex: 2;"><label>Alimento</label><input type="text" id="nombre-comida"></div>
+                        <div class="form-group" style="flex: 1;"><label>Kcal</label><input type="number" id="calorias-comida"></div>
+                        <div class="form-group" style="flex: 1;"><label>Prot (g)</label><input type="number" id="proteina-comida"></div>
+                    </div>
+                    <button class="btn-main btn-secondary" onclick="agregarComida()">+ Agregar Comida</button>
+                    <div id="lista-comidas" style="margin-top:10px;"></div>
+                </div>
+
+                <div class="list-section">
+                    <div class="section-title">Ejercicios</div>
+                    <div class="form-group"><label>Actividad</label><input type="text" id="nombre-ejercicio" placeholder="Ej. Pesas, Cardio..."></div>
+                    <div class="row">
+                        <div class="form-group"><label>Duración (min)</label><input type="number" id="tiempo-ejercicio"></div>
+                        <div class="form-group"><label>Kcal Quemadas</label><input type="number" id="calorias-ejercicio"></div>
+                    </div>
+                    <button class="btn-main btn-secondary" onclick="agregarEjercicio()">+ Agregar Ejercicio</button>
+                    <div id="lista-ejercicios" style="margin-top:10px;"></div>
+                </div>
+            </div>
+
+            <div id="config" class="tab-content">
+                <div class="section-title">Configuración Base</div>
+                <div class="row">
+                    <div class="form-group"><label>Altura (cm)</label><input type="number" id="altura" value="160"></div>
+                    <div class="form-group"><label>Edad</label><input type="number" id="edad"></div>
+                </div>
+                <div class="form-group">
+                    <label>Nivel de Actividad</label>
+                    <select id="actividad">
+                        <option value="1.2">Sedentario</option>
+                        <option value="1.375">Ligero (1-3 días/sem)</option>
+                        <option value="1.55">Moderado (3-5 días/sem)</option>
+                        <option value="1.725">Fuerte (6-7 días/sem)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Déficit Calórico Objetivo</label>
+                    <select id="deficit-config" onchange="renderizarMetas()">
+                        <option value="300">Suave (-300 kcal)</option>
+                        <option value="500" selected>Recomendado (-500 kcal)</option>
+                        <option value="700">Agresivo (-700 kcal)</option>
+                        <option value="1000">Extremo (-1000 kcal)</option>
+                    </select>
+                </div>
+                <button class="btn-main btn-secondary" onclick="guardarConfig()">Guardar Configuración</button>
+
+                <div class="section-title" style="margin-top: 30px; color: var(--accent);">Tus Metas y Proyecciones</div>
+                <div class="row">
+                    <div class="form-group" style="flex: 1;"><label>Peso meta (kg)</label><input type="number" id="nuevo-peso-meta" step="0.1"></div>
+                    <div class="form-group" style="flex: 2;"><label>Tu Recompensa</label><input type="text" id="nueva-recompensa"></div>
+                </div>
+                <button class="btn-main" style="background-color: var(--accent);" onclick="agregarMeta()">+ Agregar Meta</button>
+                <div id="lista-metas" style="margin-top: 15px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Registro del Service Worker para PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(reg => {
+                    console.log('PWA Service Worker registrado con éxito.', reg);
+                }).catch(err => {
+                    console.log('Error al registrar el Service Worker.', err);
+                });
+            });
+        }
+
+        document.getElementById('fecha-medidas').valueAsDate = new Date();
+        document.getElementById('fecha-nutricion').valueAsDate = new Date();
+        let chartInstance = null;
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+            if(tabId === 'dashboard') actualizarDashboard();
+            if(tabId === 'nutricion') renderizarDiario();
+            if(tabId === 'config') cargarConfig();
+        }
+
+        function obtenerDB() {
+            let db = JSON.parse(localStorage.getItem('baddieTrackerV5'));
+            if (!db) db = { registros: {}, listaMetas: [], config: { altura: 160, edad: '', actividad: 1.2, deficit: 500 } };
+            if (!db.listaMetas) db.listaMetas = [];
+            if (!db.config) db.config = { altura: 160, edad: '', actividad: 1.2, deficit: 500 };
+            return db;
+        }
+        function guardarDB(db) { localStorage.setItem('baddieTrackerV5', JSON.stringify(db)); }
+        function obtenerDia(fecha, db) {
+            if (!db.registros[fecha]) db.registros[fecha] = { peso: 0, cintura: 0, cadera: 0, busto: 0, comidas: [], ejercicios: [] };
+            return db.registros[fecha];
+        }
+
+        function cargarConfig() {
+            let db = obtenerDB();
+            document.getElementById('altura').value = db.config.altura || 160;
+            if(db.config.edad) document.getElementById('edad').value = db.config.edad;
+            document.getElementById('actividad').value = db.config.actividad || 1.2;
+            document.getElementById('deficit-config').value = db.config.deficit || 500;
+            renderizarMetas();
+        }
+
+        function guardarConfig() {
+            let db = obtenerDB();
+            db.config.altura = parseFloat(document.getElementById('altura').value);
+            db.config.edad = parseFloat(document.getElementById('edad').value);
+            db.config.actividad = parseFloat(document.getElementById('actividad').value);
+            db.config.deficit = parseFloat(document.getElementById('deficit-config').value);
+            guardarDB(db); alert("Configuración guardada."); actualizarDashboard(); renderizarMetas();
+        }
+
+        function agregarMeta() {
+            const pesoMeta = parseFloat(document.getElementById('nuevo-peso-meta').value);
+            const recompensa = document.getElementById('nueva-recompensa').value;
+            if(!pesoMeta || !recompensa) return alert("Ingresa el peso y tu recompensa");
+            let db = obtenerDB();
+            db.listaMetas.push({ id: Date.now(), peso: pesoMeta, recompensa: recompensa, lograda: false });
+            guardarDB(db); document.getElementById('nuevo-peso-meta').value = ''; document.getElementById('nueva-recompensa').value = ''; renderizarMetas();
+        }
+
+        function borrarMeta(id) { let db = obtenerDB(); db.listaMetas = db.listaMetas.filter(m => m.id !== id); guardarDB(db); renderizarMetas(); }
+
+        function renderizarMetas() {
+            let db = obtenerDB(); 
+            const lista = document.getElementById('lista-metas'); 
+            lista.innerHTML = '';
+            
+            // Lógica de Proyección
+            const deficitDiario = document.getElementById('deficit-config').value || 500;
+            const ultimoPeso = Object.values(db.registros).map(r=>r.peso).filter(p=>p>0).pop() || 0;
+
+            db.listaMetas.sort((a,b) => b.peso - a.peso).forEach(m => {
+                const clase = m.lograda ? 'goal-item achieved' : 'goal-item';
+                const status = m.lograda ? '✅ ¡Lograda!' : '⏳ Pendiente';
+                
+                let etaHTML = "";
+                if (!m.lograda && ultimoPeso > 0 && m.peso < ultimoPeso) {
+                    const kilosAPerder = ultimoPeso - m.peso;
+                    const caloriasTotales = kilosAPerder * 7700; 
+                    const diasEstimados = Math.ceil(caloriasTotales / deficitDiario);
+                    const fechaEstimada = new Date();
+                    fechaEstimada.setDate(fechaEstimada.getDate() + diasEstimados);
+                    const opcionesFecha = { day: 'numeric', month: 'short', year: 'numeric' };
+                    etaHTML = `<div style="font-size:11px; color:var(--primary-dark); margin-top:5px; background: rgba(255,255,255,0.7); padding: 5px; border-radius: 5px;">🗓️ <b>Llegarás aprox. el ${fechaEstimada.toLocaleDateString('es-ES', opcionesFecha)}</b><br>(en ${diasEstimados} días manteniendo tu déficit)</div>`;
+                } else if (!m.lograda && ultimoPeso > 0 && m.peso >= ultimoPeso) {
+                     etaHTML = `<div style="font-size:11px; color:var(--danger); margin-top:5px;">⚠️ Meta superior a tu peso actual.</div>`;
+                }
+
+                lista.innerHTML += `<div class="list-item ${clase}">
+                    <div class="info">
+                        <span style="font-weight:bold; font-size:14px;">Alcanzar ${m.peso} kg</span>
+                        <span style="font-size:12px; margin-top: 3px;">🎁 ${m.recompensa}</span>
+                        ${etaHTML}
+                    </div>
+                    <div class="stats">
+                        <span style="font-size:10px;">${status}</span><br>
+                        <button class="delete-btn" onclick="borrarMeta(${m.id})">✖</button>
+                    </div>
+                </div>`;
+            });
+        }
+
+        function verificarMetasAlRegistrarPeso(pesoActual, db) {
+            if(pesoActual <= 0) return;
+            let huboLogro = false;
+            db.listaMetas.forEach(meta => {
+                if(!meta.lograda && pesoActual <= meta.peso) {
+                    meta.lograda = true; huboLogro = true;
+                    document.getElementById('recompensa-texto').innerText = meta.recompensa;
+                    document.getElementById('baddie-modal').style.display = 'flex';
+                }
+            });
+            if(huboLogro) guardarDB(db);
+        }
+
+        function guardarMedidas() {
+            const fecha = document.getElementById('fecha-medidas').value;
+            let db = obtenerDB(); let dia = obtenerDia(fecha, db);
+            const pesoNuevo = parseFloat(document.getElementById('peso').value) || dia.peso;
+            dia.peso = pesoNuevo;
+            dia.cintura = parseFloat(document.getElementById('cintura').value) || dia.cintura;
+            dia.cadera = parseFloat(document.getElementById('cadera').value) || dia.cadera;
+            dia.busto = parseFloat(document.getElementById('busto').value) || dia.busto;
+            guardarDB(db); alert("¡Cuerpo actualizado!"); verificarMetasAlRegistrarPeso(pesoNuevo, db); actualizarDashboard(); renderizarMetas();
+        }
+
+        async function buscarEnAPI() {
+            const query = document.getElementById('busqueda-comida').value;
+            if(!query) return;
+            try {
+                const res = await fetch(`https://es.openfoodfacts.org/cgi/search.pl?search_terms=${query}&search_simple=1&action=process&json=1`);
+                const data = await res.json();
+                if(data.products && data.products.length > 0) {
+                    const p = data.products[0];
+                    document.getElementById('nombre-comida').value = p.product_name_es || p.product_name || query;
+                    document.getElementById('calorias-comida').value = p.nutriments['energy-kcal_100g'] || 0;
+                    document.getElementById('proteina-comida').value = p.nutriments['proteins_100g'] || 0;
+                    alert(`✅ Encontrado: ${p.product_name_es || p.product_name}. (Valores por 100g).`);
+                } else { alert("❌ No encontrado. Ingresa manual."); }
+            } catch(e) { alert("Error de conexión."); }
+        }
+
+        function agregarComida() {
+            const fecha = document.getElementById('fecha-nutricion').value;
+            let db = obtenerDB(); let dia = obtenerDia(fecha, db);
+            const nombre = document.getElementById('nombre-comida').value;
+            const cal = parseFloat(document.getElementById('calorias-comida').value) || 0;
+            const prot = parseFloat(document.getElementById('proteina-comida').value) || 0;
+            if(!nombre || cal === 0) return alert("Faltan datos");
+            dia.comidas.push({ id: Date.now(), nombre, cal, prot }); guardarDB(db);
+            document.getElementById('nombre-comida').value = ''; document.getElementById('calorias-comida').value = ''; document.getElementById('proteina-comida').value = '';
+            renderizarDiario(); actualizarDashboard();
+        }
+
+        function agregarEjercicio() {
+            const fecha = document.getElementById('fecha-nutricion').value;
+            let db = obtenerDB(); let dia = obtenerDia(fecha, db);
+            const nombre = document.getElementById('nombre-ejercicio').value;
+            const min = parseFloat(document.getElementById('tiempo-ejercicio').value) || 0;
+            const cal = parseFloat(document.getElementById('calorias-ejercicio').value) || 0;
+            if(!nombre) return alert("Falta el nombre");
+            dia.ejercicios.push({ id: Date.now(), nombre, min, cal }); guardarDB(db);
+            document.getElementById('nombre-ejercicio').value = ''; document.getElementById('tiempo-ejercicio').value = ''; document.getElementById('calorias-ejercicio').value = '';
+            renderizarDiario(); actualizarDashboard(); checkFattieZone();
+        }
+
+        function borrarItem(tipo, id) {
+            const fecha = document.getElementById('fecha-nutricion').value;
+            let db = obtenerDB(); let dia = obtenerDia(fecha, db);
+            if(tipo === 'comida') dia.comidas = dia.comidas.filter(c => c.id !== id);
+            if(tipo === 'ejercicio') dia.ejercicios = dia.ejercicios.filter(e => e.id !== id);
+            guardarDB(db); renderizarDiario(); actualizarDashboard(); checkFattieZone();
+        }
+
+        function renderizarDiario() {
+            const fecha = document.getElementById('fecha-nutricion').value;
+            let db = obtenerDB(); let dia = obtenerDia(fecha, db);
+            const lc = document.getElementById('lista-comidas'); lc.innerHTML = '';
+            dia.comidas.forEach(c => { lc.innerHTML += `<div class="list-item"><div class="info"><span>${c.nombre}</span><span style="font-size:10px; color:#888;">${c.prot}g prot</span></div><div class="stats">${c.cal} kcal <button class="delete-btn" onclick="borrarItem('comida', ${c.id})">✖</button></div></div>`; });
+            const le = document.getElementById('lista-ejercicios'); le.innerHTML = '';
+            dia.ejercicios.forEach(e => { le.innerHTML += `<div class="list-item"><div class="info"><span>${e.nombre}</span><span style="font-size:10px; color:#888;">${e.min} mins</span></div><div class="stats">🔥 ${e.cal} kcal <button class="delete-btn" onclick="borrarItem('ejercicio', ${e.id})">✖</button></div></div>`; });
+        }
+
+        function formatearProgreso(idElemento, valores, unidad) {
+            const limpios = valores.filter(v => v > 0); const el = document.getElementById(idElemento);
+            if(limpios.length < 2) { el.innerText = "--"; el.style.color = 'var(--text-light)'; return; }
+            const diff = (limpios[0] - limpios[limpios.length-1]).toFixed(1);
+            if(diff > 0) { el.innerText = `👇 -${diff} ${unidad}`; el.style.color = 'var(--success)'; }
+            else if (diff < 0) { el.innerText = `📈 +${Math.abs(diff)} ${unidad}`; el.style.color = 'var(--danger)'; }
+            else { el.innerText = "Igual"; el.style.color = 'var(--text-light)'; }
+        }
+
+        function calcularMejoras(db) {
+            const fechas = Object.keys(db.registros).sort();
+            formatearProgreso('prog-peso', fechas.map(f => db.registros[f].peso), 'kg');
+            formatearProgreso('prog-cintura', fechas.map(f => db.registros[f].cintura), 'cm');
+            formatearProgreso('prog-cadera', fechas.map(f => db.registros[f].cadera), 'cm');
+            formatearProgreso('prog-busto', fechas.map(f => db.registros[f].busto), 'cm');
+        }
+
+        function actualizarDashboard() {
+            cargarConfig();
+            const fechaHoy = new Date().toISOString().split('T')[0];
+            let db = obtenerDB(); let hoy = obtenerDia(fechaHoy, db);
+            
+            calcularMejoras(db);
+            let totalIn = 0; let totalProt = 0; let totalOut = 0;
+            hoy.comidas.forEach(c => { totalIn += c.cal; totalProt += c.prot; });
+            hoy.ejercicios.forEach(e => { totalOut += e.cal; });
+
+            document.getElementById('prot-hoy').innerText = `${totalProt} g`;
+            let ultimoPeso = hoy.peso > 0 ? hoy.peso : Object.values(db.registros).map(r=>r.peso).filter(p=>p>0).pop() || 0;
+
+            if (db.config.edad && db.config.altura && ultimoPeso > 0) {
+                const bmr = (10 * ultimoPeso) + (6.25 * db.config.altura) - (5 * db.config.edad) - 161;
+                const tdee = bmr * db.config.actividad;
+                const metaCalorias = Math.round(tdee - db.config.deficit); 
+                const caloriasRestantes = Math.round(metaCalorias - totalIn + totalOut);
+                const elRestantes = document.getElementById('cal-restantes');
+                
+                elRestantes.innerText = `${caloriasRestantes} kcal`;
+                if(caloriasRestantes < 0) { elRestantes.classList.add('exceeded'); elRestantes.innerText = `${Math.abs(caloriasRestantes)} kcal extras`; } 
+                else { elRestantes.classList.remove('exceeded'); }
+
+                document.getElementById('cal-detalle').innerText = `Meta: ${metaCalorias} | Consumido: ${totalIn} | Ejercicio: ${totalOut}`;
+                const deficitReal = (tdee + totalOut) - totalIn;
+                document.getElementById('deficit-hoy').innerText = deficitReal > 0 ? `-${Math.round(deficitReal)} kcal` : `+${Math.round(Math.abs(deficitReal))} kcal`;
+            } else { document.getElementById('cal-detalle').innerText = "Llena tu edad y peso en Config / Cuerpo"; }
+
+            const fechasOrd = Object.keys(db.registros).sort();
+            const pesos = fechasOrd.map(f => db.registros[f].peso).filter(p => p > 0);
+            const labels = fechasOrd.filter(f => db.registros[f].peso > 0).map(f => f.slice(5));
+
+            if (chartInstance) chartInstance.destroy();
+            chartInstance = new Chart(document.getElementById('graficoPeso').getContext('2d'), {
+                type: 'line', data: { labels: labels, datasets: [{ label: 'Peso (kg)', data: pesos, borderColor: '#d4a5a5', backgroundColor: 'rgba(212, 165, 165, 0.2)', borderWidth: 3, pointBackgroundColor: '#fff', fill: true, tension: 0.4 }] },
+                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: false } } }
+            });
+        }
+
+        function checkFattieZone() {
+            const fechaHoy = new Date().toISOString().split('T')[0];
+            let db = obtenerDB(); let hoy = obtenerDia(fechaHoy, db);
+            const hora = new Date().getHours();
+            document.getElementById('fattie-warning').style.display = (hora >= 22 && hoy.ejercicios.length === 0) ? 'block' : 'none';
+        }
+
+        window.onload = () => {
+            cargarConfig(); actualizarDashboard(); renderizarDiario(); checkFattieZone();
+            setInterval(checkFattieZone, 300000); 
+        };
+    </script>
+</body>
+</html>
