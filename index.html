@@ -13,7 +13,7 @@
     <link rel="icon" type="image/png" href="icono.png">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root { --primary: #9bbfab; --primary-dark: #7a9e8a; --bg-color: #f8f9fa; --text-main: #4a4a4a; --text-light: #888888; --accent: #d4a5a5; --danger: #e74c3c; --success: #2ecc71; }
@@ -21,21 +21,20 @@
         body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); background-image: url('fondo.png'); background-size: cover; background-position: center; background-attachment: fixed; color: var(--text-main); margin: 0; padding: 15px; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
         .app-container { background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); width: 100%; max-width: 500px; min-height: 85vh; border-radius: 24px; box-shadow: 0 12px 35px rgba(0,0,0,0.15); overflow: hidden; padding-bottom: 20px; position: relative; }
         
-        /* BANNER CUTE Y MÁS VISIBLE */
+        /* BANNER CON NUEVA FUENTE GRUESA */
         .baddie-banner { 
-            /* Reduje el porcentaje de 0.75 a 0.35 para que tu imagen se vea mucho más clara */
             background-image: linear-gradient(rgba(212, 165, 165, 0.35), rgba(181, 131, 141, 0.35)), url('banner.png'); 
             background-size: cover; 
             background-position: center; 
             color: white; 
             text-align: center; 
-            padding: 55px 20px; /* Más padding = banner más alto */
-            font-size: 42px; /* Letra más grande */
-            font-family: 'Caveat', cursive; /* La nueva fuente cute */
-            font-weight: 700; 
+            padding: 55px 20px; 
+            font-size: 38px; 
+            font-family: 'Pacifico', cursive; /* Nueva fuente */
+            font-weight: 400; /* Pacifico no necesita ser tan bold porque ya es gruesa */
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
             margin-bottom: 20px; 
-            text-shadow: 2px 2px 6px rgba(0,0,0,0.6); /* Sombra de texto para que lea bien sobre la foto */
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.7); 
         }
         
         .fattie-warning { background-color: var(--danger); color: white; text-align: center; padding: 10px; font-weight: 600; font-size: 14px; display: none; animation: pulse 2s infinite; }
@@ -106,6 +105,7 @@
         <div id="fattie-warning" class="fattie-warning">
             🚨 ¡PELIGRO! Son más de las 10 PM y no hay ejercicio. Estás en riesgo de entrar en la Fattie Zone. 🚨
         </div>
+        
         <div class="baddie-banner">From Fattie to Baddie</div>
 
         <div class="content-padding">
@@ -157,9 +157,9 @@
                 <div class="form-group"><label>Fecha</label><input type="date" id="fecha-nutricion" onchange="renderizarDiario()"></div>
                 
                 <div class="list-section" style="margin-top:0;">
-                    <div class="section-title">Comidas <span>(Buscador de Alimentos)</span></div>
+                    <div class="section-title">Comidas <span>(Base de Datos Chile)</span></div>
                     <div class="row">
-                        <div class="form-group" style="flex: 2;"><input type="text" id="busqueda-comida" placeholder="Ej. Avena, Huevo, Manzana..."></div>
+                        <div class="form-group" style="flex: 2;"><input type="text" id="busqueda-comida" placeholder="Ej. Lider, Carozzi, Avena..."></div>
                         <button class="btn-search" onclick="buscarEnAPI()">🔍 Buscar</button>
                     </div>
                     
@@ -167,7 +167,7 @@
 
                     <div class="row">
                         <div class="form-group" style="flex: 2;"><label>Alimento</label><input type="text" id="nombre-comida"></div>
-                        <div class="form-group" style="flex: 1;"><label>Cant. (g)</label><input type="number" id="gramos-comida" value="100" oninput="recalcularPorcion()"></div>
+                        <div class="form-group" style="flex: 1;"><label>Cant. (g/ml)</label><input type="number" id="gramos-comida" value="100" oninput="recalcularPorcion()"></div>
                     </div>
                     <div class="row">
                         <div class="form-group" style="flex: 1;"><label>Kcal</label><input type="number" id="calorias-comida"></div>
@@ -235,7 +235,6 @@
             window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); });
         }
 
-        // Variables globales para calcular porciones dinámicas
         let baseKcal100g = 0;
         let baseProt100g = 0;
 
@@ -343,7 +342,7 @@
             guardarDB(db); alert("¡Cuerpo actualizado!"); verificarMetasAlRegistrarPeso(pesoNuevo, db); actualizarDashboard(); renderizarMetas();
         }
 
-        // BÚSQUEDA Y CÁLCULO DINÁMICO
+        // BÚSQUEDA Y CÁLCULO DINÁMICO CON API CHILENA
         async function buscarEnAPI() {
             const query = document.getElementById('busqueda-comida').value;
             const contenedor = document.getElementById('contenedor-resultados');
@@ -353,7 +352,8 @@
             contenedor.style.display = 'block';
 
             try {
-                const res = await fetch(`https://es.openfoodfacts.org/cgi/search.pl?search_terms=${query}&search_simple=1&action=process&json=1&page_size=6`);
+                // AQUÍ: cl.openfoodfacts.org para dar prioridad a Chile
+                const res = await fetch(`https://cl.openfoodfacts.org/cgi/search.pl?search_terms=${query}&search_simple=1&action=process&json=1&page_size=6`);
                 const data = await res.json();
                 
                 contenedor.innerHTML = '';
@@ -378,7 +378,7 @@
                             baseKcal100g = kcal;
                             baseProt100g = prot;
                             document.getElementById('gramos-comida').value = 100;
-                            recalcularPorcion(); // Llenar automáticamente los inputs
+                            recalcularPorcion(); 
                             contenedor.style.display = 'none';
                         };
                         contenedor.appendChild(item);
@@ -393,7 +393,6 @@
             }
         }
 
-        // Función que recalcula calorías y proteínas cuando cambias los gramos
         function recalcularPorcion() {
             const gramos = parseFloat(document.getElementById('gramos-comida').value) || 0;
             document.getElementById('calorias-comida').value = Math.round((baseKcal100g / 100) * gramos);
@@ -409,12 +408,9 @@
             const prot = parseFloat(document.getElementById('proteina-comida').value) || 0;
             if(!nombre || cal === 0) return alert("Faltan datos");
             
-            // Le agregamos el peso al nombre para que se vea en el diario
             nombre = `${nombre} (${gramos}g)`;
-            
             dia.comidas.push({ id: Date.now(), nombre, cal, prot }); guardarDB(db);
             
-            // Limpiar
             document.getElementById('nombre-comida').value = ''; 
             document.getElementById('gramos-comida').value = 100; 
             document.getElementById('calorias-comida').value = ''; 
@@ -467,12 +463,10 @@
         function calcularMejoras(db) {
             const fechas = Object.keys(db.registros).sort();
             
-            // NUEVA LÓGICA DE PESO BASADA EN EL PESO INICIAL OFICIAL
             const pesos = fechas.map(f => db.registros[f].peso).filter(p => p > 0);
             const elPeso = document.getElementById('prog-peso');
             
             if (pesos.length > 0) {
-                // Si tienes un peso inicial configurado lo usa, si no, usa el primer peso que registraste
                 const primerPeso = (db.config.pesoInicial && db.config.pesoInicial > 0) ? db.config.pesoInicial : pesos[0];
                 const ultimoPeso = pesos[pesos.length - 1];
                 const diff = (primerPeso - ultimoPeso).toFixed(1);
@@ -525,12 +519,10 @@
                 }
             } else { document.getElementById('cal-detalle').innerText = "Llena tu edad y peso en Config / Cuerpo"; }
 
-            // Configurar el gráfico
             const fechasOrd = Object.keys(db.registros).sort();
             const pesosArray = fechasOrd.map(f => db.registros[f].peso).filter(p => p > 0);
             const labelsArray = fechasOrd.filter(f => db.registros[f].peso > 0).map(f => f.slice(5));
             
-            // Agregar el peso inicial al principio del gráfico si existe
             if(db.config.pesoInicial && db.config.pesoInicial > 0) {
                 pesosArray.unshift(db.config.pesoInicial);
                 labelsArray.unshift("Inicio");
