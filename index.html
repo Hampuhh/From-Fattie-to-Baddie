@@ -200,13 +200,16 @@
                     <input type="text" id="busqueda-ai" placeholder="Ej: media palta reina con té..." onkeydown="if(event.key==='Enter') consultarAI()">
                     <button class="btn-search" onclick="consultarAI()"><i class="ph-fill ph-lightning"></i></button>
                 </div>
+                
                 <div id="ai-response">
                     <div id="ai-texto"></div>
                     <button class="btn-main" id="btn-add-ai" style="background: var(--success); margin-top: 10px;"><i class="ph-bold ph-plus"></i> Añadir al Diario</button>
                 </div>
-                <div id="ai-loading" class="ai-loading" style="display:none;"><i class="ph-bold ph-spinner ph-spin"></i> Gemini calculando...</div>
+                <div id="ai-loading" class="ai-loading" style="display:none;"><i class="ph-bold ph-spinner ph-spin"></i> Gemini está calculando...</div>
+                
                 <div class="section-title">Comidas</div>
                 <div id="lista-comidas"></div>
+                
                 <div class="section-title" style="margin-top: 25px;">Ejercicio</div>
                 <div class="form-group"><label>Actividad</label><input type="text" id="ej-nombre" placeholder="Ej: Pilates"></div>
                 <div class="row">
@@ -241,12 +244,15 @@
                         <option value="700">Agresivo (-700 kcal)</option>
                     </select>
                 </div>
-                <div class="form-group" style="background: #fff0f0; padding: 10px; border-radius: 12px;">
+                
+                <div class="form-group" style="background: #fff0f0; padding: 10px; border-radius: 12px; margin-top: 15px;">
                     <label style="color: var(--danger);">Gemini API Key (Privada)</label>
                     <input type="password" id="c-apikey" placeholder="Pega tu llave aquí...">
                 </div>
+                
                 <button class="btn-main" onclick="guardarConfig()">Actualizar Perfil</button>
                 <button class="btn-main" style="background-color: #e2e8e5; color: var(--primary-dark); margin-top: 10px;" onclick="descargarRespaldo()"><i class="ph-bold ph-download-simple"></i> Respaldar Datos</button>
+
                 <div class="section-title" style="margin-top: 30px; color: var(--accent);">Metas y Proyecciones</div>
                 <div class="row">
                     <input type="number" id="m-peso" placeholder="Meta kg" style="flex:1;">
@@ -255,18 +261,23 @@
                 <button class="btn-main btn-secondary" onclick="agregarMeta()">Crear Meta</button>
                 <div id="lista-metas" style="margin-top: 15px;"></div>
             </div>
-            
-        </div> </div> <script>
+        </div>
+    </div>
+
+    <script>
         if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); }); }
+        
         let db = { registros: {}, metas: [], config: { altura: 160, edad: '', actividad: 1.2, pesoI: '', deficit: 500, apiKey: '' } };
-        let currentAIResult = null; let chart = null;
+        let currentAIResult = null; 
+        let chart = null;
 
         function init() {
             try {
-                const saved = localStorage.getItem('baddieData_V21');
+                const saved = localStorage.getItem('baddieData_V22');
                 if (saved) db = JSON.parse(saved);
                 document.getElementById('global-fecha').valueAsDate = new Date();
-                cargarConfigUI(); cambioFechaGlobal();
+                cargarConfigUI(); 
+                cambioFechaGlobal();
             } catch (e) { localStorage.clear(); location.reload(); }
         }
 
@@ -274,7 +285,8 @@
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            btn.classList.add('active'); cambioFechaGlobal();
+            btn.classList.add('active'); 
+            cambioFechaGlobal();
         }
 
         function cambioFechaGlobal() {
@@ -288,29 +300,52 @@
             renderDiario(); renderMetas(); actualizarDashboard(); checkFattieZone();
         }
 
+        // --- MOTOR MEJORADO DE GEMINI AI ---
         async function consultarAI() {
             const q = document.getElementById('busqueda-ai').value;
             const key = db.config.apiKey;
-            if (!key) return alert("Pega tu API Key en la pestaña de Metas");
+            
+            if (!key) return alert("❌ Primero pega tu API Key en la pestaña de Metas");
             if (!q) return;
+            
             document.getElementById('ai-loading').style.display = 'block';
             document.getElementById('ai-response').style.display = 'none';
-            const prompt = `Nutricionista chilena. Analiza: "${q}". Devuelve JSON: {"nombre": "Plato", "calorias": 100, "proteinas": 10}. Solo JSON.`;
+            
+            const prompt = `Actúa como nutricionista chilena. El usuario comió: "${q}". 
+Calcula las calorías y macronutrientes aproximados. 
+Obligatorio: Responde ÚNICAMENTE con un objeto JSON válido con esta estructura exacta:
+{"nombre": "Nombre del plato (cantidad)", "calorias": numero_entero, "proteinas": numero_entero}`;
+
             try {
                 const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
-                    method: 'POST', body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        contents: [{ parts: [{ text: prompt }] }],
+                        generationConfig: { responseMimeType: "application/json" } // Obliga a Gemini a devolver JSON perfecto
+                    })
                 });
-                const data = await res.json();
-                const text = data.candidates[0].content.parts[0].text;
-                const jsonMatch = text.match(/\{.*\}/s);
-                if (jsonMatch) {
-                    currentAIResult = JSON.parse(jsonMatch[0]);
-                    document.getElementById('ai-texto').innerHTML = `<b>${currentAIResult.nombre}</b><br><i class="ph-fill ph-fire"></i> ${currentAIResult.calorias} kcal | ${currentAIResult.proteinas}g prot`;
-                    document.getElementById('ai-response').style.display = 'block';
-                    document.getElementById('btn-add-ai').onclick = addComidaAI;
+                
+                if (!res.ok) {
+                    throw new Error("Error en la conexión con Google. Verifica que la llave sea correcta.");
                 }
-            } catch (e) { alert("Error con la IA. Revisa tu llave."); }
-            document.getElementById('ai-loading').style.display = 'none';
+
+                const data = await res.json();
+                const textResponse = data.candidates[0].content.parts[0].text;
+                
+                // Como le exigimos MimeType JSON, no necesitamos hacer limpiezas raras
+                currentAIResult = JSON.parse(textResponse);
+                
+                document.getElementById('ai-texto').innerHTML = `<b>${currentAIResult.nombre}</b><br><i class="ph-fill ph-fire" style="color:var(--accent);"></i> ${currentAIResult.calorias} kcal | <i class="ph-fill ph-barbell" style="color:var(--primary-dark);"></i> ${currentAIResult.proteinas}g prot`;
+                document.getElementById('ai-response').style.display = 'block';
+                document.getElementById('btn-add-ai').onclick = addComidaAI;
+                
+            } catch (e) { 
+                alert("⚠️ " + e.message); 
+                console.error(e);
+            } finally {
+                document.getElementById('ai-loading').style.display = 'none';
+            }
         }
 
         function addComidaAI() {
@@ -345,18 +380,18 @@
                     document.getElementById('baddie-modal').style.display = 'flex';
                 }
             });
-            save(); cambioFechaGlobal(); alert("Guardado");
+            save(); cambioFechaGlobal(); alert("Guardado con éxito");
         }
 
         function renderDiario() {
             const f = document.getElementById('global-fecha').value;
             const lc = document.getElementById('lista-comidas'); lc.innerHTML = '';
             db.registros[f].comidas.forEach(c => {
-                lc.innerHTML += `<div class="list-item"><div class="info"><b>${c.n}</b><small>${c.p}g prot</small></div><div class="stats"><span>${c.k} kcal</span><button class="delete-btn" onclick="borrarItem('c',${c.id})"><i class="ph-bold ph-trash"></i></button></div></div>`;
+                lc.innerHTML += `<div class="list-item"><div class="info"><b>${c.n}</b><small>${c.p}g prot</small></div><div class="stats"><span style="color:var(--accent);"><i class="ph-fill ph-fire"></i> ${c.k}</span><button class="delete-btn" onclick="borrarItem('c',${c.id})"><i class="ph-bold ph-trash"></i></button></div></div>`;
             });
             const le = document.getElementById('lista-ejercicios'); le.innerHTML = '';
             db.registros[f].ejercicios.forEach(e => {
-                le.innerHTML += `<div class="list-item"><div class="info"><b>${e.n}</b><small>${e.t} min</small></div><div class="stats"><span>-${e.k} kcal</span><button class="delete-btn" onclick="borrarItem('e',${e.id})"><i class="ph-bold ph-trash"></i></button></div></div>`;
+                le.innerHTML += `<div class="list-item"><div class="info"><b>${e.n}</b><small>${e.t} min</small></div><div class="stats"><span style="color:var(--success);"><i class="ph-bold ph-trend-down"></i> ${e.k}</span><button class="delete-btn" onclick="borrarItem('e',${e.id})"><i class="ph-bold ph-trash"></i></button></div></div>`;
             });
         }
 
@@ -368,23 +403,27 @@
             hoy.ejercicios.forEach(e => { tOut += e.k; });
             const pesos = Object.keys(db.registros).sort().map(k=>db.registros[k].peso).filter(p=>p>0);
             const uPeso = hoy.peso || pesos[pesos.length-1] || conf.pesoI || 0;
+            
             if(uPeso > 0 && conf.altura && conf.edad) {
                 const bmr = (10 * uPeso) + (6.25 * conf.altura) - (5 * conf.edad) - 161;
                 const neat = Math.round(bmr * conf.actividad); 
                 const metaDef = parseFloat(conf.deficit || 500);
                 const meta = neat - metaDef; 
                 const rest = meta - tIn + tOut;
+                
                 document.getElementById('cal-restantes').innerText = rest + ' kcal';
                 document.getElementById('cal-detalle').innerText = `TDEE: ${neat} | Comida: ${tIn} | Ejer: ${tOut}`;
                 document.getElementById('prot-hoy').innerText = tP + 'g';
                 const defReal = (neat + tOut) - tIn;
                 document.getElementById('deficit-hoy').innerText = (defReal > 0 ? '-' : '+') + Math.abs(defReal);
+                
                 const calWarn = document.getElementById('cal-warning');
                 if (rest <= 200 && rest > 0) {
                     calWarn.style.display = 'flex'; calWarn.innerHTML = '<i class="ph-fill ph-warning"></i> ¡PELIGRO! Cerca de zona Fattie';
                 } else if (rest <= 0) {
                     calWarn.style.display = 'flex'; calWarn.innerHTML = '<i class="ph-fill ph-skull"></i> ¡ZONA FATTIE! Límite superado';
                 } else { calWarn.style.display = 'none'; }
+                
                 if(hoy.cintura && hoy.cadera) {
                     const icc = (hoy.cintura / hoy.cadera).toFixed(2);
                     document.getElementById('icc-value').innerText = icc;
@@ -448,6 +487,7 @@
             else db.registros[f].ejercicios = db.registros[f].ejercicios.filter(i=>i.id!==id);
             save(); cambioFechaGlobal();
         }
+        
         function cargarConfigUI() {
             document.getElementById('c-alt').value = db.config.altura || '';
             document.getElementById('c-edad').value = db.config.edad || '';
@@ -456,21 +496,25 @@
             document.getElementById('c-deficit').value = db.config.deficit || 500;
             document.getElementById('c-apikey').value = db.config.apiKey || '';
         }
+        
         function guardarConfig() {
             db.config.altura = document.getElementById('c-alt').value;
             db.config.edad = document.getElementById('c-edad').value;
             db.config.pesoI = document.getElementById('c-peso-i').value;
             db.config.actividad = document.getElementById('c-act').value;
             db.config.deficit = document.getElementById('c-deficit').value;
-            db.config.apiKey = document.getElementById('c-apikey').value;
+            db.config.apiKey = document.getElementById('c-apikey').value.trim();
             save(); alert("Perfil actualizado"); cambioFechaGlobal();
         }
+        
         function descargarRespaldo() {
             const blob = new Blob([JSON.stringify(db)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a'); a.href = url; a.download = `Baddie_Backup.json`; a.click();
         }
-        function save() { localStorage.setItem('baddieData_V21', JSON.stringify(db)); }
+        
+        function save() { localStorage.setItem('baddieData_V22', JSON.stringify(db)); }
+        
         function renderChart() {
             const ctx = document.getElementById('graficoPeso').getContext('2d');
             const fechas = Object.keys(db.registros).sort().slice(-7);
@@ -481,6 +525,7 @@
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: true, grid: { color: '#f0edea' } }, x: { grid: { display: false } } } }
             });
         }
+        
         function checkFattieZone() {
             const hoyStr = new Date().toISOString().split('T')[0];
             const hora = new Date().getHours();
