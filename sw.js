@@ -1,14 +1,13 @@
-const CACHE_NAME = 'baddie-tracker-v1';
+const CACHE_NAME = 'baddie-tracker-v2'; // <-- Cambiamos a v2 para forzar la actualización
 const urlsToCache = [
   './',
   './index.html',
   './manifest.json',
-  './fondo.jpg',
-  './banner.jpg',
+  './fondo.png',
+  './banner.png',
   './icono.png'
 ];
 
-// Instalar el Service Worker y guardar en caché los archivos básicos
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -18,12 +17,10 @@ self.addEventListener('install', event => {
   );
 });
 
-// Interceptar las solicitudes web para servir desde la caché si no hay internet
 self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
       .then(response => {
-        // Devuelve la versión en caché si existe, de lo contrario busca en la red
         return response || fetch(event.request);
       })
   );
