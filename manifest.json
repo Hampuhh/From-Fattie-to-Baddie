@@ -4,9 +4,15 @@
   "description": "Tu rastreador personal de bienestar, calorías y progreso.",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f8f9fa",
-  "theme_color": "#d4a5a5",
+  "background_color": "#fdf6f5",
+  "theme_color": "#84a99c",
   "icons": [
+    {
+      "src": "icono.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
     {
       "src": "icono.png",
       "sizes": "512x512",
