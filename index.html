@@ -36,99 +36,111 @@
             background-image: url('fondo.png'); background-size: cover; background-position: center; z-index: -1;
         }
 
-        .app-wrapper { width: 100%; max-width: 500px; display: flex; flex-direction: column; gap: 15px; padding-bottom: 30px; }
+        .app-wrapper { width: 100%; max-width: 500px; display: flex; flex-direction: column; gap: 12px; padding-bottom: 30px; }
         
+        /* BANNER CON FECHA INTEGRADA ARRIBA A LA DERECHA */
         .baddie-banner { 
             background-image: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)), url('banner.png'); 
             background-size: cover; background-position: center; color: white; text-align: center; 
-            padding: 40px 20px; border-radius: 24px; box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            padding: 50px 20px 35px 20px; border-radius: 24px; box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            position: relative; overflow: hidden;
         }
         
-        .baddie-banner h1 {
-            margin: 0; font-size: 38px; font-family: 'Fredoka', sans-serif; font-weight: 700; color: #ffffff;
-            text-shadow: -2.5px -2.5px 0 #5a504b, 2.5px -2.5px 0 #5a504b, -2.5px 2.5px 0 #5a504b, 2.5px 2.5px 0 #5a504b, 0px -2.5px 0 #5a504b, 0px 2.5px 0 #5a504b, -2.5px 0px 0 #5a504b, 2.5px 0px 0 #5a504b, 4px 6px 0 rgba(90, 80, 75, 0.25);
-            letter-spacing: 1.5px; line-height: 1.2;
-        }
-
-        .fattie-warning { background-color: var(--danger); color: white; text-align: center; padding: 12px; border-radius: 16px; font-weight: 700; font-size: 13px; display: none; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 10px rgba(242, 139, 130, 0.3);}
-
         .date-card {
-            background: #ffffff; border-radius: 20px; padding: 8px 20px; display: flex;
-            align-items: center; justify-content: center; width: max-content; margin: 0 auto; gap: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 2px solid #ffffff;
+            position: absolute; top: 12px; right: 12px;
+            background: rgba(255, 255, 255, 0.9); border-radius: 12px; padding: 4px 10px; 
+            display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        .date-card input { border: none; background: transparent; font-size: 14px; font-weight: 800; color: var(--text-main); outline: none; font-family: 'Nunito'; cursor: pointer;}
+        .date-card i { font-size: 14px; color: var(--primary); }
+        .date-card input { 
+            border: none; background: transparent; font-size: 11px; font-weight: 900; 
+            color: var(--text-main); outline: none; font-family: 'Nunito'; width: 95px;
+        }
 
-        .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        .tab-btn { 
-            background: #ffffff; border: none; padding: 15px 5px; border-radius: 16px; 
-            font-family: 'Nunito'; font-size: 11px; font-weight: 800; color: var(--text-light); 
-            display: flex; flex-direction: column; align-items: center; gap: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+        .baddie-banner h1 {
+            margin: 0; font-size: 36px; font-family: 'Fredoka', sans-serif; font-weight: 700; color: #ffffff;
+            text-shadow: -2px -2px 0 #5a504b, 2px -2px 0 #5a504b, -2px 2px 0 #5a504b, 2px 2px 0 #5a504b, 3px 5px 0 rgba(90, 80, 75, 0.2);
+            letter-spacing: 1px; line-height: 1.1;
         }
-        .tab-btn i { font-size: 24px; color: var(--text-light); }
+
+        .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .tab-btn { 
+            background: #ffffff; border: none; padding: 10px 5px; border-radius: 16px; 
+            font-family: 'Nunito'; font-size: 10px; font-weight: 800; color: var(--text-light); 
+            display: flex; flex-direction: column; align-items: center; gap: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+        .tab-btn i { font-size: 22px; color: var(--text-light); }
         .tab-btn.active { background: var(--primary); color: white; }
         .tab-btn.active i { color: white; }
 
-        .glass-panel { background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(15px); border-radius: 24px; padding: 22px; box-shadow: 0 8px 30px rgba(0,0,0,0.05); }
+        .glass-panel { background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(15px); border-radius: 24px; padding: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.05); }
 
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.2s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; } }
 
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-size: 11px; font-weight: 800; margin-bottom: 6px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px;}
-        input, select { width: 100%; padding: 14px; border: 2px solid #f0edea; border-radius: 14px; font-family: 'Nunito'; font-size: 16px; background: white; }
+        .form-group { margin-bottom: 12px; }
+        label { display: block; font-size: 10px; font-weight: 800; margin-bottom: 4px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px;}
+        input, select { width: 100%; padding: 12px; border: 2px solid #f0edea; border-radius: 14px; font-family: 'Nunito'; font-size: 15px; background: white; }
         
-        .btn-main { width: 100%; background: var(--primary); color: white; padding: 14px; border: none; border-radius: 14px; font-weight: 800; font-size: 15px; margin-top: 10px; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-main { width: 100%; background: var(--primary); color: white; padding: 14px; border: none; border-radius: 14px; font-weight: 800; font-size: 14px; margin-top: 5px; display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; }
         .btn-secondary { background: white; color: var(--primary); border: 2px solid var(--primary); }
 
-        .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-        .kpi-card { background: white; border-radius: 20px; padding: 15px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
-        .kpi-card h3 { font-size: 10px; text-transform: uppercase; color: var(--text-light); margin: 0 0 5px 0; font-weight: 800;}
-        .kpi-card h2 { margin: 0; font-size: 22px; font-weight: 900; }
-        .progress-text { font-size: 12px; font-weight: 800; color: var(--success); margin-top: 5px; display: flex; justify-content: center; align-items: center; gap: 4px;}
+        .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .kpi-card { background: white; border-radius: 20px; padding: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .kpi-card h3 { font-size: 9px; text-transform: uppercase; color: var(--text-light); margin: 0 0 4px 0; font-weight: 800;}
+        .kpi-card h2 { margin: 0; font-size: 18px; font-weight: 900; }
+        .progress-text { font-size: 11px; font-weight: 900; color: var(--success); margin-top: 4px; display: flex; justify-content: center; align-items: center; gap: 3px;}
 
-        .list-item { display: flex; justify-content: space-between; align-items: center; background: white; padding: 15px; border-radius: 16px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
-        .list-item .info { display: flex; flex-direction: column; flex: 1; gap: 3px; }
-        .list-item .stats { font-weight: 800; color: var(--primary-dark); text-align: right; min-width: 75px; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
-        .delete-btn { color: #e0d8d5; background: none; border: none; font-size: 20px; cursor: pointer; }
+        .search-container { display: flex; gap: 8px; margin-bottom: 12px; }
+        .btn-search { background: var(--accent); color: white; border: none; border-radius: 14px; width: 50px; display: flex; justify-content: center; align-items: center; font-size: 20px; box-shadow: 0 4px 10px rgba(244, 162, 152, 0.2); cursor: pointer;}
 
-        /* MODAL */
-        #baddie-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: white; border-radius: 30px; padding: 35px 25px; text-align: center; max-width: 350px; border: 4px solid var(--accent); box-shadow: 0 15px 50px rgba(0,0,0,0.2); }
+        .list-item { display: flex; justify-content: space-between; align-items: center; background: white; padding: 12px; border-radius: 15px; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+        .list-item .info { display: flex; flex-direction: column; flex: 1; gap: 2px; }
+        .list-item .stats { font-weight: 800; color: var(--primary-dark); text-align: right; min-width: 70px; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+        .delete-btn { color: #e0d8d5; background: none; border: none; font-size: 18px; cursor: pointer; }
 
-        .resultados-api { display: none; background: white; border-radius: 16px; margin-bottom: 15px; max-height: 200px; overflow-y: auto; border: 1px solid #eee; box-shadow: 0 8px 25px rgba(0,0,0,0.08); }
-        .resultado-item { padding: 12px 15px; border-bottom: 1px solid #f9f8f6; }
-        .section-title { font-size: 16px; font-weight: 800; color: var(--primary-dark); margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;}
-        .health-badge { display: inline-block; padding: 6px 10px; border-radius: 10px; font-size: 11px; font-weight: 800; margin-top: 5px;}
+        .row { display: flex; gap: 10px; }
+        .row .form-group { flex: 1; }
+
+        .chart-container { background: white; border-radius: 20px; padding: 15px; margin-top: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
+        .section-title { font-size: 15px; font-weight: 800; color: var(--primary-dark); margin: 15px 0 10px 0; display: flex; justify-content: space-between; align-items: center;}
+        
+        .fattie-warning { background-color: var(--danger); color: white; text-align: center; padding: 10px; border-radius: 14px; font-weight: 700; font-size: 12px; display: none; align-items: center; justify-content: center; gap: 8px; margin-bottom: 5px; }
+
+        #baddie-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(90, 80, 75, 0.7); backdrop-filter: blur(8px); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { background: white; border-radius: 30px; padding: 35px 25px; text-align: center; max-width: 350px; border: 4px solid var(--accent); box-shadow: 0 15px 50px rgba(0,0,0,0.2); animation: pop 0.3s ease-out; }
+        @keyframes pop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .resultados-api { display: none; background: white; border-radius: 16px; margin-bottom: 12px; max-height: 180px; overflow-y: auto; border: 1px solid #eee; }
+        .resultado-item { padding: 10px 15px; border-bottom: 1px solid #f9f8f6; cursor: pointer; font-size: 13px; }
     </style>
 </head>
 <body>
 
     <div id="baddie-modal">
         <div class="modal-content">
-            <i class="ph-fill ph-shooting-star" style="color: var(--gold); font-size: 56px;"></i>
-            <h2 style="font-family: 'Fredoka'; color: var(--accent); font-size: 28px;">¡Misión Cumplida!</h2>
-            <p style="font-size: 14px; font-weight: 800; color: var(--text-light);">Eres una BADDIE ✨ Ganaste esto:</p>
-            <p id="recompensa-texto" style="font-family:'Fredoka'; font-weight: 700; color: var(--primary-dark); font-size: 20px; background: #f2fbf6; padding: 15px; border-radius: 16px; border: 2px dashed var(--success); margin: 15px 0;"></p>
+            <i class="ph-fill ph-shooting-star" style="color: var(--gold); font-size: 50px;"></i>
+            <h2 style="font-family: 'Fredoka'; color: var(--accent); font-size: 26px; margin: 10px 0;">¡Meta Lograda!</h2>
+            <p style="font-size: 13px; font-weight: 800; color: var(--text-light); margin-bottom: 15px;">Eres oficialmente una BADDIE ✨</p>
+            <p id="recompensa-texto" style="font-family:'Fredoka'; font-weight: 700; color: var(--primary-dark); font-size: 18px; background: #f2fbf6; padding: 15px; border-radius: 16px; border: 2px dashed var(--success); margin-bottom: 20px;"></p>
             <button class="btn-main" onclick="document.getElementById('baddie-modal').style.display='none'"><i class="ph-bold ph-heart"></i> ¡Lo merezco!</button>
         </div>
     </div>
 
     <div class="app-wrapper">
-        <div id="fattie-warning" class="fattie-warning">
-            <i class="ph-fill ph-warning-circle" style="font-size: 22px;"></i>
-            <span>Sin ejercicio hoy. ¡Peligro de Fattie Zone!</span>
-        </div>
-
         <header class="baddie-banner">
+            <div class="date-card">
+                <i class="ph-fill ph-calendar-blank"></i>
+                <input type="date" id="global-fecha" onchange="cambioFechaGlobal()">
+            </div>
             <h1>From Fattie to Baddie</h1>
             <p>Just do it <i class="ph-fill ph-star" style="color: var(--gold);"></i></p>
         </header>
 
-        <div class="date-card">
-            <i class="ph-fill ph-calendar-blank"></i>
-            <input type="date" id="global-fecha" onchange="cambioFechaGlobal()">
+        <div id="fattie-warning" class="fattie-warning">
+            <i class="ph-fill ph-warning-circle"></i>
+            <span>Sin ejercicio hoy. ¡Peligro de Fattie Zone!</span>
         </div>
 
         <div class="tabs">
@@ -140,100 +152,103 @@
 
         <div class="glass-panel">
             <div id="dashboard" class="tab-content active">
-                <div class="kpi-card" style="background: var(--primary); color: white; margin-bottom: 15px;">
-                    <h3 style="color: rgba(255,255,255,0.8);">Calorías Restantes Hoy</h3>
-                    <h2 id="cal-restantes">-- kcal</h2>
-                    <div style="font-size: 11px; margin-top: 5px; font-weight: 700; opacity: 0.9;" id="cal-detalle">Cargando...</div>
+                <div class="kpi-card" style="background: var(--primary); color: white; margin-bottom: 12px; width: 100%;">
+                    <h3 style="color: rgba(255,255,255,0.8);">Calorías Restantes</h3>
+                    <h2 id="cal-restantes" style="font-size: 26px;">-- kcal</h2>
+                    <div style="font-size: 10px; margin-top: 4px; font-weight: 700; opacity: 0.9;" id="cal-detalle">Cargando...</div>
                 </div>
                 
                 <div class="kpi-grid">
-                    <div class="kpi-card"><h3>Déficit Diario</h3><h2 id="deficit-hoy" style="color: var(--accent);">0</h2></div>
-                    <div class="kpi-card"><h3>Proteínas Hoy</h3><h2 id="prot-hoy" style="color: var(--primary-dark);">0g</h2></div>
+                    <div class="kpi-card"><h3>Déficit Real</h3><h2 id="deficit-hoy" style="color: var(--accent);">0</h2></div>
+                    <div class="kpi-card"><h3>Proteínas</h3><h2 id="prot-hoy" style="color: var(--primary-dark);">0g</h2></div>
                 </div>
 
-                <div class="section-title"><span>Tu Baddievolution</span><i class="ph-fill ph-sparkle" style="color: var(--gold); font-size: 20px;"></i></div>
-                <div class="kpi-grid" style="gap: 10px;">
+                <div class="section-title"><span>Evolución</span><i class="ph-fill ph-sparkle" style="color: var(--gold);"></i></div>
+                <div class="kpi-grid">
                     <div class="kpi-card"><h3>Peso</h3><div id="prog-peso" class="progress-text">--</div></div>
                     <div class="kpi-card"><h3>Cintura</h3><div id="prog-cintura" class="progress-text">--</div></div>
                     <div class="kpi-card"><h3>Cadera</h3><div id="prog-cadera" class="progress-text">--</div></div>
                     <div class="kpi-card"><h3>Busto</h3><div id="prog-busto" class="progress-text">--</div></div>
                 </div>
                 
-                <div id="health-indicators" style="background: #ffffff; padding: 15px; border-radius: 20px; margin-bottom: 20px; font-size: 13px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
-                    <strong style="color: var(--primary-dark); font-weight: 800;">Índice Cintura-Cadera (ICC):</strong> <span id="icc-value" style="font-weight: 900;">--</span><br>
-                    <div id="icc-badge" class="health-badge">Registra medidas</div>
+                <div id="health-indicators" style="background: #ffffff; padding: 12px; border-radius: 18px; margin-bottom: 15px; font-size: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.02);">
+                    <strong style="color: var(--primary-dark);">ICC:</strong> <span id="icc-value" style="font-weight: 900;">--</span> | <span id="icc-badge" style="font-weight: 800;">Sin datos</span>
                 </div>
-                <canvas id="graficoPeso"></canvas>
+
+                <div class="chart-container">
+                    <canvas id="graficoPeso" height="180"></canvas>
+                </div>
             </div>
 
             <div id="medidas" class="tab-content">
-                <div class="section-title">Medidas del Día</div>
+                <div class="section-title">Registrar Medidas</div>
                 <div class="row">
-                    <div class="form-group" style="flex:1;"><label>Peso (kg)</label><input type="number" id="peso" step="0.1"></div>
-                    <div class="form-group" style="flex:1;"><label>Busto (cm)</label><input type="number" id="busto" step="0.1"></div>
+                    <div class="form-group"><label>Peso (kg)</label><input type="number" id="peso" step="0.1"></div>
+                    <div class="form-group"><label>Busto (cm)</label><input type="number" id="busto" step="0.1"></div>
                 </div>
                 <div class="row">
                     <div class="form-group"><label>Cintura (cm)</label><input type="number" id="cintura" step="0.1"></div>
                     <div class="form-group"><label>Cadera (cm)</label><input type="number" id="cadera" step="0.1"></div>
                 </div>
-                <button class="btn-main" onclick="guardarMedidas()"><i class="ph-bold ph-floppy-disk"></i> Guardar Progreso del Día</button>
+                <button class="btn-main" onclick="guardarMedidas()"><i class="ph-bold ph-floppy-disk"></i> Guardar del Día</button>
             </div>
 
             <div id="nutricion" class="tab-content">
-                <div class="section-title">Buscar Alimento <span>(Chile)</span></div>
-                <div class="search-row">
-                    <div class="form-group" style="flex: 1; margin-bottom: 0;"><input type="text" id="busqueda-comida" placeholder="Ej. Lider, Carozzi..."></div>
+                <div class="section-title">Buscador Chile</div>
+                <div class="search-container">
+                    <input type="text" id="busqueda-comida" placeholder="¿Qué comiste?">
                     <button class="btn-search" onclick="buscarEnAPI()"><i class="ph-bold ph-magnifying-glass"></i></button>
                 </div>
                 <div id="contenedor-resultados" class="resultados-api"></div>
 
                 <div class="row">
-                    <div class="form-group" style="flex: 2;"><label>Alimento</label><input type="text" id="nombre-comida"></div>
-                    <div class="form-group" style="flex: 1;"><label>Cant. (g)</label><input type="number" id="gramos-comida" value="100" oninput="recalcularPorcion()"></div>
+                    <div class="form-group" style="flex: 2;"><label>Nombre</label><input type="text" id="nombre-comida"></div>
+                    <div class="form-group"><label>Gramos</label><input type="number" id="gramos-comida" value="100" oninput="recalcularPorcion()"></div>
                 </div>
                 <div class="row">
-                    <div class="form-group" style="flex: 1;"><label>Kcal</label><input type="number" id="calorias-comida"></div>
-                    <div class="form-group" style="flex: 1;"><label>Prot (g)</label><input type="number" id="proteina-comida"></div>
+                    <div class="form-group"><label>Kcal</label><input type="number" id="calorias-comida"></div>
+                    <div class="form-group"><label>Proteína</label><input type="number" id="proteina-comida"></div>
                 </div>
                 <button class="btn-main btn-secondary" onclick="agregarComida()"><i class="ph-bold ph-plus"></i> Añadir Comida</button>
-                <div id="lista-comidas" style="margin-top:20px;"></div>
+                
+                <div id="lista-comidas" style="margin-top:15px;"></div>
 
-                <div class="section-title" style="margin-top: 30px;">Ejercicios</div>
-                <div class="form-group"><label>Actividad</label><input type="text" id="nombre-ejercicio" placeholder="Ej. Pilates, Caminata..."></div>
+                <div class="section-title" style="margin-top: 25px;">Ejercicio</div>
+                <div class="form-group"><label>Actividad</label><input type="text" id="nombre-ejercicio" placeholder="Ej. Pilates"></div>
                 <div class="row">
                     <div class="form-group"><label>Minutos</label><input type="number" id="tiempo-ejercicio"></div>
-                    <div class="form-group"><label>Kcal Quemadas</label><input type="number" id="calorias-ejercicio"></div>
+                    <div class="form-group"><label>Kcal</label><input type="number" id="calorias-ejercicio"></div>
                 </div>
                 <button class="btn-main btn-secondary" onclick="agregarEjercicio()"><i class="ph-bold ph-plus"></i> Añadir Ejercicio</button>
-                <div id="lista-ejercicios" style="margin-top:20px;"></div>
+                <div id="lista-ejercicios" style="margin-top:15px;"></div>
             </div>
 
             <div id="config" class="tab-content">
-                <div class="section-title">Tu Perfil</div>
+                <div class="section-title">Perfil Base</div>
                 <div class="row">
-                    <div class="form-group"><label>Altura (cm)</label><input type="number" id="c-alt" value="160"></div>
+                    <div class="form-group"><label>Altura</label><input type="number" id="c-alt" value="160"></div>
                     <div class="form-group"><label>Edad</label><input type="number" id="c-edad"></div>
                 </div>
-                <div class="form-group"><label>Peso Inicio Oficial</label><input type="number" id="c-peso-i" placeholder="Ej. 74.5"></div>
+                <div class="form-group"><label>Peso Inicio Oficial</label><input type="number" id="c-peso-i"></div>
                 <div class="form-group">
-                    <label>Pasos Diarios (Actividad)</label>
+                    <label>Actividad</label>
                     <select id="c-act">
-                        <option value="1.2">Sedentario (< 5k)</option>
-                        <option value="1.3">Ligero (5k - 8k)</option>
-                        <option value="1.45">Moderado (8k - 10k)</option>
-                        <option value="1.6">Activo (> 10k)</option>
+                        <option value="1.2">Sedentario</option>
+                        <option value="1.3">Ligero</option>
+                        <option value="1.45">Moderado</option>
+                        <option value="1.6">Activo</option>
                     </select>
                 </div>
-                <button class="btn-main" onclick="guardarConfig()"><i class="ph-bold ph-check"></i> Guardar Perfil</button>
-                <button class="btn-main" style="background-color: #e2e8e5; color: var(--primary-dark); margin-top: 15px;" onclick="descargarRespaldo()"><i class="ph-bold ph-download-simple"></i> Respaldar base de datos</button>
+                <button class="btn-main" onclick="guardarConfig()">Actualizar Perfil</button>
+                <button class="btn-main" style="background-color: #e2e8e5; color: var(--primary-dark); margin-top: 10px;" onclick="descargarRespaldo()"><i class="ph-bold ph-download-simple"></i> Respaldar Datos</button>
 
-                <div class="section-title" style="margin-top: 40px; color: var(--accent);">Tus Metas y Proyecciones</div>
+                <div class="section-title" style="margin-top: 30px; color: var(--accent);">Tus Metas y Proyecciones</div>
                 <div class="row">
-                    <input type="number" id="m-peso" placeholder="Meta kg" style="flex:1;">
-                    <input type="text" id="m-premio" placeholder="Recompensa" style="flex:2;">
+                    <input type="number" id="m-peso" placeholder="Peso Meta" style="flex:1;">
+                    <input type="text" id="m-premio" placeholder="Premio" style="flex:2;">
                 </div>
                 <button class="btn-main btn-secondary" onclick="agregarMeta()"><i class="ph-bold ph-plus"></i> Crear Meta</button>
-                <div id="lista-metas" style="margin-top: 20px;"></div>
+                <div id="lista-metas" style="margin-top: 15px;"></div>
             </div>
         </div>
     </div>
@@ -242,13 +257,13 @@
         if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); }); }
         
         let db = { registros: {}, metas: [], config: { altura: 160, edad: '', actividad: 1.2, pesoI: '' } };
-        let baseKcal = 0, baseProt = 0;
-        let chart = null;
+        let baseK = 0, baseP = 0, chart = null;
 
         function init() {
             try {
-                const saved = localStorage.getItem('baddieData_V12');
+                const saved = localStorage.getItem('baddieData_V14');
                 if (saved) db = JSON.parse(saved);
+                if (!db.metas) db.metas = []; // Fix por si venía de versión vieja
                 document.getElementById('global-fecha').valueAsDate = new Date();
                 cargarConfigUI();
                 cambioFechaGlobal();
@@ -266,61 +281,57 @@
         function cambioFechaGlobal() {
             const f = document.getElementById('global-fecha').value;
             if (!db.registros[f]) db.registros[f] = { peso:0, cintura:0, cadera:0, busto:0, comidas:[], ejercicios:[] };
-            
             const hoy = db.registros[f];
             document.getElementById('peso').value = hoy.peso || '';
             document.getElementById('cintura').value = hoy.cintura || '';
             document.getElementById('cadera').value = hoy.cadera || '';
             document.getElementById('busto').value = hoy.busto || '';
-            
-            renderDiario();
-            renderMetas();
-            actualizarDashboard();
-            checkFattieZone();
+            renderDiario(); renderMetas(); actualizarDashboard(); checkFattieZone();
         }
 
         async function buscarEnAPI() {
             const q = document.getElementById('busqueda-comida').value;
             const resDiv = document.getElementById('contenedor-resultados');
             if(!q) return;
-            resDiv.innerHTML = '<p style="padding:15px; font-size:13px; text-align:center;"><i class="ph-bold ph-spinner ph-spin"></i> Buscando...</p>';
+            resDiv.innerHTML = '<p style="padding:15px; font-size:12px; text-align:center;">Buscando...</p>';
             resDiv.style.display = 'block';
             try {
                 const r = await fetch(`https://cl.openfoodfacts.org/cgi/search.pl?search_terms=${q}&json=1&page_size=5`);
                 const d = await r.json();
                 resDiv.innerHTML = '';
-                d.products.forEach(p => {
-                    const n = p.product_name_es || p.product_name;
-                    const k = Math.round(p.nutriments['energy-kcal_100g'] || 0);
-                    const pr = Math.round(p.nutriments['proteins_100g'] || 0);
-                    const i = document.createElement('div');
-                    i.className = 'resultado-item';
-                    i.innerHTML = `<b>${n}</b><br><small><i class="ph-fill ph-fire"></i> ${k} kcal | ${pr}g prot</small>`;
-                    i.onclick = () => {
-                        document.getElementById('nombre-comida').value = n;
-                        baseKcal = k; baseProt = pr;
-                        document.getElementById('gramos-comida').value = 100;
-                        recalcularPorcion();
-                        resDiv.style.display = 'none';
-                    };
-                    resDiv.appendChild(i);
-                });
+                if(d.products.length > 0) {
+                    d.products.forEach(p => {
+                        const n = p.product_name_es || p.product_name;
+                        const k = Math.round(p.nutriments['energy-kcal_100g'] || 0);
+                        const pr = Math.round(p.nutriments['proteins_100g'] || 0);
+                        const i = document.createElement('div');
+                        i.className = 'resultado-item';
+                        i.innerHTML = `<b>${n}</b><br><small>${k} kcal | ${pr}g prot</small>`;
+                        i.onclick = () => {
+                            document.getElementById('nombre-comida').value = n;
+                            baseK = k; baseP = pr;
+                            document.getElementById('gramos-comida').value = 100;
+                            recalcularPorcion(); resDiv.style.display = 'none';
+                        };
+                        resDiv.appendChild(i);
+                    });
+                } else { resDiv.innerHTML = '<p style="padding:10px; text-align:center;">No encontrado.</p>'; }
             } catch(e) { resDiv.style.display = 'none'; }
         }
 
         function recalcularPorcion() {
             const g = document.getElementById('gramos-comida').value / 100;
-            document.getElementById('calorias-comida').value = Math.round(baseKcal * g);
-            document.getElementById('proteina-comida').value = Math.round(baseProt * g);
+            document.getElementById('calorias-comida').value = Math.round(baseK * g);
+            document.getElementById('proteina-comida').value = Math.round(baseP * g);
         }
 
         function agregarComida() {
             const f = document.getElementById('global-fecha').value;
             const n = document.getElementById('nombre-comida').value;
             const k = parseFloat(document.getElementById('calorias-comida').value);
-            const p = parseFloat(document.getElementById('proteina-comida').value);
+            const p = parseFloat(document.getElementById('proteina-comida').value) || 0;
             const g = document.getElementById('gramos-comida').value;
-            if(!n || isNaN(k)) return;
+            if(!n || isNaN(k)) return alert("Pon nombre y calorías");
             db.registros[f].comidas.push({id: Date.now(), n: `${n} (${g}g)`, k, p});
             save(); cambioFechaGlobal();
             document.getElementById('nombre-comida').value = ''; document.getElementById('calorias-comida').value = ''; document.getElementById('proteina-comida').value = '';
@@ -331,7 +342,7 @@
             const n = document.getElementById('nombre-ejercicio').value;
             const t = document.getElementById('tiempo-ejercicio').value;
             const k = parseFloat(document.getElementById('calorias-ejercicio').value);
-            if(!n || isNaN(k)) return;
+            if(!n || isNaN(k)) return alert("Faltan datos");
             db.registros[f].ejercicios.push({id: Date.now(), n, t, k});
             save(); cambioFechaGlobal();
             document.getElementById('nombre-ejercicio').value = ''; document.getElementById('tiempo-ejercicio').value = ''; document.getElementById('calorias-ejercicio').value = '';
@@ -346,11 +357,11 @@
 
         function guardarMedidas() {
             const f = document.getElementById('global-fecha').value;
-            const p = parseFloat(document.getElementById('peso').value);
+            const p = parseFloat(document.getElementById('peso').value) || 0;
             db.registros[f].peso = p;
-            db.registros[f].cintura = parseFloat(document.getElementById('cintura').value);
-            db.registros[f].cadera = parseFloat(document.getElementById('cadera').value);
-            db.registros[f].busto = parseFloat(document.getElementById('busto').value);
+            db.registros[f].cintura = parseFloat(document.getElementById('cintura').value) || 0;
+            db.registros[f].cadera = parseFloat(document.getElementById('cadera').value) || 0;
+            db.registros[f].busto = parseFloat(document.getElementById('busto').value) || 0;
             
             db.metas.forEach(m => {
                 if(!m.done && p > 0 && p <= m.p) {
@@ -366,7 +377,7 @@
             const f = document.getElementById('global-fecha').value;
             const lc = document.getElementById('lista-comidas'); lc.innerHTML = '';
             db.registros[f].comidas.forEach(c => {
-                lc.innerHTML += `<div class="list-item"><div class="info"><b>${c.n}</b><small>${c.p||0}g prot</small></div><div class="stats"><span>${c.k} kcal</span><button class="delete-btn" onclick="borrarItem('c',${c.id})"><i class="ph-bold ph-trash"></i></button></div></div>`;
+                lc.innerHTML += `<div class="list-item"><div class="info"><b>${c.n}</b><small>${c.p}g prot</small></div><div class="stats"><span>${c.k} kcal</span><button class="delete-btn" onclick="borrarItem('c',${c.id})"><i class="ph-bold ph-trash"></i></button></div></div>`;
             });
             const le = document.getElementById('lista-ejercicios'); le.innerHTML = '';
             db.registros[f].ejercicios.forEach(e => {
@@ -378,9 +389,8 @@
             const f = document.getElementById('global-fecha').value;
             const hoy = db.registros[f];
             const conf = db.config;
-            
             let tIn = 0, tProt = 0, tOut = 0;
-            hoy.comidas.forEach(c => { tIn += c.k; tProt += (c.p || 0); });
+            hoy.comidas.forEach(c => { tIn += c.k; tProt += c.p; });
             hoy.ejercicios.forEach(e => { tOut += e.k; });
 
             const pesos = Object.keys(db.registros).sort().map(k=>db.registros[k].peso).filter(p=>p>0);
@@ -403,23 +413,20 @@
                 if(hoy.cintura && hoy.cadera) {
                     const icc = (hoy.cintura / hoy.cadera).toFixed(2);
                     document.getElementById('icc-value').innerText = icc;
-                    const b = document.getElementById('icc-badge');
-                    b.innerText = icc < 0.81 ? 'Bajo Riesgo ✨' : 'Riesgo Moderado';
-                    b.className = `health-badge ${icc < 0.81 ? 'badge-good' : 'badge-warn'}`;
+                    document.getElementById('icc-badge').innerText = icc < 0.81 ? 'Bajo Riesgo ✨' : 'Riesgo Moderado';
                 }
             }
-            
-            renderMejoras();
-            renderChart();
+            renderMejoras(); renderChart();
         }
 
         function renderMejoras() {
             const fechas = Object.keys(db.registros).sort();
             const getDiff = (key) => {
                 const vals = fechas.map(f=>db.registros[f][key]).filter(v=>v>0);
-                if(vals.length < 2) return '--';
+                if(vals.length < 1) return '--';
                 const first = (key==='peso' && db.config.pesoI) ? db.config.pesoI : vals[0];
                 const diff = (first - vals[vals.length-1]).toFixed(1);
+                if(diff == 0) return 'Igual';
                 return (diff > 0 ? '👇 -' : '📈 +') + Math.abs(diff);
             };
             document.getElementById('prog-peso').innerText = getDiff('peso');
@@ -437,35 +444,38 @@
                 let proy = '';
                 if(!m.done && uPeso > m.p) {
                     const dias = Math.ceil(((uPeso - m.p) * 7700) / 500);
-                    const fechaE = new Date(); fechaE.setDate(fechaE.getDate() + dias);
-                    proy = `<div style="font-size:11px; margin-top:8px; color:var(--primary-dark); background:white; padding:8px; border-radius:10px; display:flex; align-items:center; gap:8px;">
-                        <i class="ph-fill ph-calendar-heart" style="font-size:24px; color:var(--accent);"></i>
-                        <div><span style="font-weight:800; color:var(--text-main);">Faltan aprox. ${dias} días</span><br>Llegarás el ${fechaE.toLocaleDateString('es-ES')}</div>
+                    proy = `<div style="font-size:10px; margin-top:8px; color:var(--primary-dark); background:rgba(255,255,255,0.7); padding:8px; border-radius:10px; display:flex; align-items:center; gap:6px;">
+                        <i class="ph-fill ph-calendar-heart" style="font-size:18px; color:var(--accent);"></i>
+                        <div><span style="font-weight:900; color:var(--text-main);">Faltan aprox. ${dias} días</span></div>
                     </div>`;
                 }
                 cont.innerHTML += `<div class="list-item" style="border-left:6px solid ${m.done?'var(--success)':'var(--accent)'}">
-                    <div class="info"><b>Bajar a ${m.p} kg</b><small><i class="ph-fill ph-gift"></i> ${m.r}</small>${proy}</div>
+                    <div class="info"><b>Bajar a ${m.p} kg</b><small>🎁 ${m.r}</small>${proy}</div>
                     <button class="delete-btn" onclick="delMeta(${m.id})"><i class="ph-bold ph-trash"></i></button>
                 </div>`;
             });
         }
 
-        function addMeta() {
+        function agregarMeta() {
             const p = parseFloat(document.getElementById('m-peso').value);
             const r = document.getElementById('m-premio').value;
-            if(!p || !r) return;
+            if(!p || !r) return alert("Pon el peso meta y tu premio");
             db.metas.push({id:Date.now(), p, r, done:false});
             save(); cambioFechaGlobal();
             document.getElementById('m-peso').value = ''; document.getElementById('m-premio').value = '';
         }
-        function delMeta(id) { db.metas = db.metas.filter(m=>m.id!==id); save(); cambioFechaGlobal(); }
+        
+        function delMeta(id) { 
+            if(confirm("¿Borrar meta?")) {
+                db.metas = db.metas.filter(m=>m.id!==id); save(); cambioFechaGlobal(); 
+            }
+        }
 
         function cargarConfigUI() {
-            const c = db.config;
-            document.getElementById('c-alt').value = c.altura;
-            document.getElementById('c-edad').value = c.edad;
-            document.getElementById('c-peso-i').value = c.pesoI;
-            document.getElementById('c-act').value = c.actividad;
+            document.getElementById('c-alt').value = db.config.altura;
+            document.getElementById('c-edad').value = db.config.edad;
+            document.getElementById('c-peso-i').value = db.config.pesoI;
+            document.getElementById('c-act').value = db.config.actividad;
         }
 
         function guardarConfig() {
@@ -473,17 +483,16 @@
             db.config.edad = document.getElementById('c-edad').value;
             db.config.pesoI = document.getElementById('c-peso-i').value;
             db.config.actividad = document.getElementById('c-act').value;
-            save(); alert("Perfil guardado"); cambioFechaGlobal();
+            save(); alert("Perfil actualizado"); cambioFechaGlobal();
         }
 
         function descargarRespaldo() {
             const blob = new Blob([JSON.stringify(db)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = `Baddie_Backup_${new Date().toISOString().split('T')[0]}.json`;
-            a.click();
+            const a = document.createElement('a'); a.href = url; a.download = `Baddie_Backup.json`; a.click();
         }
 
-        function save() { localStorage.setItem('baddieData_V12', JSON.stringify(db)); }
+        function save() { localStorage.setItem('baddieData_V14', JSON.stringify(db)); }
 
         function renderChart() {
             const ctx = document.getElementById('graficoPeso').getContext('2d');
@@ -494,9 +503,9 @@
                 type: 'line',
                 data: {
                     labels: fechas.map(f=>f.split('-')[2]),
-                    datasets: [{ data: dataP, borderColor: '#f4a298', borderWidth: 4, tension: 0.4, fill: true, backgroundColor: 'rgba(244, 162, 152, 0.1)' }]
+                    datasets: [{ data: dataP, borderColor: '#f4a298', borderWidth: 3, tension: 0.4, fill: true, backgroundColor: 'rgba(244, 162, 152, 0.05)', pointBackgroundColor: '#fff', pointRadius: 4 }]
                 },
-                options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: true, grid: { color: '#f0edea' }, ticks: { font: {size: 10} } }, x: { grid: { display: false }, ticks: { font: {size: 10} } } } }
             });
         }
 
