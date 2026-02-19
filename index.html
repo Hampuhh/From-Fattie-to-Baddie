@@ -13,16 +13,30 @@
     <link rel="icon" type="image/png" href="icono.png">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
         :root { --primary: #9bbfab; --primary-dark: #7a9e8a; --bg-color: #f8f9fa; --text-main: #4a4a4a; --text-light: #888888; --accent: #d4a5a5; --danger: #e74c3c; --success: #2ecc71; }
         
-        /* AQUÍ ESTÁN TUS IMÁGENES .PNG */
         body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); background-image: url('fondo.png'); background-size: cover; background-position: center; background-attachment: fixed; color: var(--text-main); margin: 0; padding: 15px; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
         .app-container { background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); width: 100%; max-width: 500px; min-height: 85vh; border-radius: 24px; box-shadow: 0 12px 35px rgba(0,0,0,0.15); overflow: hidden; padding-bottom: 20px; position: relative; }
         
-        /* BANNER EN .PNG */
-        .baddie-banner { background-image: linear-gradient(rgba(212, 165, 165, 0.75), rgba(181, 131, 141, 0.75)), url('banner.png'); background-size: cover; background-position: center; color: white; text-align: center; padding: 35px 20px; font-size: 26px; font-weight: 700; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        /* BANNER CUTE Y MÁS VISIBLE */
+        .baddie-banner { 
+            /* Reduje el porcentaje de 0.75 a 0.35 para que tu imagen se vea mucho más clara */
+            background-image: linear-gradient(rgba(212, 165, 165, 0.35), rgba(181, 131, 141, 0.35)), url('banner.png'); 
+            background-size: cover; 
+            background-position: center; 
+            color: white; 
+            text-align: center; 
+            padding: 55px 20px; /* Más padding = banner más alto */
+            font-size: 42px; /* Letra más grande */
+            font-family: 'Caveat', cursive; /* La nueva fuente cute */
+            font-weight: 700; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+            margin-bottom: 20px; 
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.6); /* Sombra de texto para que lea bien sobre la foto */
+        }
         
         .fattie-warning { background-color: var(--danger); color: white; text-align: center; padding: 10px; font-weight: 600; font-size: 14px; display: none; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { background-color: #e74c3c; } 50% { background-color: #c0392b; } 100% { background-color: #e74c3c; } }
@@ -55,13 +69,13 @@
         .kpi-card h2 { margin: 0; font-size: 24px; }
         .kpi-card.main-kpi h2.exceeded { color: #ffcccc; }
         .progress-text { font-size: 12px; font-weight: 600; color: var(--success); margin-top: 5px;}
-        .section-title { font-size: 15px; font-weight: 600; color: var(--primary-dark); margin-bottom: 10px; display: flex; justify-content: space-between; border-bottom: 2px solid #f0f4f2; padding-bottom: 5px;}
+        .section-title { font-size: 16px; font-weight: 600; color: var(--primary-dark); margin-bottom: 10px; display: flex; justify-content: space-between; border-bottom: 2px solid #f0f4f2; padding-bottom: 5px;}
 
         .list-section { margin-top: 20px; }
         .list-item { display: flex; justify-content: space-between; align-items: center; background: rgba(253, 253, 253, 0.9); border: 1px solid #eee; padding: 10px; border-radius: 10px; margin-bottom: 8px; font-size: 12px; }
         .list-item .info { display: flex; flex-direction: column; flex: 1;}
         .list-item .stats { font-weight: 600; color: var(--primary-dark); text-align: right; min-width: 70px;}
-        .delete-btn { color: var(--danger); background: none; border: none; font-weight: bold; cursor: pointer; }
+        .delete-btn { color: var(--danger); background: none; border: none; font-weight: bold; cursor: pointer; padding: 5px;}
         
         .goal-item { border-left: 4px solid var(--accent); align-items: flex-start;}
         .goal-item.achieved { background: #f0f9f4; border-left: 4px solid var(--success); opacity: 0.8;}
@@ -71,7 +85,6 @@
         .modal-content h2 { color: var(--accent); font-size: 24px; margin-bottom: 10px;}
         .modal-content p#recompensa-texto { font-weight: 600; color: var(--primary-dark); font-size: 16px; margin: 15px 0; padding: 10px; background: #f0f4f2; border-radius: 10px;}
         
-        /* Estilos del nuevo buscador */
         .resultados-api { display: none; background: #fff; border: 1px solid #e1e8e4; border-radius: 10px; padding: 5px; margin-bottom: 15px; max-height: 180px; overflow-y: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .resultado-item { padding: 10px; border-bottom: 1px solid #f0f4f2; cursor: pointer; transition: 0.2s; }
         .resultado-item:hover { background-color: #f0f9f4; }
@@ -93,7 +106,7 @@
         <div id="fattie-warning" class="fattie-warning">
             🚨 ¡PELIGRO! Son más de las 10 PM y no hay ejercicio. Estás en riesgo de entrar en la Fattie Zone. 🚨
         </div>
-        <div class="baddie-banner">From Fattie to Baddie ✨</div>
+        <div class="baddie-banner">From Fattie to Baddie</div>
 
         <div class="content-padding">
             <div class="tabs">
@@ -114,7 +127,7 @@
                     <div class="kpi-card"><h3>Déficit Total</h3><h2 id="deficit-hoy" style="color: var(--accent);">0 kcal</h2></div>
                 </div>
 
-                <div class="section-title">Tu Evolución Baddie</div>
+                <div class="section-title">Tu Baddievolution ✨</div>
                 <div class="kpi-grid-4">
                     <div class="kpi-card"><h3>Peso</h3><div id="prog-peso" class="progress-text">--</div></div>
                     <div class="kpi-card"><h3>Cintura</h3><div id="prog-cintura" class="progress-text">--</div></div>
@@ -154,9 +167,13 @@
 
                     <div class="row">
                         <div class="form-group" style="flex: 2;"><label>Alimento</label><input type="text" id="nombre-comida"></div>
+                        <div class="form-group" style="flex: 1;"><label>Cant. (g)</label><input type="number" id="gramos-comida" value="100" oninput="recalcularPorcion()"></div>
+                    </div>
+                    <div class="row">
                         <div class="form-group" style="flex: 1;"><label>Kcal</label><input type="number" id="calorias-comida"></div>
                         <div class="form-group" style="flex: 1;"><label>Prot (g)</label><input type="number" id="proteina-comida"></div>
                     </div>
+
                     <button class="btn-main btn-secondary" onclick="agregarComida()">+ Agregar Comida</button>
                     <div id="lista-comidas" style="margin-top:10px;"></div>
                 </div>
@@ -179,14 +196,17 @@
                     <div class="form-group"><label>Altura (cm)</label><input type="number" id="altura" value="160"></div>
                     <div class="form-group"><label>Edad</label><input type="number" id="edad"></div>
                 </div>
-                <div class="form-group">
-                    <label>Nivel de Actividad</label>
-                    <select id="actividad">
-                        <option value="1.2">Sedentario</option>
-                        <option value="1.375">Ligero (1-3 días/sem)</option>
-                        <option value="1.55">Moderado (3-5 días/sem)</option>
-                        <option value="1.725">Fuerte (6-7 días/sem)</option>
-                    </select>
+                <div class="row">
+                    <div class="form-group"><label>Peso Inicial Oficial (kg)</label><input type="number" id="peso-inicial" placeholder="Tu base"></div>
+                    <div class="form-group">
+                        <label>Nivel de Actividad</label>
+                        <select id="actividad">
+                            <option value="1.2">Sedentario</option>
+                            <option value="1.375">Ligero (1-3 días)</option>
+                            <option value="1.55">Moderado (3-5 días)</option>
+                            <option value="1.725">Fuerte (6-7 días)</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>Déficit Calórico Objetivo</label>
@@ -215,6 +235,10 @@
             window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); });
         }
 
+        // Variables globales para calcular porciones dinámicas
+        let baseKcal100g = 0;
+        let baseProt100g = 0;
+
         document.getElementById('fecha-medidas').valueAsDate = new Date();
         document.getElementById('fecha-nutricion').valueAsDate = new Date();
         let chartInstance = null;
@@ -230,13 +254,13 @@
         }
 
         function obtenerDB() {
-            let db = JSON.parse(localStorage.getItem('baddieTrackerV6'));
-            if (!db) db = { registros: {}, listaMetas: [], config: { altura: 160, edad: '', actividad: 1.2, deficit: 500 } };
+            let db = JSON.parse(localStorage.getItem('baddieTrackerV7'));
+            if (!db) db = { registros: {}, listaMetas: [], config: { altura: 160, edad: '', actividad: 1.2, deficit: 500, pesoInicial: '' } };
             if (!db.listaMetas) db.listaMetas = [];
-            if (!db.config) db.config = { altura: 160, edad: '', actividad: 1.2, deficit: 500 };
+            if (!db.config) db.config = { altura: 160, edad: '', actividad: 1.2, deficit: 500, pesoInicial: '' };
             return db;
         }
-        function guardarDB(db) { localStorage.setItem('baddieTrackerV6', JSON.stringify(db)); }
+        function guardarDB(db) { localStorage.setItem('baddieTrackerV7', JSON.stringify(db)); }
         function obtenerDia(fecha, db) {
             if (!db.registros[fecha]) db.registros[fecha] = { peso: 0, cintura: 0, cadera: 0, busto: 0, comidas: [], ejercicios: [] };
             return db.registros[fecha];
@@ -246,6 +270,7 @@
             let db = obtenerDB();
             document.getElementById('altura').value = db.config.altura || 160;
             if(db.config.edad) document.getElementById('edad').value = db.config.edad;
+            if(db.config.pesoInicial) document.getElementById('peso-inicial').value = db.config.pesoInicial;
             document.getElementById('actividad').value = db.config.actividad || 1.2;
             document.getElementById('deficit-config').value = db.config.deficit || 500;
             renderizarMetas();
@@ -255,6 +280,7 @@
             let db = obtenerDB();
             db.config.altura = parseFloat(document.getElementById('altura').value);
             db.config.edad = parseFloat(document.getElementById('edad').value);
+            db.config.pesoInicial = parseFloat(document.getElementById('peso-inicial').value) || 0;
             db.config.actividad = parseFloat(document.getElementById('actividad').value);
             db.config.deficit = parseFloat(document.getElementById('deficit-config').value);
             guardarDB(db); alert("Configuración guardada."); actualizarDashboard(); renderizarMetas();
@@ -274,7 +300,7 @@
         function renderizarMetas() {
             let db = obtenerDB(); const lista = document.getElementById('lista-metas'); lista.innerHTML = '';
             const deficitDiario = document.getElementById('deficit-config').value || 500;
-            const ultimoPeso = Object.values(db.registros).map(r=>r.peso).filter(p=>p>0).pop() || 0;
+            const ultimoPeso = Object.values(db.registros).map(r=>r.peso).filter(p=>p>0).pop() || db.config.pesoInicial || 0;
 
             db.listaMetas.sort((a,b) => b.peso - a.peso).forEach(m => {
                 const clase = m.lograda ? 'goal-item achieved' : 'goal-item';
@@ -289,7 +315,6 @@
                 } else if (!m.lograda && ultimoPeso > 0 && m.peso >= ultimoPeso) {
                      etaHTML = `<div style="font-size:11px; color:var(--danger); margin-top:5px;">⚠️ Meta superior a tu peso actual.</div>`;
                 }
-
                 lista.innerHTML += `<div class="list-item ${clase}"><div class="info"><span style="font-weight:bold; font-size:14px;">Alcanzar ${m.peso} kg</span><span style="font-size:12px; margin-top: 3px;">🎁 ${m.recompensa}</span>${etaHTML}</div><div class="stats"><span style="font-size:10px;">${status}</span><br><button class="delete-btn" onclick="borrarMeta(${m.id})">✖</button></div></div>`;
             });
         }
@@ -318,7 +343,7 @@
             guardarDB(db); alert("¡Cuerpo actualizado!"); verificarMetasAlRegistrarPeso(pesoNuevo, db); actualizarDashboard(); renderizarMetas();
         }
 
-        // --- NUEVO BUSCADOR MEJORADO ---
+        // BÚSQUEDA Y CÁLCULO DINÁMICO
         async function buscarEnAPI() {
             const query = document.getElementById('busqueda-comida').value;
             const contenedor = document.getElementById('contenedor-resultados');
@@ -350,9 +375,11 @@
                         
                         item.onclick = () => {
                             document.getElementById('nombre-comida').value = name;
-                            document.getElementById('calorias-comida').value = kcal;
-                            document.getElementById('proteina-comida').value = prot;
-                            contenedor.style.display = 'none'; // Ocultar al seleccionar
+                            baseKcal100g = kcal;
+                            baseProt100g = prot;
+                            document.getElementById('gramos-comida').value = 100;
+                            recalcularPorcion(); // Llenar automáticamente los inputs
+                            contenedor.style.display = 'none';
                         };
                         contenedor.appendChild(item);
                     });
@@ -366,16 +393,36 @@
             }
         }
 
+        // Función que recalcula calorías y proteínas cuando cambias los gramos
+        function recalcularPorcion() {
+            const gramos = parseFloat(document.getElementById('gramos-comida').value) || 0;
+            document.getElementById('calorias-comida').value = Math.round((baseKcal100g / 100) * gramos);
+            document.getElementById('proteina-comida').value = Math.round((baseProt100g / 100) * gramos);
+        }
+
         function agregarComida() {
             const fecha = document.getElementById('fecha-nutricion').value;
             let db = obtenerDB(); let dia = obtenerDia(fecha, db);
-            const nombre = document.getElementById('nombre-comida').value;
+            let nombre = document.getElementById('nombre-comida').value;
+            const gramos = document.getElementById('gramos-comida').value;
             const cal = parseFloat(document.getElementById('calorias-comida').value) || 0;
             const prot = parseFloat(document.getElementById('proteina-comida').value) || 0;
             if(!nombre || cal === 0) return alert("Faltan datos");
+            
+            // Le agregamos el peso al nombre para que se vea en el diario
+            nombre = `${nombre} (${gramos}g)`;
+            
             dia.comidas.push({ id: Date.now(), nombre, cal, prot }); guardarDB(db);
-            document.getElementById('nombre-comida').value = ''; document.getElementById('calorias-comida').value = ''; document.getElementById('proteina-comida').value = ''; document.getElementById('busqueda-comida').value = '';
+            
+            // Limpiar
+            document.getElementById('nombre-comida').value = ''; 
+            document.getElementById('gramos-comida').value = 100; 
+            document.getElementById('calorias-comida').value = ''; 
+            document.getElementById('proteina-comida').value = ''; 
+            document.getElementById('busqueda-comida').value = '';
             document.getElementById('contenedor-resultados').style.display = 'none';
+            baseKcal100g = 0; baseProt100g = 0;
+            
             renderizarDiario(); actualizarDashboard();
         }
 
@@ -419,7 +466,24 @@
 
         function calcularMejoras(db) {
             const fechas = Object.keys(db.registros).sort();
-            formatearProgreso('prog-peso', fechas.map(f => db.registros[f].peso), 'kg');
+            
+            // NUEVA LÓGICA DE PESO BASADA EN EL PESO INICIAL OFICIAL
+            const pesos = fechas.map(f => db.registros[f].peso).filter(p => p > 0);
+            const elPeso = document.getElementById('prog-peso');
+            
+            if (pesos.length > 0) {
+                // Si tienes un peso inicial configurado lo usa, si no, usa el primer peso que registraste
+                const primerPeso = (db.config.pesoInicial && db.config.pesoInicial > 0) ? db.config.pesoInicial : pesos[0];
+                const ultimoPeso = pesos[pesos.length - 1];
+                const diff = (primerPeso - ultimoPeso).toFixed(1);
+                
+                if(diff > 0) { elPeso.innerText = `👇 -${diff} kg`; elPeso.style.color = 'var(--success)'; }
+                else if (diff < 0) { elPeso.innerText = `📈 +${Math.abs(diff)} kg`; elPeso.style.color = 'var(--danger)'; }
+                else { elPeso.innerText = "Igual"; elPeso.style.color = 'var(--text-light)'; }
+            } else {
+                elPeso.innerText = "--"; elPeso.style.color = 'var(--text-light)';
+            }
+
             formatearProgreso('prog-cintura', fechas.map(f => db.registros[f].cintura), 'cm');
             formatearProgreso('prog-cadera', fechas.map(f => db.registros[f].cadera), 'cm');
             formatearProgreso('prog-busto', fechas.map(f => db.registros[f].busto), 'cm');
@@ -436,7 +500,7 @@
             hoy.ejercicios.forEach(e => { totalOut += e.cal; });
 
             document.getElementById('prot-hoy').innerText = `${totalProt} g`;
-            let ultimoPeso = hoy.peso > 0 ? hoy.peso : Object.values(db.registros).map(r=>r.peso).filter(p=>p>0).pop() || 0;
+            let ultimoPeso = hoy.peso > 0 ? hoy.peso : Object.values(db.registros).map(r=>r.peso).filter(p=>p>0).pop() || db.config.pesoInicial || 0;
 
             if (db.config.edad && db.config.altura && ultimoPeso > 0) {
                 const bmr = (10 * ultimoPeso) + (6.25 * db.config.altura) - (5 * db.config.edad) - 161;
@@ -451,7 +515,6 @@
 
                 document.getElementById('cal-detalle').innerText = `Meta: ${metaCalorias} | Consumido: ${totalIn} | Ejercicio: ${totalOut}`;
                 
-                // LÓGICA DE DÉFICIT CORREGIDA: Empieza en 0 si no has comido nada.
                 if (totalIn === 0) {
                     document.getElementById('deficit-hoy').innerText = "0 kcal";
                     document.getElementById('deficit-hoy').style.color = "var(--text-light)";
@@ -462,13 +525,20 @@
                 }
             } else { document.getElementById('cal-detalle').innerText = "Llena tu edad y peso en Config / Cuerpo"; }
 
+            // Configurar el gráfico
             const fechasOrd = Object.keys(db.registros).sort();
-            const pesos = fechasOrd.map(f => db.registros[f].peso).filter(p => p > 0);
-            const labels = fechasOrd.filter(f => db.registros[f].peso > 0).map(f => f.slice(5));
+            const pesosArray = fechasOrd.map(f => db.registros[f].peso).filter(p => p > 0);
+            const labelsArray = fechasOrd.filter(f => db.registros[f].peso > 0).map(f => f.slice(5));
+            
+            // Agregar el peso inicial al principio del gráfico si existe
+            if(db.config.pesoInicial && db.config.pesoInicial > 0) {
+                pesosArray.unshift(db.config.pesoInicial);
+                labelsArray.unshift("Inicio");
+            }
 
             if (chartInstance) chartInstance.destroy();
             chartInstance = new Chart(document.getElementById('graficoPeso').getContext('2d'), {
-                type: 'line', data: { labels: labels, datasets: [{ label: 'Peso (kg)', data: pesos, borderColor: '#d4a5a5', backgroundColor: 'rgba(212, 165, 165, 0.2)', borderWidth: 3, pointBackgroundColor: '#fff', fill: true, tension: 0.4 }] },
+                type: 'line', data: { labels: labelsArray, datasets: [{ label: 'Peso (kg)', data: pesosArray, borderColor: '#d4a5a5', backgroundColor: 'rgba(212, 165, 165, 0.2)', borderWidth: 3, pointBackgroundColor: '#fff', fill: true, tension: 0.4 }] },
                 options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: false } } }
             });
         }
