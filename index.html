@@ -324,66 +324,34 @@
             return data;
         }
 
-        async function consultarAI() {
-            const q = document.getElementById('busqueda-ai').value;
+     async function consultarAI() {
             const key = db.config.apiKey;
+            if (!key) return alert("❌ No hay API Key guardada.");
             
-            if (!key) return alert("❌ Primero pega tu API Key en la pestaña de Metas (Ajustes)");
-            if (!q) return;
+            alert("Probando conexión directa con Google...");
             
-            document.getElementById('ai-loading').style.display = 'block';
-            document.getElementById('ai-response').style.display = 'none';
+            // Usamos el modelo más básico y estable
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
             
-            const prompt = `Actúa como nutricionista chilena. El usuario comió esto: "${q}". 
-Calcula las calorías y macronutrientes aproximados de manera realista. 
-IMPORTANTE: Tu respuesta debe ser ÚNICAMENTE un objeto JSON, sin formato markdown ni texto extra, con esta estructura exacta:
-{"nombre": "Nombre de la comida (porción)", "calorias": 100, "proteinas": 10}`;
-
             try {
-                let data;
-                let errorLog = "";
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: "Hola, dime 'funciona' en formato JSON." }] }] })
+                });
                 
-                // ARRAY DE MODELOS: Del más nuevo y capaz, al más antiguo
-                const modelosPosibles = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-flash-8b'];
-                let exito = false;
-
-                // Intentamos con cada modelo de la lista uno por uno
-                for (let modelo of modelosPosibles) {
-                    try {
-                        data = await fetchGemini(prompt, key, modelo);
-                        exito = true;
-                        break; // Si el modelo funciona, rompemos el ciclo y continuamos
-                    } catch (e) {
-                        console.warn(`El modelo ${modelo} falló o no existe:`, e.message);
-                        errorLog = e.message; // Guardamos el error por si todos fallan
-                    }
+                const data = await res.json();
+                console.log("Respuesta cruda de Google:", data);
+                
+                if (!res.ok) {
+                    // AQUÍ VEREMOS EL ERROR REAL
+                    alert(`🚨 ERROR DE GOOGLE:\nCódigo: ${res.status}\nMensaje: ${data.error?.message}`);
+                } else {
+                    alert("✅ ¡LA API KEY FUNCIONA! El problema era otra cosa.");
                 }
-
-                // Si recorrió todos los modelos y ninguno funcionó, lanzamos la alerta
-                if (!exito) {
-                    throw new Error(`Google rechazó los modelos. Último error: ${errorLog}`);
-                }
-
-                // Validación de seguridad de la respuesta
-                if (!data.candidates || !data.candidates[0].content) {
-                    throw new Error("El modelo bloqueó la consulta por seguridad o vino vacía.");
-                }
-
-                let textResponse = data.candidates[0].content.parts[0].text;
-                textResponse = textResponse.replace(/```json/gi, '').replace(/```/g, '').trim();
-                currentAIResult = JSON.parse(textResponse);
                 
-                currentAIResult.calorias = parseInt(currentAIResult.calorias) || 0;
-                currentAIResult.proteinas = parseInt(currentAIResult.proteinas) || 0;
-                
-                document.getElementById('ai-texto').innerHTML = `<b>${currentAIResult.nombre}</b><br><i class="ph-fill ph-fire" style="color:var(--accent);"></i> ${currentAIResult.calorias} kcal | <i class="ph-fill ph-barbell" style="color:var(--primary-dark);"></i> ${currentAIResult.proteinas}g prot`;
-                document.getElementById('ai-response').style.display = 'block';
-                document.getElementById('btn-add-ai').onclick = addComidaAI;
-                
-            } catch (finalErr) { 
-                alert(`⚠️ Error de IA:\n${finalErr.message}`); 
-            } finally {
-                document.getElementById('ai-loading').style.display = 'none';
+            } catch (e) {
+                alert(`⚠️ Error de red o conexión: ${e.message}`);
             }
         }
 
