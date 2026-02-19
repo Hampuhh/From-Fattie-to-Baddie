@@ -308,51 +308,61 @@
             renderDiario(); renderMetas(); actualizarDashboard(); checkFattieZone();
         }
 
-       // --- MOTOR GEMINI A PRUEBA DE FALLOS ---
+// --- MOTOR GEMINI ACTUALIZADO (SERIE 2.5) ---
         async function fetchGemini(prompt, key, modelo) {
-            // Volvemos a v1beta que es donde están los modelos más rápidos (Flash) de última generación
             const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${key}`;
             const res = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    contents: [{ parts: [{ text: prompt }] }] 
-                })
+                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
             });
             const data = await res.json();
-            if (!res.ok) throw new Error(data.error?.message || "Error en la API");
+            if (!res.ok) throw new Error(data.error?.message || "Error desconocido en la API");
             return data;
         }
 
-    async function consultarAI() {
+        async function consultarAI() {
+            const q = document.getElementById('busqueda-ai').value;
             const key = db.config.apiKey;
-            if (!key) return alert("❌ No hay API Key guardada.");
             
-            alert("Consultando el catálogo de Google para ver qué modelos tienes habilitados...");
+            if (!key) return alert("❌ Primero pega tu API Key en la pestaña de Metas (Ajustes)");
+            if (!q) return;
             
-            // Le preguntamos a Google la lista completa de modelos para tu llave
-            const url = `https://generativelanguage.googleapis.com/v1beta/models?key=${key}`;
+            document.getElementById('ai-loading').style.display = 'block';
+            document.getElementById('ai-response').style.display = 'none';
             
+            // Mantenemos tu prompt original
+            const prompt = `Actúa como nutricionista chilena. El usuario comió esto: "${q}". 
+Calcula las calorías y macronutrientes aproximados de manera realista. 
+IMPORTANTE: Tu respuesta debe ser ÚNICAMENTE un objeto JSON, sin formato markdown ni texto extra, con esta estructura exacta:
+{"nombre": "Nombre de la comida (porción)", "calorias": 100, "proteinas": 10}`;
+
             try {
-                const res = await fetch(url);
-                const data = await res.json();
-                
-                if (!res.ok) {
-                    alert(`🚨 ERROR DE GOOGLE:\n${data.error?.message}`);
-                    return;
+                // ¡AQUÍ ESTÁ LA MAGIA! Usamos el modelo que sí tienes habilitado
+                const data = await fetchGemini(prompt, key, 'gemini-2.5-flash');
+
+                if (!data.candidates || !data.candidates[0].content) {
+                    throw new Error("El modelo no devolvió texto o bloqueó la consulta.");
                 }
+
+                let textResponse = data.candidates[0].content.parts[0].text;
                 
-                // Filtramos para ver solo los que sirven para generar texto
-                const modelosSoportados = data.models
-                    .filter(m => m.supportedGenerationMethods.includes("generateContent"))
-                    .map(m => m.name.replace('models/', ''));
+                // Limpieza de formato por si la IA añade comillas de código
+                textResponse = textResponse.replace(/```json/gi, '').replace(/```/g, '').trim();
+                currentAIResult = JSON.parse(textResponse);
                 
-                // Mostramos los primeros 5 en un mensaje para que me los digas
-                const listaCorta = modelosSoportados.slice(0, 5).join('\n');
-                alert(`✅ ¡Catálogo recibido!\nEstos son los modelos que puedes usar:\n\n${listaCorta}\n\nPor favor, cópiame un par de estos nombres.`);
+                currentAIResult.calorias = parseInt(currentAIResult.calorias) || 0;
+                currentAIResult.proteinas = parseInt(currentAIResult.proteinas) || 0;
                 
-            } catch (e) {
-                alert(`⚠️ Error de red o conexión: ${e.message}`);
+                // Mostramos el resultado en la interfaz
+                document.getElementById('ai-texto').innerHTML = `<b>${currentAIResult.nombre}</b><br><i class="ph-fill ph-fire" style="color:var(--accent);"></i> ${currentAIResult.calorias} kcal | <i class="ph-fill ph-barbell" style="color:var(--primary-dark);"></i> ${currentAIResult.proteinas}g prot`;
+                document.getElementById('ai-response').style.display = 'block';
+                document.getElementById('btn-add-ai').onclick = addComidaAI;
+                
+            } catch (finalErr) { 
+                alert(`⚠️ Error final de conexión:\n${finalErr.message}`); 
+            } finally {
+                document.getElementById('ai-loading').style.display = 'none';
             }
         }
 
