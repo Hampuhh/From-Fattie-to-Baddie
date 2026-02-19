@@ -1,4 +1,4 @@
-const CACHE_NAME = 'baddie-tracker-v3'; // <-- Subimos a v3 para que tu celular descargue el nuevo código
+const CACHE_NAME = 'baddie-tracker-v4'; // <-- Caché v4 para aplicar todo lo kawaii
 const urlsToCache = [
   './',
   './index.html',
