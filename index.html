@@ -19,7 +19,7 @@
         :root { 
             --primary: #84a99c; --primary-dark: #6b8d81; --bg-color: #fdf6f5; 
             --text-main: #5a504b; --text-light: #a09894; --accent: #f4a298; 
-            --danger: #f28b82; --success: #81c784; --gold: #ffd54f;
+            --danger: #e74c3c; --success: #81c784; --gold: #ffd54f;
         }
         
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -38,27 +38,25 @@
 
         .app-wrapper { width: 100%; max-width: 500px; display: flex; flex-direction: column; gap: 12px; padding-bottom: 30px; }
         
-        /* BANNER CON FECHA INTEGRADA ARRIBA A LA DERECHA */
+        /* BANNER */
         .baddie-banner { 
             background-image: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)), url('banner.png'); 
             background-size: cover; background-position: center; color: white; text-align: center; 
-            padding: 50px 20px 35px 20px; border-radius: 24px; box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            padding: 45px 20px 30px 20px; border-radius: 24px; box-shadow: 0 8px 20px rgba(0,0,0,0.08);
             position: relative; overflow: hidden;
         }
         
-        .date-card {
-            position: absolute; top: 12px; right: 12px;
-            background: rgba(255, 255, 255, 0.9); border-radius: 12px; padding: 4px 10px; 
-            display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        .date-mini {
+            position: absolute; top: 10px; right: 10px;
+            background: rgba(255, 255, 255, 0.85); border-radius: 30px; padding: 3px 10px; 
+            display: flex; align-items: center; gap: 5px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            backdrop-filter: blur(4px);
         }
-        .date-card i { font-size: 14px; color: var(--primary); }
-        .date-card input { 
-            border: none; background: transparent; font-size: 11px; font-weight: 900; 
-            color: var(--text-main); outline: none; font-family: 'Nunito'; width: 95px;
-        }
+        .date-mini i { font-size: 12px; color: var(--primary); }
+        .date-mini input { border: none; background: transparent; font-size: 10px; font-weight: 900; color: var(--text-main); outline: none; font-family: 'Nunito'; width: 85px; cursor: pointer; }
 
         .baddie-banner h1 {
-            margin: 0; font-size: 36px; font-family: 'Fredoka', sans-serif; font-weight: 700; color: #ffffff;
+            margin: 0; font-size: 34px; font-family: 'Fredoka', sans-serif; font-weight: 700; color: #ffffff;
             text-shadow: -2px -2px 0 #5a504b, 2px -2px 0 #5a504b, -2px 2px 0 #5a504b, 2px 2px 0 #5a504b, 3px 5px 0 rgba(90, 80, 75, 0.2);
             letter-spacing: 1px; line-height: 1.1;
         }
@@ -74,10 +72,23 @@
         .tab-btn.active i { color: white; }
 
         .glass-panel { background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(15px); border-radius: 24px; padding: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.05); }
-
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.2s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; } }
+
+        /* ALERTAS */
+        .alert-box { 
+            background-color: var(--danger); color: white; text-align: center; padding: 12px; 
+            border-radius: 14px; font-weight: 800; font-size: 12px; display: none; 
+            align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px; 
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+            animation: shake 0.5s ease-in-out;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
 
         .form-group { margin-bottom: 12px; }
         label { display: block; font-size: 10px; font-weight: 800; margin-bottom: 4px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px;}
@@ -93,7 +104,7 @@
         .progress-text { font-size: 11px; font-weight: 900; color: var(--success); margin-top: 4px; display: flex; justify-content: center; align-items: center; gap: 3px;}
 
         .search-container { display: flex; gap: 8px; margin-bottom: 12px; }
-        .btn-search { background: var(--accent); color: white; border: none; border-radius: 14px; width: 50px; display: flex; justify-content: center; align-items: center; font-size: 20px; box-shadow: 0 4px 10px rgba(244, 162, 152, 0.2); cursor: pointer;}
+        .btn-search { background: var(--accent); color: white; border: none; border-radius: 14px; width: 55px; display: flex; justify-content: center; align-items: center; font-size: 20px; cursor: pointer;}
 
         .list-item { display: flex; justify-content: space-between; align-items: center; background: white; padding: 12px; border-radius: 15px; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
         .list-item .info { display: flex; flex-direction: column; flex: 1; gap: 2px; }
@@ -103,17 +114,13 @@
         .row { display: flex; gap: 10px; }
         .row .form-group { flex: 1; }
 
-        .chart-container { background: white; border-radius: 20px; padding: 15px; margin-top: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
         .section-title { font-size: 15px; font-weight: 800; color: var(--primary-dark); margin: 15px 0 10px 0; display: flex; justify-content: space-between; align-items: center;}
+        .health-badge { display: inline-block; padding: 6px 10px; border-radius: 10px; font-size: 11px; font-weight: 800; margin-top: 5px;}
         
-        .fattie-warning { background-color: var(--danger); color: white; text-align: center; padding: 10px; border-radius: 14px; font-weight: 700; font-size: 12px; display: none; align-items: center; justify-content: center; gap: 8px; margin-bottom: 5px; }
-
         #baddie-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(90, 80, 75, 0.7); backdrop-filter: blur(8px); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: white; border-radius: 30px; padding: 35px 25px; text-align: center; max-width: 350px; border: 4px solid var(--accent); box-shadow: 0 15px 50px rgba(0,0,0,0.2); animation: pop 0.3s ease-out; }
-        @keyframes pop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-        .resultados-api { display: none; background: white; border-radius: 16px; margin-bottom: 12px; max-height: 180px; overflow-y: auto; border: 1px solid #eee; }
+        .modal-content { background: white; border-radius: 30px; padding: 35px 25px; text-align: center; max-width: 350px; border: 4px solid var(--accent); box-shadow: 0 15px 50px rgba(0,0,0,0.2); }
         .resultado-item { padding: 10px 15px; border-bottom: 1px solid #f9f8f6; cursor: pointer; font-size: 13px; }
+        .resultados-api { display: none; background: white; border-radius: 16px; margin-bottom: 12px; max-height: 180px; overflow-y: auto; border: 1px solid #eee; }
     </style>
 </head>
 <body>
@@ -122,15 +129,14 @@
         <div class="modal-content">
             <i class="ph-fill ph-shooting-star" style="color: var(--gold); font-size: 50px;"></i>
             <h2 style="font-family: 'Fredoka'; color: var(--accent); font-size: 26px; margin: 10px 0;">¡Meta Lograda!</h2>
-            <p style="font-size: 13px; font-weight: 800; color: var(--text-light); margin-bottom: 15px;">Eres oficialmente una BADDIE ✨</p>
             <p id="recompensa-texto" style="font-family:'Fredoka'; font-weight: 700; color: var(--primary-dark); font-size: 18px; background: #f2fbf6; padding: 15px; border-radius: 16px; border: 2px dashed var(--success); margin-bottom: 20px;"></p>
-            <button class="btn-main" onclick="document.getElementById('baddie-modal').style.display='none'"><i class="ph-bold ph-heart"></i> ¡Lo merezco!</button>
+            <button class="btn-main" onclick="document.getElementById('baddie-modal').style.display='none'"><i class="ph-bold ph-heart"></i> ¡Lo merezco! ✨</button>
         </div>
     </div>
 
     <div class="app-wrapper">
         <header class="baddie-banner">
-            <div class="date-card">
+            <div class="date-mini">
                 <i class="ph-fill ph-calendar-blank"></i>
                 <input type="date" id="global-fecha" onchange="cambioFechaGlobal()">
             </div>
@@ -138,9 +144,9 @@
             <p>Just do it <i class="ph-fill ph-star" style="color: var(--gold);"></i></p>
         </header>
 
-        <div id="fattie-warning" class="fattie-warning">
-            <i class="ph-fill ph-warning-circle"></i>
-            <span>Sin ejercicio hoy. ¡Peligro de Fattie Zone!</span>
+        <div id="cal-warning" class="alert-box"></div>
+        <div id="fattie-warning" class="alert-box" style="background-color: #5a504b;">
+            <i class="ph-fill ph-moon"></i> <span>Sin ejercicio y es tarde. ¡Peligro Fattie Zone!</span>
         </div>
 
         <div class="tabs">
@@ -157,12 +163,10 @@
                     <h2 id="cal-restantes" style="font-size: 26px;">-- kcal</h2>
                     <div style="font-size: 10px; margin-top: 4px; font-weight: 700; opacity: 0.9;" id="cal-detalle">Cargando...</div>
                 </div>
-                
                 <div class="kpi-grid">
                     <div class="kpi-card"><h3>Déficit Real</h3><h2 id="deficit-hoy" style="color: var(--accent);">0</h2></div>
                     <div class="kpi-card"><h3>Proteínas</h3><h2 id="prot-hoy" style="color: var(--primary-dark);">0g</h2></div>
                 </div>
-
                 <div class="section-title"><span>Evolución</span><i class="ph-fill ph-sparkle" style="color: var(--gold);"></i></div>
                 <div class="kpi-grid">
                     <div class="kpi-card"><h3>Peso</h3><div id="prog-peso" class="progress-text">--</div></div>
@@ -170,18 +174,14 @@
                     <div class="kpi-card"><h3>Cadera</h3><div id="prog-cadera" class="progress-text">--</div></div>
                     <div class="kpi-card"><h3>Busto</h3><div id="prog-busto" class="progress-text">--</div></div>
                 </div>
-                
                 <div id="health-indicators" style="background: #ffffff; padding: 12px; border-radius: 18px; margin-bottom: 15px; font-size: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.02);">
-                    <strong style="color: var(--primary-dark);">ICC:</strong> <span id="icc-value" style="font-weight: 900;">--</span> | <span id="icc-badge" style="font-weight: 800;">Sin datos</span>
+                    <strong style="color: var(--primary-dark);">ICC:</strong> <span id="icc-value" style="font-weight: 900;">--</span> | <span id="icc-badge" class="health-badge">Calculando...</span>
                 </div>
-
-                <div class="chart-container">
-                    <canvas id="graficoPeso" height="180"></canvas>
-                </div>
+                <canvas id="graficoPeso" height="180"></canvas>
             </div>
 
             <div id="medidas" class="tab-content">
-                <div class="section-title">Registrar Medidas</div>
+                <div class="section-title">Medidas del Día</div>
                 <div class="row">
                     <div class="form-group"><label>Peso (kg)</label><input type="number" id="peso" step="0.1"></div>
                     <div class="form-group"><label>Busto (cm)</label><input type="number" id="busto" step="0.1"></div>
@@ -200,7 +200,6 @@
                     <button class="btn-search" onclick="buscarEnAPI()"><i class="ph-bold ph-magnifying-glass"></i></button>
                 </div>
                 <div id="contenedor-resultados" class="resultados-api"></div>
-
                 <div class="row">
                     <div class="form-group" style="flex: 2;"><label>Nombre</label><input type="text" id="nombre-comida"></div>
                     <div class="form-group"><label>Gramos</label><input type="number" id="gramos-comida" value="100" oninput="recalcularPorcion()"></div>
@@ -210,7 +209,6 @@
                     <div class="form-group"><label>Proteína</label><input type="number" id="proteina-comida"></div>
                 </div>
                 <button class="btn-main btn-secondary" onclick="agregarComida()"><i class="ph-bold ph-plus"></i> Añadir Comida</button>
-                
                 <div id="lista-comidas" style="margin-top:15px;"></div>
 
                 <div class="section-title" style="margin-top: 25px;">Ejercicio</div>
@@ -231,20 +229,20 @@
                 </div>
                 <div class="form-group"><label>Peso Inicio Oficial</label><input type="number" id="c-peso-i"></div>
                 <div class="form-group">
-                    <label>Actividad</label>
+                    <label>Actividad Física (NEAT)</label>
                     <select id="c-act">
-                        <option value="1.2">Sedentario</option>
-                        <option value="1.3">Ligero</option>
-                        <option value="1.45">Moderado</option>
-                        <option value="1.6">Activo</option>
+                        <option value="1.2">Sedentario (Menos de 5k pasos)</option>
+                        <option value="1.3">Ligero (5k - 8k pasos)</option>
+                        <option value="1.45">Moderado (8k - 10k pasos)</option>
+                        <option value="1.6">Activo (Más de 10k pasos)</option>
                     </select>
                 </div>
                 <button class="btn-main" onclick="guardarConfig()">Actualizar Perfil</button>
                 <button class="btn-main" style="background-color: #e2e8e5; color: var(--primary-dark); margin-top: 10px;" onclick="descargarRespaldo()"><i class="ph-bold ph-download-simple"></i> Respaldar Datos</button>
 
-                <div class="section-title" style="margin-top: 30px; color: var(--accent);">Tus Metas y Proyecciones</div>
+                <div class="section-title" style="margin-top: 40px; color: var(--accent);">Tus Metas y Proyecciones</div>
                 <div class="row">
-                    <input type="number" id="m-peso" placeholder="Peso Meta" style="flex:1;">
+                    <input type="number" id="m-peso" placeholder="Meta kg" style="flex:1;">
                     <input type="text" id="m-premio" placeholder="Premio" style="flex:2;">
                 </div>
                 <button class="btn-main btn-secondary" onclick="agregarMeta()"><i class="ph-bold ph-plus"></i> Crear Meta</button>
@@ -255,18 +253,15 @@
 
     <script>
         if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); }); }
-        
         let db = { registros: {}, metas: [], config: { altura: 160, edad: '', actividad: 1.2, pesoI: '' } };
         let baseK = 0, baseP = 0, chart = null;
 
         function init() {
             try {
-                const saved = localStorage.getItem('baddieData_V14');
+                const saved = localStorage.getItem('baddieData_V17');
                 if (saved) db = JSON.parse(saved);
-                if (!db.metas) db.metas = []; // Fix por si venía de versión vieja
                 document.getElementById('global-fecha').valueAsDate = new Date();
-                cargarConfigUI();
-                cambioFechaGlobal();
+                cargarConfigUI(); cambioFechaGlobal();
             } catch (e) { localStorage.clear(); location.reload(); }
         }
 
@@ -274,8 +269,7 @@
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            btn.classList.add('active');
-            cambioFechaGlobal();
+            btn.classList.add('active'); cambioFechaGlobal();
         }
 
         function cambioFechaGlobal() {
@@ -293,25 +287,22 @@
             const q = document.getElementById('busqueda-comida').value;
             const resDiv = document.getElementById('contenedor-resultados');
             if(!q) return;
-            resDiv.innerHTML = '<p style="padding:15px; font-size:12px; text-align:center;">Buscando...</p>';
+            resDiv.innerHTML = '<p style="padding:15px; text-align:center;">Buscando...</p>';
             resDiv.style.display = 'block';
             try {
                 const r = await fetch(`https://cl.openfoodfacts.org/cgi/search.pl?search_terms=${q}&json=1&page_size=5`);
-                const d = await r.json();
-                resDiv.innerHTML = '';
+                const d = await r.json(); resDiv.innerHTML = '';
                 if(d.products.length > 0) {
                     d.products.forEach(p => {
                         const n = p.product_name_es || p.product_name;
                         const k = Math.round(p.nutriments['energy-kcal_100g'] || 0);
                         const pr = Math.round(p.nutriments['proteins_100g'] || 0);
-                        const i = document.createElement('div');
-                        i.className = 'resultado-item';
+                        const i = document.createElement('div'); i.className = 'resultado-item';
                         i.innerHTML = `<b>${n}</b><br><small>${k} kcal | ${pr}g prot</small>`;
                         i.onclick = () => {
-                            document.getElementById('nombre-comida').value = n;
-                            baseK = k; baseP = pr;
-                            document.getElementById('gramos-comida').value = 100;
-                            recalcularPorcion(); resDiv.style.display = 'none';
+                            document.getElementById('nombre-comida').value = n; baseK = k; baseP = pr;
+                            document.getElementById('gramos-comida').value = 100; recalcularPorcion();
+                            resDiv.style.display = 'none';
                         };
                         resDiv.appendChild(i);
                     });
@@ -331,7 +322,7 @@
             const k = parseFloat(document.getElementById('calorias-comida').value);
             const p = parseFloat(document.getElementById('proteina-comida').value) || 0;
             const g = document.getElementById('gramos-comida').value;
-            if(!n || isNaN(k)) return alert("Pon nombre y calorías");
+            if(!n || isNaN(k)) return;
             db.registros[f].comidas.push({id: Date.now(), n: `${n} (${g}g)`, k, p});
             save(); cambioFechaGlobal();
             document.getElementById('nombre-comida').value = ''; document.getElementById('calorias-comida').value = ''; document.getElementById('proteina-comida').value = '';
@@ -342,7 +333,7 @@
             const n = document.getElementById('nombre-ejercicio').value;
             const t = document.getElementById('tiempo-ejercicio').value;
             const k = parseFloat(document.getElementById('calorias-ejercicio').value);
-            if(!n || isNaN(k)) return alert("Faltan datos");
+            if(!n || isNaN(k)) return;
             db.registros[f].ejercicios.push({id: Date.now(), n, t, k});
             save(); cambioFechaGlobal();
             document.getElementById('nombre-ejercicio').value = ''; document.getElementById('tiempo-ejercicio').value = ''; document.getElementById('calorias-ejercicio').value = '';
@@ -362,15 +353,13 @@
             db.registros[f].cintura = parseFloat(document.getElementById('cintura').value) || 0;
             db.registros[f].cadera = parseFloat(document.getElementById('cadera').value) || 0;
             db.registros[f].busto = parseFloat(document.getElementById('busto').value) || 0;
-            
             db.metas.forEach(m => {
                 if(!m.done && p > 0 && p <= m.p) {
-                    m.done = true;
-                    document.getElementById('recompensa-texto').innerText = m.r;
+                    m.done = true; document.getElementById('recompensa-texto').innerText = m.r;
                     document.getElementById('baddie-modal').style.display = 'flex';
                 }
             });
-            save(); cambioFechaGlobal(); alert("¡Guardado!");
+            save(); cambioFechaGlobal(); alert("¡Progreso actualizado!");
         }
 
         function renderDiario() {
@@ -387,33 +376,39 @@
 
         function actualizarDashboard() {
             const f = document.getElementById('global-fecha').value;
-            const hoy = db.registros[f];
-            const conf = db.config;
-            let tIn = 0, tProt = 0, tOut = 0;
-            hoy.comidas.forEach(c => { tIn += c.k; tProt += c.p; });
+            const hoy = db.registros[f]; const conf = db.config;
+            let tIn = 0, tP = 0, tOut = 0;
+            hoy.comidas.forEach(c => { tIn += c.k; tP += c.p; });
             hoy.ejercicios.forEach(e => { tOut += e.k; });
-
             const pesos = Object.keys(db.registros).sort().map(k=>db.registros[k].peso).filter(p=>p>0);
             const uPeso = hoy.peso || pesos[pesos.length-1] || conf.pesoI || 0;
-
+            
             if(uPeso > 0 && conf.altura && conf.edad) {
                 const bmr = (10 * uPeso) + (6.25 * conf.altura) - (5 * conf.edad) - 161;
-                const neat = Math.round(bmr * conf.actividad);
-                const meta = neat - 500;
-                const rest = meta - tIn + tOut;
+                const neat = Math.round(bmr * conf.actividad); const meta = neat - 500; const rest = meta - tIn + tOut;
                 
-                const elR = document.getElementById('cal-restantes');
-                elR.innerText = rest + ' kcal';
-                elR.style.color = rest < 0 ? 'var(--danger)' : 'white';
+                document.getElementById('cal-restantes').innerText = rest + ' kcal';
                 document.getElementById('cal-detalle').innerText = `Base: ${neat} | Comida: ${tIn} | Ejercicio: ${tOut}`;
-                document.getElementById('prot-hoy').innerText = tProt + 'g';
+                document.getElementById('prot-hoy').innerText = tP + 'g';
                 const defReal = (neat + tOut) - tIn;
                 document.getElementById('deficit-hoy').innerText = (defReal > 0 ? '-' : '+') + Math.abs(defReal);
                 
+                // LÓGICA DE ALERTA DE CALORÍAS
+                const calWarn = document.getElementById('cal-warning');
+                if (rest <= 200 && rest > 0) {
+                    calWarn.style.display = 'flex';
+                    calWarn.innerHTML = '<i class="ph-fill ph-warning-octagon"></i> ¡PELIGRO! estás a punto de entrar a la zona Fattie';
+                } else if (rest <= 0) {
+                    calWarn.style.display = 'flex';
+                    calWarn.innerHTML = '<i class="ph-fill ph-skull"></i> ¡ZONA FATTIE! Has superado tu límite diario';
+                } else { calWarn.style.display = 'none'; }
+
                 if(hoy.cintura && hoy.cadera) {
                     const icc = (hoy.cintura / hoy.cadera).toFixed(2);
                     document.getElementById('icc-value').innerText = icc;
-                    document.getElementById('icc-badge').innerText = icc < 0.81 ? 'Bajo Riesgo ✨' : 'Riesgo Moderado';
+                    const badge = document.getElementById('icc-badge');
+                    badge.innerText = icc < 0.81 ? 'Bajo Riesgo ✨' : 'Riesgo Moderado';
+                    badge.className = `health-badge ${icc < 0.81 ? 'badge-good' : 'badge-warn'}`;
                 }
             }
             renderMejoras(); renderChart();
@@ -426,8 +421,7 @@
                 if(vals.length < 1) return '--';
                 const first = (key==='peso' && db.config.pesoI) ? db.config.pesoI : vals[0];
                 const diff = (first - vals[vals.length-1]).toFixed(1);
-                if(diff == 0) return 'Igual';
-                return (diff > 0 ? '👇 -' : '📈 +') + Math.abs(diff);
+                return (diff > 0 ? '👇 -' : (diff < 0 ? '📈 +' : '')) + Math.abs(diff);
             };
             document.getElementById('prog-peso').innerText = getDiff('peso');
             document.getElementById('prog-cintura').innerText = getDiff('cintura');
@@ -439,14 +433,14 @@
             const cont = document.getElementById('lista-metas'); cont.innerHTML = '';
             const pesos = Object.values(db.registros).map(r=>r.peso).filter(p=>p>0);
             const uPeso = pesos[pesos.length-1] || db.config.pesoI || 0;
-
             db.metas.forEach(m => {
                 let proy = '';
                 if(!m.done && uPeso > m.p) {
                     const dias = Math.ceil(((uPeso - m.p) * 7700) / 500);
-                    proy = `<div style="font-size:10px; margin-top:8px; color:var(--primary-dark); background:rgba(255,255,255,0.7); padding:8px; border-radius:10px; display:flex; align-items:center; gap:6px;">
-                        <i class="ph-fill ph-calendar-heart" style="font-size:18px; color:var(--accent);"></i>
-                        <div><span style="font-weight:900; color:var(--text-main);">Faltan aprox. ${dias} días</span></div>
+                    const fechaE = new Date(); fechaE.setDate(fechaE.getDate() + dias);
+                    proy = `<div style="font-size:11px; margin-top:8px; color:var(--primary-dark); background:rgba(255,255,255,0.7); padding:8px; border-radius:12px; display:flex; align-items:center; gap:8px;">
+                        <i class="ph-fill ph-calendar-heart" style="font-size:24px; color:var(--accent);"></i>
+                        <div><span style="font-weight:900; color:var(--text-main);">Faltan aprox. ${dias} días</span><br>Llegarás el ${fechaE.toLocaleDateString('es-ES')}</div>
                     </div>`;
                 }
                 cont.innerHTML += `<div class="list-item" style="border-left:6px solid ${m.done?'var(--success)':'var(--accent)'}">
@@ -459,18 +453,13 @@
         function agregarMeta() {
             const p = parseFloat(document.getElementById('m-peso').value);
             const r = document.getElementById('m-premio').value;
-            if(!p || !r) return alert("Pon el peso meta y tu premio");
+            if(!p || !r) return;
             db.metas.push({id:Date.now(), p, r, done:false});
             save(); cambioFechaGlobal();
             document.getElementById('m-peso').value = ''; document.getElementById('m-premio').value = '';
         }
+        function delMeta(id) { if(confirm("¿Borrar?")) { db.metas = db.metas.filter(m=>m.id!==id); save(); cambioFechaGlobal(); } }
         
-        function delMeta(id) { 
-            if(confirm("¿Borrar meta?")) {
-                db.metas = db.metas.filter(m=>m.id!==id); save(); cambioFechaGlobal(); 
-            }
-        }
-
         function cargarConfigUI() {
             document.getElementById('c-alt').value = db.config.altura;
             document.getElementById('c-edad').value = db.config.edad;
@@ -492,7 +481,7 @@
             const a = document.createElement('a'); a.href = url; a.download = `Baddie_Backup.json`; a.click();
         }
 
-        function save() { localStorage.setItem('baddieData_V14', JSON.stringify(db)); }
+        function save() { localStorage.setItem('baddieData_V17', JSON.stringify(db)); }
 
         function renderChart() {
             const ctx = document.getElementById('graficoPeso').getContext('2d');
@@ -500,12 +489,8 @@
             const dataP = fechas.map(f=>db.registros[f].peso).filter(p=>p>0);
             if (chart) chart.destroy();
             chart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: fechas.map(f=>f.split('-')[2]),
-                    datasets: [{ data: dataP, borderColor: '#f4a298', borderWidth: 3, tension: 0.4, fill: true, backgroundColor: 'rgba(244, 162, 152, 0.05)', pointBackgroundColor: '#fff', pointRadius: 4 }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: true, grid: { color: '#f0edea' }, ticks: { font: {size: 10} } }, x: { grid: { display: false }, ticks: { font: {size: 10} } } } }
+                type: 'line', data: { labels: fechas.map(f=>f.split('-')[2]), datasets: [{ data: dataP, borderColor: '#f4a298', borderWidth: 3, tension: 0.4, fill: true, backgroundColor: 'rgba(244, 162, 152, 0.05)', pointBackgroundColor: '#fff', pointRadius: 4 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: true, grid: { color: '#f0edea' } }, x: { grid: { display: false } } } }
             });
         }
 
